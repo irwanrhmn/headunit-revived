@@ -82,8 +82,19 @@ class AapNavigation(
         val road = (detail?.road?.takeIf { it.isNotBlank() } ?: currentStreet).ifBlank { "—" }
         val nextEventType = detail?.nextturn?.number ?: 0
         val turnSide = detail?.side?.number
+        val turnNumber = detail?.takeIf { it.hasTrunnumer() }?.trunnumer
+        val turnAngle = detail?.takeIf { it.hasTurnangel() }?.turnangel
         val actionText = detail?.let { nextEventToAction(it.nextturn) } ?: context.getString(R.string.nav_action_unknown)
-        val intent = NavigationUpdateIntent(distanceMeters, timeSeconds, road, nextEventType, actionText, turnSide)
+        val intent = NavigationUpdateIntent(
+            distanceMeters = distanceMeters,
+            timeSeconds = timeSeconds,
+            road = road,
+            nextEventType = nextEventType,
+            actionText = actionText,
+            turnSide = turnSide,
+            turnNumber = turnNumber,
+            turnAngle = turnAngle
+        )
         context.applicationContext.sendBroadcast(intent)
     }
 

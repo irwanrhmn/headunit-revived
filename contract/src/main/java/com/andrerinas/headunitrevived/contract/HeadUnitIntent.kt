@@ -87,7 +87,10 @@ class NavigationUpdateIntent(
     timeSeconds: Int?,
     road: String,
     nextEventType: Int,
-    actionText: String
+    actionText: String,
+    turnSide: Int? = null,
+    turnNumber: Int? = null,
+    turnAngle: Int? = null
 ) : Intent(action) {
     init {
         putExtra(EXTRA_DISTANCE_METERS, distanceMeters?.takeIf { it >= 0 } ?: -1)
@@ -95,6 +98,9 @@ class NavigationUpdateIntent(
         putExtra(EXTRA_ROAD, road.ifBlank { "" })
         putExtra(EXTRA_NEXT_EVENT_TYPE, nextEventType.coerceIn(0, 31))
         putExtra(EXTRA_ACTION_TEXT, actionText.ifBlank { "" })
+        putExtra(EXTRA_TURN_SIDE, turnSide?.coerceIn(1, 3) ?: TURN_SIDE_UNSPECIFIED)
+        putExtra(EXTRA_TURN_NUMBER, turnNumber?.takeIf { it >= 0 } ?: -1)
+        putExtra(EXTRA_TURN_ANGLE, turnAngle?.takeIf { it >= 0 } ?: -1)
     }
 
     companion object {
@@ -114,5 +120,20 @@ class NavigationUpdateIntent(
 
         /** Human-readable action string (e.g. "Turn", "Exit ramp") in the app's locale. */
         const val EXTRA_ACTION_TEXT = "action_text"
+
+        /**
+         * Turn side from AA NextTurnDetail.Side:
+         * 1 = LEFT, 2 = RIGHT, 3 = UNSPECIFIED.
+         */
+        const val EXTRA_TURN_SIDE = "turn_side"
+        const val TURN_SIDE_LEFT = 1
+        const val TURN_SIDE_RIGHT = 2
+        const val TURN_SIDE_UNSPECIFIED = 3
+
+        /** Roundabout exit/turn number if provided, otherwise -1. */
+        const val EXTRA_TURN_NUMBER = "turn_number"
+
+        /** Turn angle in degrees if provided, otherwise -1. */
+        const val EXTRA_TURN_ANGLE = "turn_angle"
     }
 }
