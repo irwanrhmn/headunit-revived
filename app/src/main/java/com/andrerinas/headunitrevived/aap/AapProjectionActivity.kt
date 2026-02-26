@@ -244,6 +244,11 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
 
     private fun setFullscreen() {
         val container = findViewById<View>(R.id.container)
+        
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && settings.startInFullscreenMode) {
+            window.addFlags(android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        }
+
         SystemUI.apply(window, container, settings.startInFullscreenMode)
 
         // Workaround for API < 19 (Jelly Bean) where Sticky Immersive Mode doesn't exist.

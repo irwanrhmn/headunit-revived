@@ -24,8 +24,9 @@ public class TwilightCalculator {
     private static final float DEGREES_TO_RADIANS = (float) (Math.PI / 180.0f);
     // element for calculating solar transit.
     private static final float J0 = 0.0009f;
-    // correction for civil twilight
-    private static final float ALTIDUTE_CORRECTION_CIVIL_TWILIGHT = -0.104719755f;
+    // correction for "early" sunrise/sunset to prevent glare.
+    // +1.0 degree in radians (approx 4 minutes before actual sunset)
+    private static final float ALTIDUTE_CORRECTION_EARLY_NIGHT = 0.017453293f;
     // coefficients for calculating Equation of Center.
     private static final float C1 = 0.0334196f;
     private static final float C2 = 0.000349066f;
@@ -34,19 +35,19 @@ public class TwilightCalculator {
     // Java time on Jan 1, 2000 12:00 UTC.
     private static final long UTC_2000 = 946728000000L;
     /**
-     * Time of sunset (civil twilight) in milliseconds or -1 in the case the day
+     * Time of sunset in milliseconds or -1 in the case the day
      * or night never ends.
      */
     public long mSunset;
     /**
-     * Time of sunrise (civil twilight) in milliseconds or -1 in the case the
+     * Time of sunrise in milliseconds or -1 in the case the
      * day or night never ends.
      */
     public long mSunrise;
     /** Current state */
     public int mState;
     /**
-     * calculates the civil twilight bases on time and geo-coordinates.
+     * calculates the sunrise/sunset bases on time and geo-coordinates.
      *
      * @param time time in milliseconds.
      * @param latitude latitude in degrees.
@@ -69,7 +70,7 @@ public class TwilightCalculator {
         // declination of sun
         double solarDec = Math.asin(Math.sin(solarLng) * Math.sin(OBLIQUITY));
         final double latRad = latitude * DEGREES_TO_RADIANS;
-        double cosHourAngle = (Math.sin(ALTIDUTE_CORRECTION_CIVIL_TWILIGHT) - Math.sin(latRad)
+        double cosHourAngle = (Math.sin(ALTIDUTE_CORRECTION_EARLY_NIGHT) - Math.sin(latRad)
                 * Math.sin(solarDec)) / (Math.cos(latRad) * Math.cos(solarDec));
         // The day or night never ends for the given date and location, if this value is out of
         // range.

@@ -69,7 +69,19 @@
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:screenOrientation="sensor"
-            android:theme="@style/AppTheme" />
+            android:exported="true"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.NAVIGATE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.APP_MAPS" />
+                <data android:scheme="headunit" android:host="connect" />
+                <data android:scheme="headunit" android:host="disconnect" />
+                <data android:scheme="headunit" android:host="nightmode" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".app.UsbAttachedActivity"
