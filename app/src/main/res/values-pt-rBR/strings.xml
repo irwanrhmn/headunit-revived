@@ -170,6 +170,9 @@
     <string name="save_and_restart">Salvar (é necessário reconectar)</string>
     <string name="add_new">Adicionar novo</string>
     <string name="cancel">Cancelar</string>
+    <string name="enable">Ativar</string>
+    <string name="experimental_feature_title">Recurso experimental</string>
+    <string name="experimental_feature_message">Este recurso é experimental e pode não funcionar corretamente em todos os dispositivos. Deseja ativá-lo?</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Áudio</string>

@@ -169,6 +169,9 @@
     <string name="save_and_restart">Opslaan (Opnieuw aansluiten benodigd)</string>
     <string name="add_new">Nieuwe toevoegen</string>
     <string name="cancel">Annuleren</string>
+    <string name="enable">Inschakelen</string>
+    <string name="experimental_feature_title">Experimentele functie</string>
+    <string name="experimental_feature_message">Deze functie is experimenteel en werkt mogelijk niet correct op alle apparaten. Wilt u deze inschakelen?</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>

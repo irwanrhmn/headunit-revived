@@ -172,6 +172,9 @@
     <string name="save_and_restart">Uložit (vyžaduje opětovné připojení)</string>
     <string name="add_new">Přidat nové</string>
     <string name="cancel">Zrušit</string>
+    <string name="enable">Povolit</string>
+    <string name="experimental_feature_title">Experimentální funkce</string>
+    <string name="experimental_feature_message">Tato funkce je experimentální a nemusí správně fungovat na všech zařízeních. Chcete ji povolit?</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>

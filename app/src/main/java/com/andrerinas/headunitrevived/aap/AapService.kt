@@ -281,7 +281,7 @@ class AapService : Service(), UsbReceiver.Listener {
 
         val (notificationIntent, requestCode) = if (isConnected) {
             AapProjectionActivity.intent(this).apply {
-                addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             } to 100
         } else {
             Intent(this, com.andrerinas.headunitrevived.main.MainActivity::class.java).apply {
@@ -698,7 +698,7 @@ class AapService : Service(), UsbReceiver.Listener {
 
                     val aapIntent = AapProjectionActivity.intent(this@AapService).apply {
                         putExtra(AapProjectionActivity.EXTRA_FOCUS, true);
-                        addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     };
                     startActivity(aapIntent);
                 } else {

@@ -172,6 +172,9 @@
     <string name="save_and_restart">Speichern (Neustart nötig)</string>
     <string name="add_new">Hinzufügen</string>
     <string name="cancel">Abbrechen</string>
+    <string name="enable">Aktivieren</string>
+    <string name="experimental_feature_title">Experimentelle Funktion</string>
+    <string name="experimental_feature_message">Diese Funktion ist experimentell und funktioniert möglicherweise nicht auf allen Geräten korrekt. Möchten Sie sie aktivieren?</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>

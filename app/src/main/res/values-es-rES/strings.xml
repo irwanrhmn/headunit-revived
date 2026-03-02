@@ -170,6 +170,9 @@
     <string name="save_and_restart">Guardar (Requiere reconexión)</string>
     <string name="add_new">Añadir nuevo</string>
     <string name="cancel">Cancelar</string>
+    <string name="enable">Activar</string>
+    <string name="experimental_feature_title">Función experimental</string>
+    <string name="experimental_feature_message">Esta función es experimental y puede no funcionar correctamente en todos los dispositivos. ¿Desea activarla?</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>

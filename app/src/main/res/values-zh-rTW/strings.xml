@@ -169,6 +169,9 @@
     <string name="save_and_restart">儲存 (需要重新連接)</string>
     <string name="add_new">加入新的</string>
     <string name="cancel">取消</string>
+    <string name="enable">啟用</string>
+    <string name="experimental_feature_title">實驗性功能</string>
+    <string name="experimental_feature_message">此功能為實驗性質，可能無法在所有裝置上正常運作。您要啟用嗎？</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">音訊</string>

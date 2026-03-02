@@ -170,6 +170,9 @@
     <string name="save_and_restart">Zapisz (Wymagane ponowne połączenie)</string>
     <string name="add_new">Dodaj nowy</string>
     <string name="cancel">Anuluj</string>
+    <string name="enable">Włącz</string>
+    <string name="experimental_feature_title">Funkcja eksperymentalna</string>
+    <string name="experimental_feature_message">Ta funkcja jest eksperymentalna i może nie działać poprawnie na wszystkich urządzeniach. Czy chcesz ją włączyć?</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Dźwięk</string>

@@ -171,6 +171,9 @@
     <string name="save_and_restart">Mentés (újracsatlakozás szükséges)</string>
     <string name="add_new">Új hozzáadása</string>
     <string name="cancel">Mégse</string>
+    <string name="enable">Engedélyezés</string>
+    <string name="experimental_feature_title">Kísérleti funkció</string>
+    <string name="experimental_feature_message">Ez a funkció kísérleti jellegű, és nem feltétlenül működik megfelelően minden eszközön. Szeretné engedélyezni?</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Hang</string>

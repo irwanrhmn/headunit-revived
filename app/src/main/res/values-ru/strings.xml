@@ -170,6 +170,9 @@
     <string name="save_and_restart">Сохранить (требуется переподключение)</string>
     <string name="add_new">Добавить</string>
     <string name="cancel">Отмена</string>
+    <string name="enable">Включить</string>
+    <string name="experimental_feature_title">Экспериментальная функция</string>
+    <string name="experimental_feature_message">Эта функция является экспериментальной и может работать некорректно на всех устройствах. Хотите включить её?</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Аудио</string>

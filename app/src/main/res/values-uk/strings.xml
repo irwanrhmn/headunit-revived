@@ -170,6 +170,9 @@
     <string name="save_and_restart">Зберегти (потрібне перепідключення)</string>
     <string name="add_new">Додати новий</string>
     <string name="cancel">Скасувати</string>
+    <string name="enable">Увімкнути</string>
+    <string name="experimental_feature_title">Експериментальна функція</string>
+    <string name="experimental_feature_message">Ця функція є експериментальною і може працювати некоректно на деяких пристроях. Бажаєте увімкнути її?</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Звук</string>

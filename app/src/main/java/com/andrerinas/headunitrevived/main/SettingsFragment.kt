@@ -581,9 +581,23 @@ class SettingsFragment : Fragment() {
             descriptionResId = R.string.auto_start_usb_description,
             isChecked = pendingAutoStartOnUsb!!,
             onCheckedChanged = { isChecked ->
-                pendingAutoStartOnUsb = isChecked
-                checkChanges()
-                updateSettingsList()
+                if (isChecked) {
+                    showExperimentalWarning(
+                        onConfirm = {
+                            pendingAutoStartOnUsb = true
+                            checkChanges()
+                            updateSettingsList()
+                        },
+                        onCancel = {
+                            pendingAutoStartOnUsb = false
+                            updateSettingsList()
+                        }
+                    )
+                } else {
+                    pendingAutoStartOnUsb = false
+                    checkChanges()
+                    updateSettingsList()
+                }
             }
         ))
 
@@ -606,9 +620,23 @@ class SettingsFragment : Fragment() {
             descriptionResId = R.string.usb_stability_check_description,
             isChecked = pendingUsbStabilityCheck!!,
             onCheckedChanged = { isChecked ->
-                pendingUsbStabilityCheck = isChecked
-                checkChanges()
-                updateSettingsList()
+                if (isChecked) {
+                    showExperimentalWarning(
+                        onConfirm = {
+                            pendingUsbStabilityCheck = true
+                            checkChanges()
+                            updateSettingsList()
+                        },
+                        onCancel = {
+                            pendingUsbStabilityCheck = false
+                            updateSettingsList()
+                        }
+                    )
+                } else {
+                    pendingUsbStabilityCheck = false
+                    checkChanges()
+                    updateSettingsList()
+                }
             }
         ))
 
@@ -1215,6 +1243,16 @@ class SettingsFragment : Fragment() {
                 startActivity(intent)
             }
             .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun showExperimentalWarning(onConfirm: () -> Unit, onCancel: () -> Unit) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.experimental_feature_title)
+            .setMessage(R.string.experimental_feature_message)
+            .setPositiveButton(R.string.enable) { _, _ -> onConfirm() }
+            .setNegativeButton(R.string.cancel) { _, _ -> onCancel() }
+            .setOnCancelListener { onCancel() }
             .show()
     }
 

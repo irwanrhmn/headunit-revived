@@ -172,6 +172,9 @@
     <string name="save_and_restart">Save (Reconnect needed)</string>
     <string name="add_new">Add new</string>
     <string name="cancel">Cancel</string>
+    <string name="enable">Enable</string>
+    <string name="experimental_feature_title">Experimental Feature</string>
+    <string name="experimental_feature_message">This feature is experimental and may not work correctly on all devices. Do you want to enable it?</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>
