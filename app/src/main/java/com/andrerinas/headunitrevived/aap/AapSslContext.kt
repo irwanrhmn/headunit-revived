@@ -21,13 +21,21 @@ class AapSslContext(keyManager: SingleKeyKeyManager): AapSsl {
         if (prepare() < 0) return false
 
         val buffer = ByteArray(Messages.DEF_BUFFER_LENGTH)
+        // Hard cap on the entire SSL phase. Without this, a phone that goes silent after
+        // the first round-trip would stall for (remaining rounds × per-call timeout) seconds.
+        val deadline = android.os.SystemClock.elapsedRealtime() + SSL_HANDSHAKE_TIMEOUT_MS
 
         while (getHandshakeStatus() != SSLEngineResult.HandshakeStatus.FINISHED &&
                 getHandshakeStatus() != SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING) {
 
+            if (android.os.SystemClock.elapsedRealtime() >= deadline) {
+                AppLog.e("SSL Handshake: Timed out after ${SSL_HANDSHAKE_TIMEOUT_MS}ms")
+                return false
+            }
+
             when (getHandshakeStatus()) {
                 SSLEngineResult.HandshakeStatus.NEED_UNWRAP -> {
-                    val size = connection.recvBlocking(buffer, buffer.size, 5000, false)
+                    val size = connection.recvBlocking(buffer, buffer.size, 2000, false)
                     if (size <= 6) {
                         AppLog.e("SSL Handshake: Receive failed or too small ($size)")
 
@@ -40,7 +48,7 @@ class AapSslContext(keyManager: SingleKeyKeyManager): AapSsl {
                     // Wrap -> Send to connection
                     val handshakeData = handshakeRead()
                     val bio = Messages.createRawMessage(0, 3, 3, handshakeData)
-                    if (connection.sendBlocking(bio, bio.size, 5000) < 0) {
+                    if (connection.sendBlocking(bio, bio.size, 2000) < 0) {
                         AppLog.e("SSL Handshake: Send failed")
                         return false
                     }
@@ -197,6 +205,10 @@ class AapSslContext(keyManager: SingleKeyKeyManager): AapSsl {
     }
 
     companion object {
+        // Maximum wall-clock time for the entire SSL handshake loop. Caps worst-case stall at
+        // 15 s regardless of how many round-trips remain when the phone stops responding.
+        private const val SSL_HANDSHAKE_TIMEOUT_MS = 15_000L
+
         private fun createSslContext(keyManager: SingleKeyKeyManager): SSLContext {
             val providerName = ConscryptInitializer.getProviderName()
 

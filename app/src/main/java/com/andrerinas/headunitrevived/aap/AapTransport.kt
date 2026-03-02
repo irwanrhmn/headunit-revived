@@ -215,7 +215,8 @@ class AapTransport(
         pollHandler = Handler(pollThread!!.looper, pollHandlerCallback)
         pollHandler?.post { com.andrerinas.headunitrevived.utils.LegacyOptimizer.setHighPriority() }
 
-        SystemClock.sleep(50)
+        // No sleep needed here: Handler(thread.looper, ...) already blocks internally until the
+        // HandlerThread's Looper is ready (via HandlerThread.getLooper() → wait/notifyAll).
 
         if (!handshake(connection)) {
             quit()
@@ -311,7 +312,7 @@ class AapTransport(
             AppLog.d("Handshake: SSL handshake complete. TS: ${SystemClock.elapsedRealtime()}")
             // Status = OK
             val status = Messages.statusOk
-            ret = connection.sendBlocking(status, status.size, 5000)
+            ret = connection.sendBlocking(status, status.size, 2000)
             AppLog.d("Handshake: Status OK sent. ret: $ret. TS: ${SystemClock.elapsedRealtime()}")
             if (ret < 0) {
                 AppLog.e("Handshake: Status request sendEncrypted ret: $ret")
