@@ -78,11 +78,11 @@
     <string name="back">Back</string>
     <string name="debug_mode">Debug Mode</string>
     <string name="debug_mode_description">Toggle more Logging</string>
-    <string name="log_verbosity">Log Verbosity</string>
-    <string name="log_verbosity_description">Filter log level when exporting</string>
-    <string name="start_log_capture">Start Log Capture</string>
+    <string name="log_level">Log Level</string>
+    <string name="log_level_description">Filter log level when exporting</string>
+    <string name="start_log_capture">Start Capturing Logs</string>
     <string name="start_log_capture_description">Begin recording full logs for debugging</string>
-    <string name="stop_log_capture">Stop Log Capture</string>
+    <string name="stop_log_capture">Stop Capturing Logs</string>
     <string name="stop_log_capture_description">Recording in progress… tap to stop</string>
     <string name="export_logs">Export Logs</string>
     <string name="export_logs_description">Save logs for debugging</string>

@@ -13,7 +13,7 @@ import java.util.Locale
 
 object LogExporter {
 
-    enum class Verbosity(val filter: String, val logLevel: Int) {
+    enum class LogLevel(val filter: String, val logLevel: Int) {
         VERBOSE("*:V", Log.VERBOSE),
         DEBUG("*:D", Log.DEBUG),
         INFO("*:I", Log.INFO),
@@ -56,7 +56,7 @@ object LogExporter {
      * Unlike [saveLogToPublicFile], this captures everything from the moment it is called,
      * bypassing the small shared ring buffer.
      */
-    fun startCapture(context: Context, verbosity: Verbosity) {
+    fun startCapture(context: Context, verbosity: LogLevel) {
         stopCapture()
         val logDir = context.getExternalFilesDir(null) ?: return
         logDir.mkdirs()
@@ -100,7 +100,7 @@ object LogExporter {
      *   copies its content into a fresh export file so the original capture file is preserved.
      * - Otherwise: dumps the current logcat ring buffer.
      */
-    fun saveLogToPublicFile(context: Context, verbosity: Verbosity): File? {
+    fun saveLogToPublicFile(context: Context, verbosity: LogLevel): File? {
         val logDir = context.getExternalFilesDir(null) ?: return null
         if (!logDir.exists()) logDir.mkdirs()
 

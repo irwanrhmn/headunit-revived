@@ -26,7 +26,6 @@ import com.andrerinas.headunitrevived.main.settings.SettingsAdapter
 import com.andrerinas.headunitrevived.utils.Settings
 import com.andrerinas.headunitrevived.utils.LocaleHelper
 import com.andrerinas.headunitrevived.BuildConfig
-import java.util.Locale
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -826,6 +825,25 @@ class SettingsFragment : Fragment() {
         // --- Debug Settings ---
         items.add(SettingItem.CategoryHeader("debug", R.string.category_debug))
 
+        val logLevels = com.andrerinas.headunitrevived.utils.LogExporter.LogLevel.entries
+        val logLevelNames = logLevels.map { it.name.lowercase().replaceFirstChar { c -> c.uppercase() } }.toTypedArray()
+        items.add(SettingItem.SettingEntry(
+            stableId = "logLevel",
+            nameResId = R.string.log_level,
+            value = settings.exporterLogLevel.name.lowercase().replaceFirstChar { it.uppercase() },
+            onClick = {
+                val currentIndex = logLevels.indexOf(settings.exporterLogLevel)
+                MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+                    .setTitle(R.string.log_level)
+                    .setSingleChoiceItems(logLevelNames, currentIndex) { dialog, which ->
+                        settings.exporterLogLevel = logLevels[which]
+                        dialog.dismiss()
+                        updateSettingsList()
+                    }
+                    .show()
+            }
+        ))
+
         items.add(SettingItem.SettingEntry(
             stableId = "captureLog",
             nameResId = if (com.andrerinas.headunitrevived.utils.LogExporter.isCapturing) R.string.stop_log_capture else R.string.start_log_capture,
@@ -835,28 +853,9 @@ class SettingsFragment : Fragment() {
                 if (com.andrerinas.headunitrevived.utils.LogExporter.isCapturing) {
                     com.andrerinas.headunitrevived.utils.LogExporter.stopCapture()
                 } else {
-                    com.andrerinas.headunitrevived.utils.LogExporter.startCapture(context, settings.logVerbosity)
+                    com.andrerinas.headunitrevived.utils.LogExporter.startCapture(context, settings.exporterLogLevel)
                 }
                 updateSettingsList()
-            }
-        ))
-
-        val verbosityLevels = com.andrerinas.headunitrevived.utils.LogExporter.Verbosity.entries
-        val verbosityNames = verbosityLevels.map { it.name.lowercase().replaceFirstChar { c -> c.uppercase() } }.toTypedArray()
-        items.add(SettingItem.SettingEntry(
-            stableId = "logVerbosity",
-            nameResId = R.string.log_verbosity,
-            value = settings.logVerbosity.name.lowercase().replaceFirstChar { it.uppercase() },
-            onClick = {
-                val currentIndex = verbosityLevels.indexOf(settings.logVerbosity)
-                MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
-                    .setTitle(R.string.log_verbosity)
-                    .setSingleChoiceItems(verbosityNames, currentIndex) { dialog, which ->
-                        settings.logVerbosity = verbosityLevels[which]
-                        dialog.dismiss()
-                        updateSettingsList()
-                    }
-                    .show()
             }
         ))
 
@@ -869,7 +868,7 @@ class SettingsFragment : Fragment() {
                 if (com.andrerinas.headunitrevived.utils.LogExporter.isCapturing) {
                     com.andrerinas.headunitrevived.utils.LogExporter.stopCapture()
                 }
-                val logFile = com.andrerinas.headunitrevived.utils.LogExporter.saveLogToPublicFile(context, settings.logVerbosity)
+                val logFile = com.andrerinas.headunitrevived.utils.LogExporter.saveLogToPublicFile(context, settings.exporterLogLevel)
                 updateSettingsList()
 
                 if (logFile != null) {
