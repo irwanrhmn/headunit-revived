@@ -66,7 +66,7 @@ class Settings(context: Context) {
         }
 
     var showNavigationNotifications: Boolean
-        get() = prefs.getBoolean("show-navigation-notifications", true)
+        get() = prefs.getBoolean("show-navigation-notifications", false)
         set(value) {
             prefs.edit().putBoolean("show-navigation-notifications", value).apply()
         }
