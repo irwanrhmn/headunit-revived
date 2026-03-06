@@ -79,9 +79,6 @@ class AapService : Service(), UsbReceiver.Listener {
 
     private val commManager get() = App.provide(this).commManager
 
-    private var usbStabilityJob: Job? = null
-    private var stableDeviceName: String? = null
-
     fun updateMediaSessionState(isPlaying: Boolean) {
         val state = if (isPlaying) {
             android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
@@ -459,53 +456,7 @@ class AapService : Service(), UsbReceiver.Listener {
         if (singleUsb) {
             val nonAccessoryDevices = deviceList.values.filter { !UsbDeviceCompat.isInAccessoryMode(it) }
             if (nonAccessoryDevices.size == 1) {
-                // Skip if stability check is already running for this exact device
-                val deviceName = UsbDeviceCompat(nonAccessoryDevices[0]).uniqueName
-                if (usbStabilityJob != null && stableDeviceName == deviceName) {
-                    AppLog.i("checkAlreadyConnectedUsb: stability check already in progress for $deviceName, skipping")
-                    return
-                }
-                startSingleUsbStabilityCheck(nonAccessoryDevices[0])
-                return
-            } else if (usbStabilityJob != null) {
-                cancelUsbStabilityCheck()
-            }
-        }
-    }
-
-    private fun startSingleUsbStabilityCheck(device: UsbDevice) {
-        val settings = App.provide(this).settings
-        if (!settings.usbStabilityCheck) {
-            performSingleUsbConnect(device)
-            return
-        }
-
-        val deviceName = UsbDeviceCompat(device).uniqueName
-        val timeoutMs = settings.usbStabilityTimeout * 1000L
-
-        stableDeviceName = deviceName
-        usbStabilityJob?.cancel()
-
-        AppLog.i("USB stability: Starting ${settings.usbStabilityTimeout}s timer for $deviceName")
-        Toast.makeText(this, getString(R.string.usb_device_settling), Toast.LENGTH_SHORT).show()
-
-        usbStabilityJob = serviceScope.launch {
-            delay(timeoutMs)
-
-            val usbManager = getSystemService(Context.USB_SERVICE) as UsbManager
-            val stillPresent = usbManager.deviceList.values.any {
-                UsbDeviceCompat(it).uniqueName == deviceName
-            }
-
-            if (stillPresent) {
-                val dev = usbManager.deviceList.values.first {
-                    UsbDeviceCompat(it).uniqueName == deviceName
-                }
-                AppLog.i("USB stability: Device $deviceName stable after ${settings.usbStabilityTimeout}s, connecting")
-                performSingleUsbConnect(dev)
-            } else {
-                AppLog.i("USB stability: Device $deviceName disappeared during wait")
-                cancelUsbStabilityCheck()
+                performSingleUsbConnect(nonAccessoryDevices[0])
             }
         }
     }
@@ -527,13 +478,6 @@ class AapService : Service(), UsbReceiver.Listener {
             AppLog.i("Single USB auto-connect: device found but no permission, requesting...")
             requestUsbPermission(device)
         }
-        cancelUsbStabilityCheck()
-    }
-
-    private fun cancelUsbStabilityCheck() {
-        usbStabilityJob?.cancel()
-        usbStabilityJob = null
-        stableDeviceName = null
     }
 
     // -------------------------------------------------------------------------

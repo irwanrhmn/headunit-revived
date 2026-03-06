@@ -159,13 +159,6 @@
     <string name="move_up">Вверх</string>
     <string name="move_down">Вниз</string>
     <string name="auto_connecting_single_usb">Автоподключение к USB-устройству…</string>
-    <string name="usb_stability_check">Проверка стабильности USB-адаптера</string>
-    <string name="usb_stability_check_description">Включите, если у вас есть беспроводной адаптер Android Auto, который отключается и подключается несколько раз, прежде чем начать работать правильно</string>
-    <string name="usb_stability_timeout">Таймаут стабильности</string>
-    <string name="usb_stability_timeout_description">Секунды, в течение которых устройство должно оставаться подключённым перед автоподключением или переподключением (%d с)</string>
-    <string name="usb_device_settling">Ожидание стабилизации USB-устройства…</string>
-    <string name="max_auto_retry_attempts">Макс. попыток автоподключения</string>
-    <string name="max_auto_retry_attempts_description">Количество автоматических попыток переподключения (%d)</string>
     <string name="video_codec">Видеокодек</string>
     <string name="fps_limit">Ограничение FPS</string>
     <string name="save">Сохранить</string>
@@ -173,9 +166,6 @@
     <string name="add_new">Добавить</string>
     <string name="cancel">Отмена</string>
     <string name="enable">Включить</string>
-    <string name="experimental_feature_title">Экспериментальная функция</string>
-    <string name="experimental_feature_message">Эта функция является экспериментальной и может работать некорректно на всех устройствах. Хотите включить её?</string>
-    <string name="experimental_feature_usb_hint">Если вы собираетесь использовать автоподключение USB, сначала протестируйте с этой опцией выключенной.</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Аудио</string>
@@ -265,9 +255,6 @@
     <string name="shortcut_night_mode_day_desc">Принудительный дневной режим</string>
     <string name="shortcut_night_mode_night_title">Режим: Ночь</string>
     <string name="shortcut_night_mode_night_desc">Принудительный ночной режим</string>
-    <string name="retry">Повторить</string>
-    <string name="retry_connection_title">Повторить подключение</string>
-    <string name="retry_connection_option">Повторить Android Auto</string>
     <string name="reset_usb_option">Сбросить USB-подключение</string>
     <string name="reset_usb_timeout">USB-устройство не найдено. Проверьте подключение.</string>
     <string name="setup_welcome_title">Быстрая настройка</string>

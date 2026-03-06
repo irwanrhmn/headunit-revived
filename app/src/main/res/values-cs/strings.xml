@@ -159,13 +159,6 @@
     <string name="move_up">Posunout nahoru</string>
     <string name="move_down">Posunout dolů</string>
     <string name="auto_connecting_single_usb">Automatické připojování k USB zařízení…</string>
-    <string name="usb_stability_check">Kontrola stability USB adaptéru</string>
-    <string name="usb_stability_check_description">Povolte, pokud máte bezdrátový adaptér Android Auto, který se opakovaně odpojuje a připojuje, než začne správně fungovat</string>
-    <string name="usb_stability_timeout">Časový limit stability</string>
-    <string name="usb_stability_timeout_description">Počet sekund, po které musí být zařízení připojeno před automatickým připojením nebo opětovným připojením (%d s)</string>
-    <string name="usb_device_settling">Čekání na stabilizaci USB zařízení…</string>
-    <string name="max_auto_retry_attempts">Max. počet pokusů o opětovné připojení</string>
-    <string name="max_auto_retry_attempts_description">Počet automatických pokusů o opětovné připojení (%d)</string>
     <string name="video_codec">Video kodek</string>
     <string name="fps_limit">Limit FPS</string>
     <string name="save">Uložit</string>
@@ -173,9 +166,6 @@
     <string name="add_new">Přidat nové</string>
     <string name="cancel">Zrušit</string>
     <string name="enable">Povolit</string>
-    <string name="experimental_feature_title">Experimentální funkce</string>
-    <string name="experimental_feature_message">Tato funkce je experimentální a nemusí správně fungovat na všech zařízeních. Chcete ji povolit?</string>
-    <string name="experimental_feature_usb_hint">Pokud budete používat automatické připojení USB, nejprve otestujte s touto volbou vypnutou.</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>
@@ -265,9 +255,6 @@
     <string name="shortcut_night_mode_day_desc">Vynutit denní režim</string>
     <string name="shortcut_night_mode_night_title">Režim: Noc</string>
     <string name="shortcut_night_mode_night_desc">Vynutit noční režim</string>
-    <string name="retry">Opakovat</string>
-    <string name="retry_connection_title">Opakovat připojení</string>
-    <string name="retry_connection_option">Opakovat Android Auto</string>
     <string name="reset_usb_option">Resetovat USB připojení</string>
     <string name="reset_usb_timeout">USB zařízení nenalezeno. Zkontrolujte připojení.</string>
     <string name="setup_welcome_title">Rychlé nastavení</string>

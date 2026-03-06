@@ -90,8 +90,6 @@ class SettingsFragment : Fragment() {
     private var pendingInsetBottom: Int? = null
 
     private var pendingAutoStartOnUsb: Boolean? = null
-    private var pendingUsbStabilityCheck: Boolean? = null
-    private var pendingUsbStabilityTimeout: Int? = null
 
     private var pendingMediaVolumeOffset: Int? = null
     private var pendingAssistantVolumeOffset: Int? = null
@@ -135,8 +133,6 @@ class SettingsFragment : Fragment() {
         pendingAutoStartBtName = settings.autoStartBluetoothDeviceName
         pendingAutoStartBtMac = settings.autoStartBluetoothDeviceMac
         pendingAutoStartOnUsb = settings.autoStartOnUsb
-        pendingUsbStabilityCheck = settings.usbStabilityCheck
-        pendingUsbStabilityTimeout = settings.usbStabilityTimeout
         pendingScreenOrientation = settings.screenOrientation
         pendingAppLanguage = settings.appLanguage
         
@@ -240,8 +236,6 @@ class SettingsFragment : Fragment() {
         pendingAutoStartBtName?.let { settings.autoStartBluetoothDeviceName = it }
         pendingAutoStartBtMac?.let { settings.autoStartBluetoothDeviceMac = it }
         pendingAutoStartOnUsb?.let { settings.autoStartOnUsb = it }
-        pendingUsbStabilityCheck?.let { settings.usbStabilityCheck = it }
-        pendingUsbStabilityTimeout?.let { settings.usbStabilityTimeout = it }
         pendingScreenOrientation?.let { settings.screenOrientation = it }
 
         pendingMediaVolumeOffset?.let { settings.mediaVolumeOffset = it }
@@ -334,8 +328,6 @@ class SettingsFragment : Fragment() {
                         pendingUseNativeSsl != settings.useNativeSsl ||
                         pendingAutoStartBtMac != settings.autoStartBluetoothDeviceMac ||
                         pendingAutoStartOnUsb != settings.autoStartOnUsb ||
-                        pendingUsbStabilityCheck != settings.usbStabilityCheck ||
-                        pendingUsbStabilityTimeout != settings.usbStabilityTimeout ||
                         pendingScreenOrientation != settings.screenOrientation ||
                         pendingAppLanguage != settings.appLanguage ||
                         pendingInsetLeft != settings.insetLeft ||
@@ -594,50 +586,6 @@ class SettingsFragment : Fragment() {
                 }
             }
         ))
-
-        items.add(SettingItem.ToggleSettingEntry(
-            stableId = "usbStabilityCheck",
-            nameResId = R.string.usb_stability_check,
-            descriptionResId = R.string.usb_stability_check_description,
-            isChecked = pendingUsbStabilityCheck!!,
-            onCheckedChanged = { isChecked ->
-                if (isChecked) {
-                    pendingUsbStabilityCheck = true
-                    updateSettingsList()
-                    showExperimentalWarning(
-                        onConfirm = {
-                            checkChanges()
-                        },
-                        onCancel = {
-                            pendingUsbStabilityCheck = false
-                            checkChanges()
-                            updateSettingsList()
-                        }
-                    )
-                } else {
-                    pendingUsbStabilityCheck = false
-                    checkChanges()
-                    updateSettingsList()
-                }
-            }
-        ))
-
-        if (pendingUsbStabilityCheck == true) {
-            items.add(SettingItem.SliderSettingEntry(
-                stableId = "usbStabilityTimeout",
-                nameResId = R.string.usb_stability_timeout,
-                value = getString(R.string.usb_stability_timeout_description, pendingUsbStabilityTimeout!!),
-                sliderValue = pendingUsbStabilityTimeout!!.toFloat(),
-                valueFrom = 3f,
-                valueTo = 50f,
-                stepSize = 1f,
-                onValueChanged = { value ->
-                    pendingUsbStabilityTimeout = value.toInt()
-                    checkChanges()
-                    updateSettingsList()
-                }
-            ))
-        }
 
         // --- Graphic Settings ---
         items.add(SettingItem.CategoryHeader("graphic", R.string.category_graphic))
@@ -1222,18 +1170,6 @@ class SettingsFragment : Fragment() {
                 startActivity(intent)
             }
             .setNegativeButton(R.string.cancel, null)
-            .show()
-    }
-
-    private fun showExperimentalWarning(onConfirm: () -> Unit, onCancel: () -> Unit) {
-        val message = getString(R.string.experimental_feature_message) + "\n\n" +
-            getString(R.string.experimental_feature_usb_hint)
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.experimental_feature_title)
-            .setMessage(message)
-            .setPositiveButton(R.string.enable) { _, _ -> onConfirm() }
-            .setNegativeButton(R.string.cancel) { _, _ -> onCancel() }
-            .setOnCancelListener { onCancel() }
             .show()
     }
 

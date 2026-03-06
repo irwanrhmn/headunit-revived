@@ -158,13 +158,6 @@
     <string name="move_up">Omhoog</string>
     <string name="move_down">Omlaag</string>
     <string name="auto_connecting_single_usb">Automatisch verbinden met USB-apparaat…</string>
-    <string name="usb_stability_check">USB-adapter stabiliteitscontrole</string>
-    <string name="usb_stability_check_description">Schakel in als u een draadloze Android Auto-adapter heeft die meerdere keren loskoppelt en opnieuw verbindt voordat deze correct werkt</string>
-    <string name="usb_stability_timeout">Stabiliteits-timeout</string>
-    <string name="usb_stability_timeout_description">Seconden dat het apparaat verbonden moet blijven voordat automatisch wordt verbonden of opnieuw verbonden (%d s)</string>
-    <string name="usb_device_settling">Wachten tot USB-apparaat stabiel is…</string>
-    <string name="max_auto_retry_attempts">Max. automatische herverbindingspogingen</string>
-    <string name="max_auto_retry_attempts_description">Aantal automatische herverbindingspogingen (%d)</string>
     <string name="video_codec">Video Codec</string>
     <string name="fps_limit">FPS Limiet</string>
     <string name="save">Opslaan</string>
@@ -172,9 +165,6 @@
     <string name="add_new">Nieuwe toevoegen</string>
     <string name="cancel">Annuleren</string>
     <string name="enable">Inschakelen</string>
-    <string name="experimental_feature_title">Experimentele functie</string>
-    <string name="experimental_feature_message">Deze functie is experimenteel en werkt mogelijk niet correct op alle apparaten. Wilt u deze inschakelen?</string>
-    <string name="experimental_feature_usb_hint">Als u automatische USB-verbinding gaat gebruiken, test dan eerst met deze optie uitgeschakeld.</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>
@@ -252,9 +242,6 @@
     <string name="failed">Mislukt</string>
     <string name="failed_start_android_auto">Starten van Android Auto mislukt</string>
     <string name="android_auto_starting">Android Auto start op…</string>
-    <string name="retry">Opnieuw</string>
-    <string name="retry_connection_title">Verbinding opnieuw proberen</string>
-    <string name="retry_connection_option">Android Auto opnieuw proberen</string>
     <string name="reset_usb_option">USB-verbinding resetten</string>
     <string name="reset_usb_timeout">USB-apparaat niet gevonden. Controleer de verbinding.</string>
     <string name="notification_service_running">Headunit Revived is actief</string>

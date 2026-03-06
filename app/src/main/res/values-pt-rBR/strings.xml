@@ -159,13 +159,6 @@
     <string name="move_up">Mover para cima</string>
     <string name="move_down">Mover para baixo</string>
     <string name="auto_connecting_single_usb">Conectando automaticamente ao dispositivo USB…</string>
-    <string name="usb_stability_check">Verificação de estabilidade do adaptador USB</string>
-    <string name="usb_stability_check_description">Ative se você tem um adaptador sem fio do Android Auto que desconecta e reconecta várias vezes antes de funcionar corretamente</string>
-    <string name="usb_stability_timeout">Tempo limite de estabilidade</string>
-    <string name="usb_stability_timeout_description">Segundos que o dispositivo deve permanecer conectado antes de conectar ou reconectar automaticamente (%d s)</string>
-    <string name="usb_device_settling">Aguardando estabilização do dispositivo USB…</string>
-    <string name="max_auto_retry_attempts">Máx. tentativas de reconexão automática</string>
-    <string name="max_auto_retry_attempts_description">Número de tentativas de reconexão automática (%d)</string>
     <string name="video_codec">Codec de vídeo</string>
     <string name="fps_limit">Limite de FPS</string>
     <string name="save">Salvar</string>
@@ -173,9 +166,6 @@
     <string name="add_new">Adicionar novo</string>
     <string name="cancel">Cancelar</string>
     <string name="enable">Ativar</string>
-    <string name="experimental_feature_title">Recurso experimental</string>
-    <string name="experimental_feature_message">Este recurso é experimental e pode não funcionar corretamente em todos os dispositivos. Deseja ativá-lo?</string>
-    <string name="experimental_feature_usb_hint">Se você for usar a conexão automática USB, primeiro teste com esta opção desativada.</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Áudio</string>
@@ -253,9 +243,6 @@
     <string name="failed">Falha</string>
     <string name="failed_start_android_auto">Falha ao iniciar Android Auto</string>
     <string name="android_auto_starting">Android Auto está iniciando…</string>
-    <string name="retry">Tentar novamente</string>
-    <string name="retry_connection_title">Tentar conexão novamente</string>
-    <string name="retry_connection_option">Tentar Android Auto novamente</string>
     <string name="reset_usb_option">Redefinir conexão USB</string>
     <string name="reset_usb_timeout">Dispositivo USB não encontrado. Verifique a conexão.</string>
     <string name="notification_service_running">Headunit Revived está em execução</string>

@@ -217,18 +217,6 @@ class Settings(context: Context) {
         get() = prefs.getBoolean("auto-connect-single-usb", false)
         set(value) { prefs.edit().putBoolean("auto-connect-single-usb", value).apply() }
 
-    var usbStabilityCheck: Boolean
-        get() = prefs.getBoolean("usb-stability-check", false)
-        set(value) { prefs.edit().putBoolean("usb-stability-check", value).apply() }
-
-    var usbStabilityTimeout: Int
-        get() = prefs.getInt("usb-stability-timeout", 10)
-        set(value) { prefs.edit().putInt("usb-stability-timeout", value).apply() }
-
-    var maxAutoRetryAttempts: Int
-        get() = prefs.getInt("max-auto-retry-attempts", 3)
-        set(value) { prefs.edit().putInt("max-auto-retry-attempts", value).apply() }
-
     var lastConnectionType: String
         get() = prefs.getString("last-connection-type", "")!!
         set(value) { prefs.edit().putString("last-connection-type", value).apply() }
