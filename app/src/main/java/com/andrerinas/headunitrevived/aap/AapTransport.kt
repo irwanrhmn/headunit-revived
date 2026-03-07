@@ -22,7 +22,6 @@ import com.andrerinas.headunitrevived.aap.protocol.messages.TouchEvent
 import com.andrerinas.headunitrevived.aap.protocol.proto.Input
 import com.andrerinas.headunitrevived.aap.protocol.proto.Sensors
 import com.andrerinas.headunitrevived.connection.AccessoryConnection
-import com.andrerinas.headunitrevived.contract.DisconnectIntent
 import com.andrerinas.headunitrevived.contract.ProjectionActivityRequest
 import com.andrerinas.headunitrevived.decoder.AudioDecoder
 import com.andrerinas.headunitrevived.decoder.MicRecorder
@@ -35,13 +34,36 @@ import com.andrerinas.headunitrevived.aap.AapService
 import com.andrerinas.headunitrevived.aap.protocol.proto.Control
 import javax.net.ssl.SSLEngineResult
 
+/**
+ * Core AAP message pump.
+ *
+ * Owns two [HandlerThread]s:
+ * - **Send** (`AapTransport:Handler::Send`) — encrypts and delivers outbound messages.
+ * - **Poll** (`AapTransport:Handler::Poll`) — reads, decrypts, and dispatches inbound messages.
+ *
+ * Lifecycle: [startHandshake] → [startReading] → message loop → [stop]/[quit].
+ *
+ * @param audioDecoder Decodes PCM audio received from the phone.
+ * @param videoDecoder Decodes H.264/H.265 video received from the phone.
+ * @param audioManager Used to request and release audio focus.
+ * @param settings User preferences (SSL mode, key mappings, microphone sample rate, …).
+ * @param notification Background notification handle; updated as connection state changes.
+ * @param context Application context; used for broadcasts and system services.
+ * @param externalSsl Optional singleton [AapSslContext] whose internal [javax.net.ssl.SSLContext]
+ *   (and its `ClientSessionContext` session cache) survives across [AapTransport] recreations.
+ *   When provided on the Java-SSL path, JSSE can resume the previous TLS session on reconnect,
+ *   skipping 4–6 round-trips and saving 1–3 s of handshake time. Pass `null` to create a
+ *   fresh [AapSslContext] per transport (no session resumption). Ignored when native SSL is
+ *   active (`settings.useNativeSsl = true`).
+ */
 class AapTransport(
         audioDecoder: AudioDecoder,
         videoDecoder: VideoDecoder,
         audioManager: AudioManager,
         private val settings: Settings,
         private val notification: BackgroundNotification,
-        private val context: Context)
+        private val context: Context,
+        private val externalSsl: AapSslContext? = null)
     : MicRecorder.Listener {
 
     val ssl: AapSsl = if (settings.useNativeSsl) {
@@ -50,11 +72,15 @@ class AapTransport(
             AapSslNative()
         } catch (e: Throwable) {
             AppLog.e("Failed to instantiate Native SSL, falling back to Java SSL", e)
-            AapSslContext(SingleKeyKeyManager(context))
+            // Use the shared context when available so session resumption works on fallback.
+            externalSsl ?: AapSslContext(SingleKeyKeyManager(context))
         }
     } else {
         AppLog.i("Using Java SSL implementation")
-        AapSslContext(SingleKeyKeyManager(context))
+        // externalSsl is the singleton AapSslContext from AppComponent whose SSLContext
+        // (and its ClientSessionContext session cache) survives across transport recreations,
+        // enabling TLS session resumption on reconnect.
+        externalSsl ?: AapSslContext(SingleKeyKeyManager(context))
     }
 
     internal val aapAudio: AapAudio
@@ -73,6 +99,7 @@ class AapTransport(
     private var aapRead: AapRead? = null
     var isQuittingAllowed: Boolean = false
     var ignoreNextStopRequest: Boolean = false
+    @Volatile var onQuit: ((Boolean) -> Unit)? = null
     var onAudioFocusStateChanged: ((Boolean) -> Unit)? = null
     private var pollHandler: Handler? = null
     private val pollHandlerCallback = Handler.Callback {
@@ -145,14 +172,17 @@ class AapTransport(
 
     internal fun quit(clean: Boolean = false) {
         AppLog.i("AapTransport quitting (clean=$clean)")
-        AapService.isConnected = false
-        context.sendBroadcast(DisconnectIntent(clean))
+        val cb = onQuit
+        onQuit = null
+        cb?.invoke(clean)
         micRecorder.listener = null
         pollThread?.quit()
         sendThread?.quit()
         
         try {
-            pollThread?.join(1000)
+            // Don't join the poll thread from within itself — it would block for the full
+            // timeout since the thread can't finish while it's waiting for itself to finish.
+            if (Thread.currentThread() != pollThread) pollThread?.join(1000)
             sendThread?.join(1000)
         } catch (e: InterruptedException) {
             AppLog.e("Failed to join threads", e)
@@ -165,8 +195,15 @@ class AapTransport(
         sendThread = null
     }
 
-    internal fun start(connection: AccessoryConnection): Boolean {
-        AppLog.i("Start Aap transport for $connection")
+    /**
+     * Phase 1 of startup: creates the send/poll threads and runs the SSL handshake.
+     *
+     * Returns `true` on success. On failure, threads are stopped via [quit] before returning.
+     * Must be followed by [startReading] (called after the projection surface is ready)
+     * to actually start the message loop.
+     */
+    internal fun startHandshake(connection: AccessoryConnection): Boolean {
+        AppLog.i("Start Aap transport handshake for $connection")
         this.connection = connection
 
         sendThread = HandlerThread("AapTransport:Handler::Send", Process.THREAD_PRIORITY_AUDIO)
@@ -179,7 +216,8 @@ class AapTransport(
         pollHandler = Handler(pollThread!!.looper, pollHandlerCallback)
         pollHandler?.post { com.andrerinas.headunitrevived.utils.LegacyOptimizer.setHighPriority() }
 
-        SystemClock.sleep(200)
+        // No sleep needed here: Handler(thread.looper, ...) already blocks internally until the
+        // HandlerThread's Looper is ready (via HandlerThread.getLooper() → wait/notifyAll).
 
         if (!handshake(connection)) {
             quit()
@@ -187,8 +225,21 @@ class AapTransport(
             return false
         }
 
+        return true
+    }
+
+    /**
+     * Phase 2 of startup: creates [AapRead] and posts the first [MSG_POLL] to begin the
+     * inbound message loop.
+     *
+     * Must only be called after [startHandshake] has returned `true` **and** after the
+     * projection surface has been set on the [VideoDecoder]. This guarantees that no video
+     * frame is ever decoded before a render target exists.
+     */
+    internal fun startReading() {
+        AppLog.i("Start Aap transport read loop")
         aapRead = AapRead.Factory.create(
-            connection,
+            connection!!,
             this,
             micRecorder,
             aapAudio,
@@ -198,13 +249,11 @@ class AapTransport(
             context
         )
         pollHandler?.sendEmptyMessage(MSG_POLL)
-
-        return true
     }
 
     private fun handshake(connection: AccessoryConnection): Boolean {
         try {
-            SystemClock.sleep(100)
+            SystemClock.sleep(300)
             val buffer = ByteArray(Messages.DEF_BUFFER_LENGTH)
 
             AppLog.d("Handshake: Starting version request. TS: ${SystemClock.elapsedRealtime()}")
@@ -212,9 +261,17 @@ class AapTransport(
             var ret = -1
             var attempt = 0
             var received = false
+            // Outer deadline prevents the loop from running for minutes on an unresponsive device.
+            // Each send+recv pair uses 2 s per operation; 3 attempts × 4 s ≈ 12 s worst-case,
+            // capped here at HANDSHAKE_TIMEOUT_MS so a stuck device fails fast.
+            val versionDeadline = SystemClock.elapsedRealtime() + HANDSHAKE_TIMEOUT_MS
             while (attempt < 3 && connection.isConnected) {
+                if (SystemClock.elapsedRealtime() >= versionDeadline) {
+                    AppLog.e("Handshake: Version exchange timed out after $attempt attempt(s).")
+                    return false
+                }
                 attempt++
-                ret = connection.sendBlocking(version, version.size, 5000)
+                ret = connection.sendBlocking(version, version.size, 2000)
                 AppLog.d("Handshake: Version request sent. ret: $ret. attempt: $attempt. TS: ${SystemClock.elapsedRealtime()}")
                 if (ret < 0) {
                     AppLog.w("Handshake: Version request send failed (ret=$ret), attempt $attempt")
@@ -223,18 +280,35 @@ class AapTransport(
                 }
 
                 AppLog.d("Handshake: Waiting for version response. TS: ${SystemClock.elapsedRealtime()}")
-                ret = connection.recvBlocking(buffer, buffer.size, 5000, false)
-
-                if (ret > 0) {
-                    val hexResponse = StringBuilder()
-                    for (i in 0 until minOf(ret, 16)) {
-                        hexResponse.append(String.format("%02X ", buffer[i]))
+                // Inner loop: drain messages until we see channel=0 type=2 (VERSION_RESPONSE).
+                // On first connection the phone may send a proactive message (e.g. a ping or a
+                // status) before the version response arrives. Accepting any non-empty read as
+                // "version response received" would hand a random payload to the SSL layer and
+                // cause a 15 s timeout. Instead, discard unexpected messages and keep reading
+                // until the deadline expires.
+                val recvDeadline = SystemClock.elapsedRealtime() + 2000
+                while (SystemClock.elapsedRealtime() < recvDeadline) {
+                    val remaining = (recvDeadline - SystemClock.elapsedRealtime())
+                        .toInt().coerceAtLeast(100)
+                    ret = connection.recvBlocking(buffer, buffer.size, remaining, false)
+                    if (ret <= 0) break  // timeout or error — fall through to outer retry
+                    if (ret >= 6
+                        && buffer[0] == 0.toByte()
+                        && buffer[4] == 0.toByte()
+                        && buffer[5] == 2.toByte()) {
+                        AppLog.i("Handshake: Version response received (ret=$ret, attempt=$attempt).")
+                        received = true
+                        break
                     }
-                    AppLog.i("Handshake: Version response received (ret=$ret). Bytes: $hexResponse")
-                    received = true
-                    break
+                    // Wrong message — log and keep draining.
+                    val ch   = buffer[0].toInt() and 0xFF
+                    val type = ((buffer[4].toInt() and 0xFF) shl 8) or (buffer[5].toInt() and 0xFF)
+                    AppLog.w("Handshake: Ignoring unexpected message " +
+                             "(ch=$ch, type=0x${type.toString(16)}, len=$ret). " +
+                             "Waiting for VERSION_RESPONSE.")
                 }
-                AppLog.w("Handshake: Version response recv failed (ret=$ret), attempt $attempt")
+                if (received) break
+                AppLog.w("Handshake: No VERSION_RESPONSE within 2s (attempt $attempt), ret=$ret")
                 SystemClock.sleep(200)
             }
 
@@ -251,14 +325,12 @@ class AapTransport(
             }
 
             ssl.postHandshakeReset()
-
-            ssl.postHandshakeReset()
             AppLog.d("Handshake: SSL buffers reset after handshake.")
 
             AppLog.d("Handshake: SSL handshake complete. TS: ${SystemClock.elapsedRealtime()}")
             // Status = OK
             val status = Messages.statusOk
-            ret = connection.sendBlocking(status, status.size, 5000)
+            ret = connection.sendBlocking(status, status.size, 2000)
             AppLog.d("Handshake: Status OK sent. ret: $ret. TS: ${SystemClock.elapsedRealtime()}")
             if (ret < 0) {
                 AppLog.e("Handshake: Status request sendEncrypted ret: $ret")
@@ -364,5 +436,8 @@ class AapTransport(
     companion object {
         private const val MSG_POLL = 1
         private const val MSG_SEND = 2
+        // Maximum wall-clock time allowed for the version-exchange phase of the AAP handshake.
+        // Prevents the retry loop from blocking for minutes on an unresponsive USB device.
+        private const val HANDSHAKE_TIMEOUT_MS = 10_000L
     }
 }

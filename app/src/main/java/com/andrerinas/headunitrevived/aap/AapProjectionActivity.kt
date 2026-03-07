@@ -10,17 +10,20 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.TextureView
 import android.view.View
-import android.widget.Button
 import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.andrerinas.headunitrevived.App
 import com.andrerinas.headunitrevived.R
 import com.andrerinas.headunitrevived.aap.protocol.messages.TouchEvent
 import com.andrerinas.headunitrevived.aap.protocol.messages.VideoFocusEvent
 import com.andrerinas.headunitrevived.app.SurfaceActivity
-import com.andrerinas.headunitrevived.contract.DisconnectIntent
+import com.andrerinas.headunitrevived.connection.CommManager
 import com.andrerinas.headunitrevived.contract.KeyIntent
+import kotlinx.coroutines.launch
 import com.andrerinas.headunitrevived.decoder.VideoDecoder
 import com.andrerinas.headunitrevived.decoder.VideoDimensionsListener
 import com.andrerinas.headunitrevived.utils.AppLog
@@ -32,7 +35,6 @@ import com.andrerinas.headunitrevived.utils.Settings
 import com.andrerinas.headunitrevived.view.OverlayTouchView
 import com.andrerinas.headunitrevived.utils.HeadUnitScreenConfig
 import com.andrerinas.headunitrevived.utils.SystemUI
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, VideoDimensionsListener {
 
@@ -41,12 +43,13 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
     private val settings: Settings by lazy { Settings(this) }
     private var isSurfaceSet = false
     private val watchdogHandler = android.os.Handler(android.os.Looper.getMainLooper())
+
     private val videoWatchdogRunnable = object : Runnable {
         override fun run() {
             val loadingOverlay = findViewById<View>(R.id.loading_overlay)
-            if (loadingOverlay?.visibility == View.VISIBLE && AapService.isConnected) {
+            if (loadingOverlay?.visibility == View.VISIBLE && commManager.isConnected) {
                 AppLog.w("Watchdog: No video received. Requesting Keyframe (Unsolicited Focus)...")
-                transport.send(VideoFocusEvent(gain = true, unsolicited = true))
+                commManager.send(VideoFocusEvent(gain = true, unsolicited = true))
                 watchdogHandler.postDelayed(this, 3000)
             }
         }
@@ -57,14 +60,6 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
             checkAndForceSurface()
         }
     }
-    private var retryButton: Button? = null
-    private val retryTimerRunnable = Runnable {
-        val loadingOverlay = findViewById<View>(R.id.loading_overlay)
-        if (loadingOverlay?.visibility == View.VISIBLE) {
-            retryButton?.visibility = View.VISIBLE
-        }
-    }
-
     private fun checkAndForceSurface() {
         AppLog.i("Watchdog: checkAndForceSurface executing...")
         if (projectionView is TextureView) {
@@ -91,13 +86,6 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
              } else {
                  AppLog.e("Watchdog: SurfaceView NOT valid.")
              }
-        }
-    }
-
-    private val disconnectReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            AppLog.i("AapProjectionActivity received disconnect signal, finishing.")
-            finish()
         }
     }
 
@@ -135,10 +123,27 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
 
         setContentView(R.layout.activity_headunit)
 
-        // Register disconnect receiver safely for Android 14+
-        ContextCompat.registerReceiver(this, disconnectReceiver, IntentFilters.disconnect, ContextCompat.RECEIVER_NOT_EXPORTED)
-
         videoDecoder.dimensionsListener = this
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                commManager.connectionState.collect { state ->
+                    when (state) {
+                        is CommManager.ConnectionState.Disconnected -> finish()
+                        is CommManager.ConnectionState.HandshakeComplete -> {
+                            // Handshake done. If the surface is already ready (e.g. reconnect
+                            // while the activity is in the foreground), start reading immediately.
+                            // If not, onSurfaceChanged() will call startReading() when the surface
+                            // becomes available.
+                            if (isSurfaceSet) {
+                                commManager.startReading()
+                            }
+                        }
+                        else -> {}
+                    }
+                }
+            }
+        }
 
         AppLog.i("HeadUnit for Android Auto (tm) - Copyright 2011-2015 Michael A. Reid., since 2025 André Rinas All Rights Reserved...")
 
@@ -203,15 +208,9 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
         // Ensure loading overlay is on top of everything
         loadingOverlay?.bringToFront()
         
-        retryButton = findViewById(R.id.retry_button)
-        retryButton?.setOnClickListener { showRetryDialog() }
-        watchdogHandler.postDelayed(retryTimerRunnable, RETRY_DELAY_MS)
-
         videoDecoder.onFirstFrameListener = {
             runOnUiThread {
                 loadingOverlay?.visibility = View.GONE
-                retryButton?.visibility = View.GONE
-                watchdogHandler.removeCallbacks(retryTimerRunnable)
             }
         }
     }
@@ -221,9 +220,7 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
         super.onPause()
         watchdogHandler.removeCallbacks(watchdogRunnable)
         watchdogHandler.removeCallbacks(videoWatchdogRunnable)
-        watchdogHandler.removeCallbacks(retryTimerRunnable)
         unregisterReceiver(keyCodeReceiver)
-        // Disconnect receiver is unregistered in onDestroy
     }
 
     override fun onResume() {
@@ -232,24 +229,12 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
         watchdogHandler.postDelayed(watchdogRunnable, 2000)
         watchdogHandler.postDelayed(videoWatchdogRunnable, 3000)
 
-        val loadingOverlay = findViewById<View>(R.id.loading_overlay)
-        if (loadingOverlay?.visibility == View.VISIBLE && retryButton?.visibility != View.VISIBLE) {
-            watchdogHandler.postDelayed(retryTimerRunnable, RETRY_DELAY_MS)
-        }
-        
         // Register key event receiver safely for Android 14+
         ContextCompat.registerReceiver(this, keyCodeReceiver, IntentFilters.keyEvent, ContextCompat.RECEIVER_NOT_EXPORTED)
         
         setFullscreen() // Call setFullscreen here as well
 
-        // Pre-emptively request audio focus to push background apps away
-        App.provide(this).transport.aapAudio?.requestFocusChange(
-            android.media.AudioManager.STREAM_MUSIC,
-            com.andrerinas.headunitrevived.aap.protocol.proto.Control.AudioFocusRequestNotification.AudioFocusRequestType.GAIN_VALUE,
-            android.media.AudioManager.OnAudioFocusChangeListener { focusChange ->
-                AppLog.i("Activity AudioFocus pre-emptive change: $focusChange")
-            }
-        )
+
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -288,8 +273,7 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
         }
     }
 
-    val transport: AapTransport
-        get() = App.provide(this).transport
+    private val commManager get() = App.provide(this).commManager
 
     override fun onSurfaceCreated(surface: android.view.Surface) {
         AppLog.i("[AapProjectionActivity] onSurfaceCreated")
@@ -300,15 +284,31 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
         AppLog.i("[AapProjectionActivity] onSurfaceChanged. Actual surface dimensions: width=$width, height=$height")
         isSurfaceSet = true
         
-        // Reduced delay from 750ms to 150ms to catch the first I-Frame
-        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-            AppLog.i("Delayed setting surface to decoder")
-            videoDecoder.setSurface(surface)
+        videoDecoder.setSurface(surface)
 
-            // Simply request focus to ensure stream is active
-            transport.send(VideoFocusEvent(gain = true, unsolicited = false))
-            
-        }, 150)
+        when (commManager.connectionState.value) {
+            is CommManager.ConnectionState.Connected -> {
+                // AapService should have started the handshake already, but as a fallback
+                // (e.g. service restarted) kick it off here. The HandshakeComplete observer
+                // will call startReading() once the handshake finishes.
+                lifecycleScope.launch { commManager.startHandshake() }
+            }
+            is CommManager.ConnectionState.StartingTransport -> {
+                // Handshake is in progress. The HandshakeComplete observer will call
+                // startReading() when it finishes.
+            }
+            is CommManager.ConnectionState.HandshakeComplete -> {
+                // Handshake already done before surface was ready — start reading now.
+                lifecycleScope.launch { commManager.startReading() }
+            }
+            is CommManager.ConnectionState.TransportStarted -> {
+                // Surface recreated while transport was already running; request a keyframe.
+                commManager.send(VideoFocusEvent(gain = true, unsolicited = true))
+            }
+            else -> {
+                commManager.send(VideoFocusEvent(gain = true, unsolicited = false))
+            }
+        }
 
         // Explicitly check and set video dimensions if already known by the decoder
         // This handles cases where the activity is recreated but the decoder already has dimensions
@@ -327,7 +327,7 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
     override fun onSurfaceDestroyed(surface: android.view.Surface) {
         AppLog.i("SurfaceCallback: onSurfaceDestroyed. Surface: $surface")
         isSurfaceSet = false
-        transport.send(VideoFocusEvent(gain = false, unsolicited = false))
+        commManager.send(VideoFocusEvent(gain = false, unsolicited = false))
         videoDecoder.stop("surfaceDestroyed")
     }
 
@@ -363,7 +363,7 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
             pointerData.add(Triple(pointerId, correctedX, correctedY))
         }
 
-        transport.send(TouchEvent(ts, action, event.actionIndex, pointerData))
+        commManager.send(TouchEvent(ts, action, event.actionIndex, pointerData))
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -392,49 +392,17 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
     }
 
     private fun onKeyEvent(keyCode: Int, isPress: Boolean) {
-        transport.send(keyCode, isPress)
+        commManager.send(keyCode, isPress)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         AppLog.i("AapProjectionActivity.onDestroy called. isFinishing=$isFinishing")
-        unregisterReceiver(disconnectReceiver)
         videoDecoder.dimensionsListener = null
-
-        // Note: Disconnect is now only handled via explicit user action (Exit button)
-        // or when the phone closes the connection. This prevents accidental closes
-        // during task switching or launcher interaction.
-    }
-
-    private fun showRetryDialog() {
-        val isUsb = settings.lastConnectionType == Settings.CONNECTION_TYPE_USB
-
-        val options = mutableListOf(getString(R.string.retry_connection_option))
-        if (isUsb) {
-            options.add(getString(R.string.reset_usb_option))
-        }
-
-        MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.retry_connection_title)
-            .setItems(options.toTypedArray()) { _, which ->
-                val action = when (which) {
-                    0 -> AapService.ACTION_RETRY_CONNECTION
-                    1 -> AapService.ACTION_RESET_USB
-                    else -> return@setItems
-                }
-                val intent = Intent(this, AapService::class.java).apply {
-                    this.action = action
-                }
-                startService(intent)
-                finish()
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
     }
 
     companion object {
         const val EXTRA_FOCUS = "focus"
-        private const val RETRY_DELAY_MS = 10_000L
 
         fun intent(context: Context): Intent {
             val aapIntent = Intent(context, AapProjectionActivity::class.java)

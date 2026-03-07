@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.view.KeyEvent
 import com.andrerinas.headunitrevived.aap.AapProjectionActivity
 import com.andrerinas.headunitrevived.aap.protocol.messages.LocationUpdateEvent
+import com.andrerinas.headunitrevived.connection.CommManager
 import com.andrerinas.headunitrevived.contract.KeyIntent
 import com.andrerinas.headunitrevived.contract.LocationUpdateIntent
 import com.andrerinas.headunitrevived.contract.MediaKeyIntent
@@ -30,7 +31,7 @@ class AapBroadcastReceiver : BroadcastReceiver() {
         if (intent.action == LocationUpdateIntent.action) {
             val location = LocationUpdateIntent.extractLocation(intent)
             if (component.settings.useGpsForNavigation) {
-                App.provide(context).transport.send(LocationUpdateEvent(location))
+                component.commManager.send(LocationUpdateEvent(location))
             }
 
             if (location.latitude != 0.0 && location.longitude != 0.0) {
@@ -44,10 +45,10 @@ class AapBroadcastReceiver : BroadcastReceiver() {
                 intent.getParcelableExtra(KeyIntent.extraEvent)
             }
             event?.let {
-                component.transport.send(it.keyCode, it.action == KeyEvent.ACTION_DOWN)
+                component.commManager.send(it.keyCode, it.action == KeyEvent.ACTION_DOWN)
             }
         } else if (intent.action == ProjectionActivityRequest.action){
-            if (component.transport.isAlive) {
+            if (component.commManager.connectionState.value is CommManager.ConnectionState.TransportStarted) {
                 val aapIntent = Intent(context, AapProjectionActivity::class.java)
                 aapIntent.putExtra(AapProjectionActivity.EXTRA_FOCUS, true)
                 aapIntent.flags = FLAG_ACTIVITY_NEW_TASK

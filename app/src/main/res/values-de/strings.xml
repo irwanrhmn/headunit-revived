@@ -159,13 +159,6 @@
     <string name="move_up">Nach oben</string>
     <string name="move_down">Nach unten</string>
     <string name="auto_connecting_single_usb">Automatische Verbindung zum USB-Gerät…</string>
-    <string name="usb_stability_check">USB-Adapter Stabilitätsprüfung</string>
-    <string name="usb_stability_check_description">Aktivieren, wenn Sie einen kabellosen Android Auto-Adapter haben, der sich mehrmals trennt und wieder verbindet, bevor er korrekt funktioniert</string>
-    <string name="usb_stability_timeout">Stabilitäts-Zeitlimit</string>
-    <string name="usb_stability_timeout_description">Sekunden, die das Gerät verbunden bleiben muss, bevor es automatisch verbunden oder erneut verbunden wird (%d s)</string>
-    <string name="usb_device_settling">Warten auf Stabilisierung des USB-Geräts…</string>
-    <string name="max_auto_retry_attempts">Max. automatische Wiederverbindungsversuche</string>
-    <string name="max_auto_retry_attempts_description">Anzahl der automatischen Wiederverbindungsversuche (%d)</string>
     <string name="video_codec">Video Codec</string>
     <string name="fps_limit">FPS Limit</string>
     <string name="save">Speichern</string>
@@ -173,9 +166,6 @@
     <string name="add_new">Hinzufügen</string>
     <string name="cancel">Abbrechen</string>
     <string name="enable">Aktivieren</string>
-    <string name="experimental_feature_title">Experimentelle Funktion</string>
-    <string name="experimental_feature_message">Diese Funktion ist experimentell und funktioniert möglicherweise nicht auf allen Geräten korrekt. Möchten Sie sie aktivieren?</string>
-    <string name="experimental_feature_usb_hint">Wenn Sie die automatische USB-Verbindung verwenden möchten, testen Sie bitte zuerst mit dieser Option deaktiviert.</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>
@@ -259,9 +249,6 @@
     <string name="shortcut_connect_desc">Mit letztem Gerät verbinden</string>
     <string name="shortcut_disconnect_title">Trennen</string>
     <string name="shortcut_disconnect_desc">Aktuelle Sitzung beenden</string>
-    <string name="retry">Wiederholen</string>
-    <string name="retry_connection_title">Verbindung wiederholen</string>
-    <string name="retry_connection_option">Android Auto wiederholen</string>
     <string name="reset_usb_option">USB-Verbindung zurücksetzen</string>
     <string name="reset_usb_timeout">USB-Gerät nicht gefunden. Bitte Verbindung prüfen.</string>
     <string name="shortcut_night_mode_auto_title">Modus: Auto</string>

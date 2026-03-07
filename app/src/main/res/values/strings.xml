@@ -78,6 +78,12 @@
     <string name="back">Back</string>
     <string name="debug_mode">Debug Mode</string>
     <string name="debug_mode_description">Toggle more Logging</string>
+    <string name="log_level">Log Level</string>
+    <string name="log_level_description">Filter log level when exporting</string>
+    <string name="start_log_capture">Start Capturing Logs</string>
+    <string name="start_log_capture_description">Begin recording full logs for debugging</string>
+    <string name="stop_log_capture">Stop Capturing Logs</string>
+    <string name="stop_log_capture_description">Recording in progress… tap to stop</string>
     <string name="export_logs">Export Logs</string>
     <string name="export_logs_description">Save logs for debugging</string>
     <string name="use_native_ssl">Use Native SSL</string>
@@ -159,13 +165,6 @@
     <string name="move_up">Move up</string>
     <string name="move_down">Move down</string>
     <string name="auto_connecting_single_usb">Auto-connecting to USB device…</string>
-    <string name="usb_stability_check">USB adapter stability check</string>
-    <string name="usb_stability_check_description">Enable if you have a wireless Android Auto adapter that disconnects and reconnects several times before working correctly</string>
-    <string name="usb_stability_timeout">Stability timeout</string>
-    <string name="usb_stability_timeout_description">Seconds the device must stay connected before auto-connecting or reconnecting (%d s)</string>
-    <string name="usb_device_settling">Waiting for USB device to stabilize…</string>
-    <string name="max_auto_retry_attempts">Max auto-reconnect attempts</string>
-    <string name="max_auto_retry_attempts_description">Number of automatic reconnection attempts (%d)</string>
     <string name="video_codec">Video Codec</string>
     <string name="fps_limit">FPS Limit</string>
     <string name="save">Save</string>
@@ -173,9 +172,6 @@
     <string name="add_new">Add new</string>
     <string name="cancel">Cancel</string>
     <string name="enable">Enable</string>
-    <string name="experimental_feature_title">Experimental Feature</string>
-    <string name="experimental_feature_message">This feature is experimental and may not work correctly on all devices. Do you want to enable it?</string>
-    <string name="experimental_feature_usb_hint">If you are going to use USB auto-connect, please first test with this option turned off.</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>
@@ -253,9 +249,6 @@
     <string name="failed">Failed</string>
     <string name="failed_start_android_auto">Failed to start Android Auto</string>
     <string name="android_auto_starting">Android Auto is starting…</string>
-    <string name="retry">Retry</string>
-    <string name="retry_connection_title">Retry Connection</string>
-    <string name="retry_connection_option">Retry Android Auto</string>
     <string name="reset_usb_option">Reset USB Connection</string>
     <string name="reset_usb_timeout">USB device not found. Please check connection.</string>
     <string name="notification_service_running">Headunit Revived is running</string>

@@ -1,9 +1,7 @@
 package com.andrerinas.headunitrevived.main
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.hardware.usb.UsbManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,19 +12,24 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.andrerinas.headunitrevived.App
 import com.andrerinas.headunitrevived.R
 import com.andrerinas.headunitrevived.aap.AapProjectionActivity
 import com.andrerinas.headunitrevived.aap.AapService
 import com.andrerinas.headunitrevived.connection.UsbDeviceCompat
-import com.andrerinas.headunitrevived.contract.ConnectedIntent
-import com.andrerinas.headunitrevived.contract.DisconnectIntent
 import com.andrerinas.headunitrevived.utils.AppLog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import com.andrerinas.headunitrevived.utils.Settings
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class HomeFragment : Fragment() {
+
+    private val commManager get() = App.provide(requireContext()).commManager
 
     private lateinit var self_mode_button: Button
     private lateinit var usb: Button
@@ -37,38 +40,9 @@ class HomeFragment : Fragment() {
     private lateinit var self_mode_text: TextView
     private var hasAttemptedAutoConnect = false
     private var hasAttemptedSingleUsbAutoConnect = false
-    private var isScanning = false
 
-    private val connectionStatusReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            AppLog.i("HomeFragment received ${intent?.action}")
-
-            when (intent?.action) {
-                AapService.ACTION_SCAN_STARTED -> {
-                    isScanning = true
-                    updateWifiButtonFeedback()
-                }
-                AapService.ACTION_SCAN_FINISHED -> {
-                    isScanning = false
-                    updateWifiButtonFeedback()
-                }
-            }
-
-            updateProjectionButtonText()
-
-            if (intent?.action == ConnectedIntent.action) {
-                AppLog.i("HomeFragment: Connected broadcast received, launching projection")
-                val aapIntent = AapProjectionActivity.intent(requireContext()).apply {
-                    putExtra(AapProjectionActivity.EXTRA_FOCUS, true)
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                }
-                startActivity(aapIntent)
-            }
-        }
-    }
-
-    private fun updateWifiButtonFeedback() {
-        if (isScanning) {
+    private fun updateWifiButtonFeedback(scanning: Boolean) {
+        if (scanning) {
             wifi_text_view.text = getString(R.string.searching)
             wifi.alpha = 0.6f
         } else {
@@ -95,26 +69,38 @@ class HomeFragment : Fragment() {
         setupListeners()
         updateProjectionButtonText()
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                commManager.connectionState.collect { updateProjectionButtonText() }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                AapService.scanningState.collect { updateWifiButtonFeedback(it) }
+            }
+        }
+
         val appSettings = App.provide(requireContext()).settings
 
         // Execute auto-connect methods in user-defined priority order
         for (methodId in appSettings.autoConnectPriorityOrder) {
-            if (AapService.isConnected) break
+            if (commManager.isConnected) break
             when (methodId) {
                 Settings.AUTO_CONNECT_LAST_SESSION -> {
-                    if (appSettings.autoConnectLastSession && !hasAttemptedAutoConnect) {
+                    if (appSettings.autoConnectLastSession && !hasAttemptedAutoConnect && !commManager.isConnected) {
                         hasAttemptedAutoConnect = true
                         attemptAutoConnect()
                     }
                 }
                 Settings.AUTO_CONNECT_SELF_MODE -> {
-                    if (appSettings.autoStartSelfMode && !hasAutoStarted) {
+                    if (appSettings.autoStartSelfMode && !hasAutoStarted && !commManager.isConnected) {
                         hasAutoStarted = true
                         startSelfMode()
                     }
                 }
                 Settings.AUTO_CONNECT_SINGLE_USB -> {
-                    if (appSettings.autoConnectSingleUsbDevice && !hasAttemptedSingleUsbAutoConnect) {
+                    if (appSettings.autoConnectSingleUsbDevice && !hasAttemptedSingleUsbAutoConnect && !commManager.isConnected) {
                         hasAttemptedSingleUsbAutoConnect = true
                         attemptSingleUsbAutoConnect()
                     }
@@ -125,7 +111,6 @@ class HomeFragment : Fragment() {
 
     private fun startSelfMode() {
         AapService.selfMode = true
-        AapService.isConnected = false
         val intent = Intent(requireContext(), AapService::class.java)
         intent.action = AapService.ACTION_START_SELF_MODE
         ContextCompat.startForegroundService(requireContext(), intent)
@@ -138,7 +123,7 @@ class HomeFragment : Fragment() {
 
         if (!appSettings.autoConnectLastSession ||
             !appSettings.hasAcceptedDisclaimer ||
-            AapService.isConnected) {
+            commManager.isConnected) {
             return
         }
 
@@ -154,7 +139,11 @@ class HomeFragment : Fragment() {
                 if (ip.isNotEmpty()) {
                     AppLog.i("Auto-connect: Attempting WiFi connection to $ip")
                     Toast.makeText(requireContext(), getString(R.string.auto_connecting_to, ip), Toast.LENGTH_SHORT).show()
-                    ContextCompat.startForegroundService(requireContext(), AapService.createIntent(ip, requireContext()))
+                    val ctx = requireContext()
+                    lifecycleScope.launch(Dispatchers.IO) { App.provide(ctx).commManager.connect(ip, 5277) }
+                    ContextCompat.startForegroundService(requireContext(), Intent(requireContext(), AapService::class.java).apply {
+                        action = AapService.ACTION_CONNECT_SOCKET
+                    })
                 }
             }
             Settings.CONNECTION_TYPE_USB -> {
@@ -167,7 +156,9 @@ class HomeFragment : Fragment() {
                     if (matchingDevice != null && usbManager.hasPermission(matchingDevice)) {
                         AppLog.i("Auto-connect: Attempting USB connection to $lastUsbDevice")
                         Toast.makeText(requireContext(), getString(R.string.auto_connecting_usb), Toast.LENGTH_SHORT).show()
-                        ContextCompat.startForegroundService(requireContext(), AapService.createIntent(matchingDevice, requireContext()))
+                        ContextCompat.startForegroundService(requireContext(), Intent(requireContext(), AapService::class.java).apply {
+                            action = AapService.ACTION_CHECK_USB
+                        })
                     } else {
                         AppLog.i("Auto-connect: USB device $lastUsbDevice not found or no permission")
                     }
@@ -180,7 +171,7 @@ class HomeFragment : Fragment() {
         val appSettings = App.provide(requireContext()).settings
         if (!appSettings.autoConnectSingleUsbDevice ||
             !appSettings.hasAcceptedDisclaimer ||
-            AapService.isConnected) return
+            commManager.isConnected) return
 
         AppLog.i("HomeFragment: Requesting single-USB auto-connect via AapService")
         ContextCompat.startForegroundService(requireContext(),
@@ -199,7 +190,7 @@ class HomeFragment : Fragment() {
         }
 
         self_mode_button.setOnClickListener {
-            if (AapService.isConnected) {
+            if (commManager.isConnected) {
                 val aapIntent = Intent(requireContext(), AapProjectionActivity::class.java)
                 aapIntent.putExtra(AapProjectionActivity.EXTRA_FOCUS, true)
                 startActivity(aapIntent)
@@ -224,9 +215,9 @@ class HomeFragment : Fragment() {
             val mode = App.provide(requireContext()).settings.wifiConnectionMode
             when (mode) {
                 1 -> { // Auto (Headunit Server) - One-Shot Scan
-                    if (AapService.isConnected) {
+                    if (commManager.isConnected) {
                         // Already connected, no toast needed
-                    } else if (isScanning) {
+                    } else if (AapService.scanningState.value) {
                         Toast.makeText(requireContext(), getString(R.string.already_scanning), Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.searching_headunit_server), Toast.LENGTH_SHORT).show()
@@ -237,9 +228,9 @@ class HomeFragment : Fragment() {
                     }
                 }
                 2 -> { // Helper (Wireless Launcher)
-                    if (AapService.isConnected) {
+                    if (commManager.isConnected) {
                         // Already connected, no toast needed
-                    } else if (isScanning) {
+                    } else if (AapService.scanningState.value) {
                         Toast.makeText(requireContext(), getString(R.string.already_searching_phone), Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.searching_phone), Toast.LENGTH_SHORT).show()
@@ -268,7 +259,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateProjectionButtonText() {
-        if (AapService.isConnected) {
+        if (commManager.isConnected) {
             self_mode_text.text = getString(R.string.to_android_auto)
         } else {
             self_mode_text.text = getString(R.string.self_mode)
@@ -277,24 +268,8 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        AppLog.i("HomeFragment: onResume. isConnected=${AapService.isConnected}")
-        val filter = IntentFilter().apply {
-            addAction(ConnectedIntent.action)
-            addAction(DisconnectIntent.action)
-            addAction(AapService.ACTION_SCAN_STARTED)
-            addAction(AapService.ACTION_SCAN_FINISHED)
-        }
-        
-        ContextCompat.registerReceiver(requireContext(), connectionStatusReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
-        
-        isScanning = AapService.isScanning
-        updateWifiButtonFeedback()
+        AppLog.i("HomeFragment: onResume. isConnected=${commManager.isConnected}")
         updateProjectionButtonText()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        requireContext().unregisterReceiver(connectionStatusReceiver)
     }
 
     companion object {

@@ -150,13 +150,6 @@
     <string name="auto_connect_single_usb">USB-eszköz automatikus csatlakoztatása</string>
     <string name="auto_connect_single_usb_description">Automatikus csatlakozás, ha csak egy kompatibilis eszköz érhető el</string>
     <string name="auto_connecting_single_usb">Automatikus csatlakozás USB-eszközhöz…</string>
-    <string name="usb_stability_check">USB adapter stabilitás ellenőrzés</string>
-    <string name="usb_stability_check_description">Engedélyezze, ha van egy vezeték nélküli Android Auto adaptere, amely többször lecsatlakozik és újracsatlakozik, mielőtt megfelelően működne</string>
-    <string name="usb_stability_timeout">Stabilitási időkorlát</string>
-    <string name="usb_stability_timeout_description">Másodpercek, ameddig az eszköznek csatlakozva kell maradnia az automatikus csatlakozás vagy újracsatlakozás előtt (%d mp)</string>
-    <string name="usb_device_settling">Várakozás az USB-eszköz stabilizálódására…</string>
-    <string name="max_auto_retry_attempts">Max. automatikus újracsatlakozási kísérletek</string>
-    <string name="max_auto_retry_attempts_description">Automatikus újracsatlakozási kísérletek száma (%d)</string>
     <string name="auto_connect_settings">Automatikus csatlakozás beállítások</string>
     <string name="auto_connect_settings_description">Az automatikus csatlakozási módok és prioritásuk konfigurálása</string>
     <string name="auto_connect_help">Ezek a módszerek automatikusan futnak az alkalmazás megnyitásakor. Engedélyezze a kívántakat, majd húzza őket a sorrend beállításához. Az első sikeres engedélyezett módszer kerül felhasználásra.</string>
@@ -172,9 +165,6 @@
     <string name="add_new">Új hozzáadása</string>
     <string name="cancel">Mégse</string>
     <string name="enable">Engedélyezés</string>
-    <string name="experimental_feature_title">Kísérleti funkció</string>
-    <string name="experimental_feature_message">Ez a funkció kísérleti jellegű, és nem feltétlenül működik megfelelően minden eszközön. Szeretné engedélyezni?</string>
-    <string name="experimental_feature_usb_hint">Ha az automatikus USB-csatlakozást fogja használni, kérjük, először tesztelje ezzel a lehetőséggel kikapcsolva.</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Hang</string>
@@ -264,9 +254,6 @@
     <string name="shortcut_night_mode_day_desc">Nappali mód kényszerítése</string>
     <string name="shortcut_night_mode_night_title">Mód: Éjszakai</string>
     <string name="shortcut_night_mode_night_desc">Éjszakai mód kényszerítése</string>
-    <string name="retry">Újra</string>
-    <string name="retry_connection_title">Kapcsolat újrapróbálása</string>
-    <string name="retry_connection_option">Android Auto újrapróbálása</string>
     <string name="reset_usb_option">USB kapcsolat visszaállítása</string>
     <string name="reset_usb_timeout">USB eszköz nem található. Ellenőrizze a csatlakozást.</string>
     <string name="setup_welcome_title">Gyorsbeállítás</string>

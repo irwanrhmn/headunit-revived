@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.andrerinas.headunitrevived.App
 import com.andrerinas.headunitrevived.aap.AapService
 import com.andrerinas.headunitrevived.utils.AppLog
 import com.andrerinas.headunitrevived.utils.Settings
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AutomationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +39,10 @@ class AutomationActivity : AppCompatActivity() {
             "connect" -> {
                 val ip = data.getQueryParameter("ip")
                 if (!ip.isNullOrEmpty()) {
-                    ContextCompat.startForegroundService(this, AapService.createIntent(ip, this))
+                    ContextCompat.startForegroundService(this, Intent(this, AapService::class.java).apply {
+                        action = AapService.ACTION_CONNECT_SOCKET
+                    })
+                    lifecycleScope.launch(Dispatchers.IO) { App.provide(this@AutomationActivity).commManager.connect(ip, 5277) }
                 } else {
                     val autoIntent = Intent(this, AapService::class.java).apply {
                         this.action = AapService.ACTION_CHECK_USB

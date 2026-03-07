@@ -69,7 +69,7 @@ internal class AapSslNative : AapSsl {
         return true
     }
 
-    override fun prepare(): Int {
+    private fun prepare(): Int {
         val ret = native_ssl_prepare()
         if (ret < 0) {
             AppLog.e("SSL prepare failed: $ret")
@@ -77,7 +77,7 @@ internal class AapSslNative : AapSsl {
         return ret
     }
 
-    override fun handshakeRead(): ByteArray? {
+    private fun handshakeRead(): ByteArray? {
         native_ssl_do_handshake()
         val size = native_ssl_bio_read(0, Messages.DEF_BUFFER_LENGTH, bio_read)
         if (size <= 0) {
@@ -89,17 +89,17 @@ internal class AapSslNative : AapSsl {
         return result
     }
 
-    override fun handshakeWrite(start: Int, length: Int, buffer: ByteArray): Int {
+    private fun handshakeWrite(start: Int, length: Int, buffer: ByteArray): Int {
         return native_ssl_bio_write(start, length, buffer)
     }
 
     // Stub for delegated tasks (Native SSL handles this internally or synchronously)
-    override fun runDelegatedTasks() {
+    private fun runDelegatedTasks() {
         // No-op for Native SSL
     }
 
     // Stub for handshake status (Native SSL manages state internally)
-    override fun getHandshakeStatus(): javax.net.ssl.SSLEngineResult.HandshakeStatus {
+    private fun getHandshakeStatus(): javax.net.ssl.SSLEngineResult.HandshakeStatus {
         return javax.net.ssl.SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING
     }
     

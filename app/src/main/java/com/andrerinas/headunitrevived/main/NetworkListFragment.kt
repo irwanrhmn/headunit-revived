@@ -19,8 +19,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.content.Intent
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.andrerinas.headunitrevived.App
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import com.andrerinas.headunitrevived.R
 import com.andrerinas.headunitrevived.aap.AapService
 import com.andrerinas.headunitrevived.connection.NetworkDiscovery
@@ -68,7 +72,7 @@ class NetworkListFragment : Fragment(), NetworkDiscovery.Listener {
             }
         }
 
-        adapter = AddressAdapter(requireContext(), childFragmentManager)
+        adapter = AddressAdapter(requireContext(), childFragmentManager, viewLifecycleOwner.lifecycleScope)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
         
@@ -165,12 +169,16 @@ class NetworkListFragment : Fragment(), NetworkDiscovery.Listener {
                 scanDialog?.dismiss()
                 Toast.makeText(context, getString(R.string.found_connecting, ip), Toast.LENGTH_SHORT).show()
 
-                // If we have a socket, we need to pass it to AapService for reuse!
-                if (socket != null && socket.isConnected) {
-                    AapService.pendingSocket = socket
+                val ctx = context ?: return@runOnUiThread
+                lifecycleScope.launch(Dispatchers.IO) {
+                    if (socket != null && socket.isConnected)
+                        App.provide(ctx).commManager.connect(socket)
+                    else
+                        App.provide(ctx).commManager.connect(ip, 5277)
+                    ContextCompat.startForegroundService(ctx, Intent(ctx, AapService::class.java).apply {
+                        action = AapService.ACTION_CONNECT_SOCKET
+                    })
                 }
-
-                context?.let { ctx -> ContextCompat.startForegroundService(ctx, AapService.createIntent(ip, ctx)) }
             } else {
                 // If not in auto-connect dialog, close the probe socket
                 try { socket?.close() } catch (e: Exception) {}
@@ -260,7 +268,8 @@ class NetworkListFragment : Fragment(), NetworkDiscovery.Listener {
 
     private class AddressAdapter(
         private val context: Context,
-        private val fragmentManager: FragmentManager
+        private val fragmentManager: FragmentManager,
+        private val scope: kotlinx.coroutines.CoroutineScope
     ) : RecyclerView.Adapter<DeviceViewHolder>(), View.OnClickListener {
 
         val addressList = ArrayList<String>()
@@ -307,7 +316,11 @@ class NetworkListFragment : Fragment(), NetworkDiscovery.Listener {
 
         override fun onClick(v: View) {
             if (v.id == android.R.id.button2) {
-                ContextCompat.startForegroundService(context, AapService.createIntent(v.getTag(R.integer.key_data) as String, context))
+                val ip = v.getTag(R.integer.key_data) as String
+                ContextCompat.startForegroundService(context, Intent(context, AapService::class.java).apply {
+                    action = AapService.ACTION_CONNECT_SOCKET
+                })
+                scope.launch(Dispatchers.IO) { App.provide(context).commManager.connect(ip, 5277) }
             } else {
                 this.removeAddress(v.getTag(R.integer.key_data) as String)
             }

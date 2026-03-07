@@ -158,13 +158,6 @@
     <string name="move_up">上移</string>
     <string name="move_down">下移</string>
     <string name="auto_connecting_single_usb">正在自動連接 USB 裝置…</string>
-    <string name="usb_stability_check">USB 轉接器穩定性檢查</string>
-    <string name="usb_stability_check_description">如果您有無線 Android Auto 轉接器，且該轉接器在正常運作前會多次斷開和重新連接，請啟用此選項</string>
-    <string name="usb_stability_timeout">穩定性逾時</string>
-    <string name="usb_stability_timeout_description">裝置必須保持連接的秒數，之後才會自動連接或重新連接（%d 秒）</string>
-    <string name="usb_device_settling">等待 USB 裝置穩定…</string>
-    <string name="max_auto_retry_attempts">最大自動重連次數</string>
-    <string name="max_auto_retry_attempts_description">自動重新連線嘗試次數 (%d)</string>
     <string name="video_codec">視訊編碼</string>
     <string name="fps_limit">FPS 限制</string>
     <string name="save">儲存</string>
@@ -172,9 +165,6 @@
     <string name="add_new">加入新的</string>
     <string name="cancel">取消</string>
     <string name="enable">啟用</string>
-    <string name="experimental_feature_title">實驗性功能</string>
-    <string name="experimental_feature_message">此功能為實驗性質，可能無法在所有裝置上正常運作。您要啟用嗎？</string>
-    <string name="experimental_feature_usb_hint">如果您要使用 USB 自動連線，請先在關閉此選項的情況下進行測試。</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">音訊</string>
@@ -252,9 +242,6 @@
     <string name="failed">失敗</string>
     <string name="failed_start_android_auto">啟動 Android Auto 失敗</string>
     <string name="android_auto_starting">Android Auto 啟動中…</string>
-    <string name="retry">重試</string>
-    <string name="retry_connection_title">重試連線</string>
-    <string name="retry_connection_option">重試 Android Auto</string>
     <string name="reset_usb_option">重設 USB 連線</string>
     <string name="reset_usb_timeout">找不到 USB 裝置，請檢查連線。</string>
     <string name="notification_service_running">Headunit Revived 執行中</string>

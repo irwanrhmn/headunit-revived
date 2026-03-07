@@ -102,11 +102,11 @@ class Settings(context: Context) {
             prefs.edit().putStringSet("key-codes", list.toSet()).apply()
         }
 
-    var debugMode: Boolean
-        get() = prefs.getBoolean("debug-mode", false)
-        set(value) {
-            prefs.edit().putBoolean("debug-mode", value).apply()
-        }
+    var exporterLogLevel: LogExporter.LogLevel
+        get() = LogExporter.LogLevel.entries.getOrElse(prefs.getInt("log-level", LogExporter.LogLevel.INFO.ordinal)) { LogExporter.LogLevel.INFO }
+        set(value) { prefs.edit().putInt("log-level", value.ordinal).apply() }
+
+    val logLevel: Int get() = exporterLogLevel.logLevel
 
     var viewMode: ViewMode
         get() {
@@ -216,18 +216,6 @@ class Settings(context: Context) {
     var autoConnectSingleUsbDevice: Boolean
         get() = prefs.getBoolean("auto-connect-single-usb", false)
         set(value) { prefs.edit().putBoolean("auto-connect-single-usb", value).apply() }
-
-    var usbStabilityCheck: Boolean
-        get() = prefs.getBoolean("usb-stability-check", false)
-        set(value) { prefs.edit().putBoolean("usb-stability-check", value).apply() }
-
-    var usbStabilityTimeout: Int
-        get() = prefs.getInt("usb-stability-timeout", 10)
-        set(value) { prefs.edit().putInt("usb-stability-timeout", value).apply() }
-
-    var maxAutoRetryAttempts: Int
-        get() = prefs.getInt("max-auto-retry-attempts", 3)
-        set(value) { prefs.edit().putInt("max-auto-retry-attempts", value).apply() }
 
     var lastConnectionType: String
         get() = prefs.getString("last-connection-type", "")!!

@@ -31,12 +31,12 @@ object AppLog {
     }
 
     var LOGGER: Logger = Logger.Android()
-    private const val LOG_LEVEL = Log.DEBUG
+    private val LOG_LEVEL get() = settings?.logLevel ?: Log.INFO
 
-    const val TAG = "HUREV"
-    // LOG_LEVEL constants are no longer needed as we check the setting directly.
+    const val TAG = "CAR.HU.J"
+    // LOG_LEVEL constants should not longer be needed because we check the setting directly.
     val LOG_VERBOSE get() = LOG_LEVEL <= Log.VERBOSE
-    val LOG_DEBUG = settings?.debugMode ?: false
+    val LOG_DEBUG get() = LOG_LEVEL <= Log.DEBUG
 
     fun i(msg: String) {
         log(Log.INFO, format(msg))
