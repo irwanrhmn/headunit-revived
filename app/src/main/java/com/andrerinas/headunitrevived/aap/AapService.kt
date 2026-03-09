@@ -39,6 +39,7 @@ import com.andrerinas.headunitrevived.utils.LocaleHelper
 import com.andrerinas.headunitrevived.utils.NightModeManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.util.concurrent.atomic.AtomicBoolean
 import android.app.NotificationManager
 import java.net.ServerSocket
 
@@ -78,6 +79,17 @@ class AapService : Service(), UsbReceiver.Listener {
     private var isDestroying = false
     private var hasEverConnected = false
     private var accessoryHandshakeFailures = 0
+
+    /**
+     * Guards against duplicate [UsbAccessoryMode.connectAndSwitch] calls.
+     *
+     * Set to `true` synchronously on the main thread before launching the background
+     * connectAndSwitch coroutine. Checked in [checkAlreadyConnectedUsb] to prevent
+     * multiple concurrent AOA switch attempts on the same device.
+     * Cleared when the switch completes (success or failure), when an accessory-mode
+     * device is found, or on disconnect.
+     */
+    private val isSwitchingToAccessory = AtomicBoolean(false)
 
     private val commManager get() = App.provide(this).commManager
 
@@ -210,6 +222,7 @@ class AapService : Service(), UsbReceiver.Listener {
      * that [VideoDecoder.setSurface] is always called before the first video frame arrives.
      */
     private fun onConnected() {
+        isSwitchingToAccessory.set(false)
         updateNotification()
         mediaSession = MediaSessionCompat(this, "HeadunitRevived").apply { isActive = true }
         serviceScope.launch { commManager.startHandshake() }
@@ -227,6 +240,7 @@ class AapService : Service(), UsbReceiver.Listener {
      * 4. Scheduling a reconnect attempt if applicable (see [scheduleReconnectIfNeeded])
      */
     private fun onDisconnected(state: CommManager.ConnectionState.Disconnected) {
+        isSwitchingToAccessory.set(false)
         if (!isDestroying) updateNotification()
         mediaSession?.isActive = false
         mediaSession?.release()
@@ -373,10 +387,21 @@ class AapService : Service(), UsbReceiver.Listener {
             // Device already in AOA mode (re-enumerated after UsbAttachedActivity switched it).
             AppLog.i("USB accessory device attached, connecting.")
             checkAlreadyConnectedUsb(force = true)
+        } else {
+            // UsbAttachedActivity normally handles normal-mode devices via a manifest intent
+            // filter. However, some headunits (especially Chinese MediaTek units) don't
+            // deliver USB_DEVICE_ATTACHED to activities on cold start. As a fallback,
+            // check after a delay to give UsbAttachedActivity a chance to handle it first.
+            val deviceName = UsbDeviceCompat(device).uniqueName
+            AppLog.i("Normal USB device attached: $deviceName. Will check auto-connect in ${USB_ATTACH_FALLBACK_DELAY_MS}ms...")
+            serviceScope.launch {
+                delay(USB_ATTACH_FALLBACK_DELAY_MS)
+                if (!commManager.isConnected && !isSwitchingToAccessory.get()) {
+                    AppLog.i("UsbAttachedActivity didn't handle $deviceName. Trying from service...")
+                    checkAlreadyConnectedUsb(force = true)
+                }
+            }
         }
-        // Normal-mode devices are handled exclusively by UsbAttachedActivity (manifest intent
-        // filter). Calling connectAndSwitch() here would race with UsbAttachedActivity and
-        // cause openDevice() to return null in one of the two callers → "Failed" toast.
     }
 
     override fun onUsbDetach(device: UsbDevice) {
@@ -392,15 +417,21 @@ class AapService : Service(), UsbReceiver.Listener {
         if (granted) {
             AppLog.i("USB permission granted for $deviceName")
             if (UsbDeviceCompat.isInAccessoryMode(device)) {
+                isSwitchingToAccessory.set(false)
                 serviceScope.launch { connectUsbWithRetry(device) }
             } else {
+                isSwitchingToAccessory.set(true)
                 val usbManager = getSystemService(Context.USB_SERVICE) as UsbManager
                 val usbMode = UsbAccessoryMode(usbManager)
                 serviceScope.launch(Dispatchers.IO) {
-                    if (usbMode.connectAndSwitch(device)) {
-                        AppLog.i("Successfully requested switch to accessory mode for $deviceName")
-                    } else {
-                        AppLog.w("USB permission granted but connectAndSwitch failed for $deviceName")
+                    try {
+                        if (usbMode.connectAndSwitch(device)) {
+                            AppLog.i("Successfully requested switch to accessory mode for $deviceName")
+                        } else {
+                            AppLog.w("USB permission granted but connectAndSwitch failed for $deviceName")
+                        }
+                    } finally {
+                        isSwitchingToAccessory.set(false)
                     }
                 }
             }
@@ -445,6 +476,7 @@ class AapService : Service(), UsbReceiver.Listener {
             AppLog.i("Stale accessory detected: forcing re-enumeration via AOA descriptors for $deviceName")
             accessoryHandshakeFailures = 0
             val usbMode = UsbAccessoryMode(usbManager)
+            isSwitchingToAccessory.set(true)
             serviceScope.launch(Dispatchers.IO) {
                 try {
                     if (usbMode.connectAndSwitch(accessoryDevice)) {
@@ -454,6 +486,8 @@ class AapService : Service(), UsbReceiver.Listener {
                     }
                 } catch (e: Exception) {
                     AppLog.e("AOA re-enumeration for $deviceName failed with exception", e)
+                } finally {
+                    isSwitchingToAccessory.set(false)
                 }
             }
         }
@@ -475,7 +509,8 @@ class AapService : Service(), UsbReceiver.Listener {
 
         if (!force && !lastSession && !singleUsb) return
         if (commManager.isConnected ||
-            commManager.connectionState.value is CommManager.ConnectionState.Connecting) return
+            commManager.connectionState.value is CommManager.ConnectionState.Connecting ||
+            isSwitchingToAccessory.get()) return
 
         val usbManager = getSystemService(Context.USB_SERVICE) as UsbManager
         val deviceList = usbManager.deviceList
@@ -484,6 +519,7 @@ class AapService : Service(), UsbReceiver.Listener {
         for (device in deviceList.values) {
             if (UsbDeviceCompat.isInAccessoryMode(device)) {
                 AppLog.i("Found device already in accessory mode: ${UsbDeviceCompat(device).uniqueName}")
+                isSwitchingToAccessory.set(false)
                 serviceScope.launch { connectUsbWithRetry(device) }
                 return
             }
@@ -496,12 +532,17 @@ class AapService : Service(), UsbReceiver.Listener {
                 if (settings.isConnectingDevice(deviceCompat)) {
                     if (usbManager.hasPermission(device)) {
                         AppLog.i("Found known USB device with permission: ${deviceCompat.uniqueName}. Switching to accessory mode.")
+                        isSwitchingToAccessory.set(true)
                         val usbMode = UsbAccessoryMode(usbManager)
                         serviceScope.launch(Dispatchers.IO) {
-                            if (usbMode.connectAndSwitch(device)) {
-                                AppLog.i("Successfully requested switch to accessory mode for ${deviceCompat.uniqueName}")
-                            } else {
-                                AppLog.w("connectAndSwitch failed for ${deviceCompat.uniqueName}")
+                            try {
+                                if (usbMode.connectAndSwitch(device)) {
+                                    AppLog.i("Successfully requested switch to accessory mode for ${deviceCompat.uniqueName}")
+                                } else {
+                                    AppLog.w("connectAndSwitch failed for ${deviceCompat.uniqueName}")
+                                }
+                            } finally {
+                                isSwitchingToAccessory.set(false)
                             }
                         }
                         return
@@ -528,12 +569,17 @@ class AapService : Service(), UsbReceiver.Listener {
         if (usbManager.hasPermission(device)) {
             val deviceName = UsbDeviceCompat(device).uniqueName
             AppLog.i("Single USB auto-connect: connecting to $deviceName")
+            isSwitchingToAccessory.set(true)
             val usbMode = UsbAccessoryMode(usbManager)
             serviceScope.launch(Dispatchers.IO) {
-                if (usbMode.connectAndSwitch(device)) {
-                    AppLog.i("Successfully requested switch to accessory mode for single USB device. Waiting for re-enumeration...")
-                } else {
-                    AppLog.w("Single USB auto-connect: connectAndSwitch failed for $deviceName")
+                try {
+                    if (usbMode.connectAndSwitch(device)) {
+                        AppLog.i("Successfully requested switch to accessory mode for single USB device. Waiting for re-enumeration...")
+                    } else {
+                        AppLog.w("Single USB auto-connect: connectAndSwitch failed for $deviceName")
+                    }
+                } finally {
+                    isSwitchingToAccessory.set(false)
                 }
             }
         } else {
@@ -904,5 +950,9 @@ class AapService : Service(), UsbReceiver.Listener {
 
         /** Delay before retrying USB connection after an unexpected disconnect. */
         private const val USB_RECONNECT_DELAY_MS = 3000L
+
+        /** Delay before AapService tries to handle a normal-mode USB attach as a fallback
+         *  when UsbAttachedActivity doesn't fire (common on Chinese MediaTek headunits). */
+        private const val USB_ATTACH_FALLBACK_DELAY_MS = 2000L
     }
 }

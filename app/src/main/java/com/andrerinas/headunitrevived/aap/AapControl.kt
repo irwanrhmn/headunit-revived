@@ -7,6 +7,7 @@ import com.andrerinas.headunitrevived.aap.protocol.AudioConfigs
 import com.andrerinas.headunitrevived.aap.protocol.Channel
 import com.andrerinas.headunitrevived.aap.protocol.messages.DrivingStatusEvent
 import com.andrerinas.headunitrevived.aap.protocol.messages.ServiceDiscoveryResponse
+import com.andrerinas.headunitrevived.aap.protocol.messages.VideoFocusEvent
 import com.andrerinas.headunitrevived.aap.protocol.proto.Common
 import com.andrerinas.headunitrevived.aap.protocol.proto.Control
 import com.andrerinas.headunitrevived.aap.protocol.proto.Input
@@ -25,6 +26,9 @@ internal class AapControlMedia(
     private val micRecorder: MicRecorder,
     private val aapAudio: AapAudio): AapControl {
 
+    private var lastNativeFocusRequestTime = 0L
+    private var nativeFocusRequestCount = 0
+
     override fun execute(message: AapMessage): Int {
 
         when (message.type) {
@@ -40,16 +44,25 @@ internal class AapControlMedia(
             Media.MsgType.MEDIA_MESSAGE_VIDEO_FOCUS_REQUEST_VALUE -> {
                 val focusRequest = message.parse(Media.VideoFocusRequestNotification.newBuilder()).build()
                 AppLog.i("RX: Video Focus Request - mode: %s, reason: %s", focusRequest.mode, focusRequest.reason)
-                
-                // If AA relinquishes focus (e.g. user selects "Exit" app), we should quit projection.
-                // Only quit if reason is explicit (LAUNCH_NATIVE), otherwise keep connection (e.g. SCREEN_OFF)
+
                 if (focusRequest.mode == Media.VideoFocusMode.VIDEO_FOCUS_NATIVE) {
-                    aapTransport.stop()
-//                    if (focusRequest.reason == Media.VideoFocusRequestNotification.VideoFocusReason.LAUNCH_NATIVE) {
-//                        AppLog.i("Video Focus set to NATIVE (Reason: LAUNCH_NATIVE) -> Quitting projection activity")
-//                    } else {
-//                        AppLog.i("Video Focus set to NATIVE (Reason: ${focusRequest.reason}) -> Connection kept alive")
-//                    }
+                    val now = System.currentTimeMillis()
+                    if (now - lastNativeFocusRequestTime < NATIVE_FOCUS_DEBOUNCE_MS) {
+                        nativeFocusRequestCount++
+                    } else {
+                        nativeFocusRequestCount = 1
+                    }
+                    lastNativeFocusRequestTime = now
+
+                    if (nativeFocusRequestCount >= MAX_NATIVE_FOCUS_RETRIES) {
+                        AppLog.i("Video Focus NATIVE received $nativeFocusRequestCount times in quick succession. Stopping transport.")
+                        nativeFocusRequestCount = 0
+                        lastNativeFocusRequestTime = 0L
+                        aapTransport.stop()
+                    } else {
+                        AppLog.i("Video Focus NATIVE (attempt $nativeFocusRequestCount/$MAX_NATIVE_FOCUS_RETRIES). Re-requesting projected focus.")
+                        aapTransport.send(VideoFocusEvent(gain = true, unsolicited = true))
+                    }
                 }
                 return 0
             }
@@ -121,6 +134,13 @@ internal class AapControlMedia(
             micRecorder.stop()
         }
         return 0
+    }
+
+    companion object {
+        /** Time window for counting consecutive VIDEO_FOCUS_NATIVE requests. */
+        private const val NATIVE_FOCUS_DEBOUNCE_MS = 5000L
+        /** Number of NATIVE focus requests within the debounce window before stopping. */
+        private const val MAX_NATIVE_FOCUS_RETRIES = 3
     }
 }
 
