@@ -58,11 +58,14 @@ adb shell am start -a android.intent.action.VIEW -d "headunit://connect?ip=192.1
 
 ## Changelog
 ### v.2.0.0
-- **Wi-Fi Direct (P2P) Support:** Connect without a shared network or hotspot.
-- **New CommManager:** Refactored connection core for maximum stability and performance.
-- **Advanced Fullscreen:** New "Hide Status Bar Only" mode for better hardware button compatibility.
-- **Auto-Optimization:** Setup wizard for hardware-based setting recommendations.
-- **Audio & GPS Fixes:** Improved routing reliability and accurate speed reporting.
+- **Wi-Fi Direct (P2P) Support:** Connect your phone to the headunit without a shared network or hotspot. The headunit now automatically becomes visible as a P2P peer.
+- **Refactored Connection Core:** Complete rewrite of the internal connection handling using the new **CommManager**. Improved stability, faster handshakes, and better coroutine integration.
+- **Enhanced Fullscreen Logic:** Choose between "Immersive" (hide all), "Status Only" (keep navigation bars), or "None". Improved compatibility for devices where buttons were previously obscured.
+- **Auto-Optimization Wizard:** Automatically recommends the best Resolution, DPI, and Codec for your specific hardware.
+- **Early MediaSession Initialization:** Fixes audio routing issues where the phone would sometimes play sound through its own speakers instead of the headunit.
+- **GPS Speed Fix:** Accurate speed reporting for navigation apps by correcting unit conversions.
+- **New Logging System:** Integrated log level control and file capture for easier debugging.
+- **IMPORTANT** Fixing Android Auto 16.4 intents for selfmode. In Wireless Helper too. Please update to 1.2.0
 
 ### v.1.15.1
 - Added arabic language thanks to A5H0

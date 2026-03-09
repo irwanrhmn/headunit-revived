@@ -262,6 +262,12 @@ class AapService : Service(), UsbReceiver.Listener {
      * disconnect) produce `isClean = false`.
      */
     private fun scheduleReconnectIfNeeded(state: CommManager.ConnectionState.Disconnected) {
+        if (selfMode) {
+            AppLog.i("AapService: Self Mode disconnected. Not restarting.")
+            selfMode = false
+            return
+        }
+
         if (wirelessServer != null) {
             AppLog.i("AapService: Disconnected. Restarting discovery loop in 2s...")
             serviceScope.launch {
@@ -755,6 +761,7 @@ class AapService : Service(), UsbReceiver.Listener {
      * relevant Android classes have no public constructors.
      */
     private fun startSelfMode() {
+        selfMode = true
         startWirelessServer()
 
         val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -778,6 +785,18 @@ class AapService : Service(), UsbReceiver.Listener {
         try {
             AppLog.i("Launching AA Wireless Startup...")
             startActivity(magicalIntent)
+        } catch (e: android.content.ActivityNotFoundException) {
+            AppLog.w("Legacy activity not found. Trying minimal broadcast fallback for AA 16.4+.")
+            val receiverIntent = Intent().apply {
+                setClassName(
+                    "com.google.android.projection.gearhead",
+                    "com.google.android.apps.auto.wireless.setup.receiver.WirelessStartupReceiver"
+                )
+                action = "com.google.android.apps.auto.wireless.setup.receiver.wirelessstartup.START"
+                putExtra("ip_address", "127.0.0.1")
+                putExtra("projection_port", 5288)
+            }
+            sendBroadcast(receiverIntent)
         } catch (e: Exception) {
             AppLog.e("Failed to launch AA", e)
             Toast.makeText(this, getString(R.string.failed_start_android_auto), Toast.LENGTH_SHORT).show()

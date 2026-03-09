@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.view.TextureView
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -270,6 +271,20 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
                     }, 2000)
                 }
             }
+        }
+    }
+
+    private var lastBackPressTime = 0L
+
+    override fun onBackPressed() {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastBackPressTime < 2000) {
+            AppLog.i("AapProjectionActivity: Double back press detected. Disconnecting...")
+            commManager.disconnect()
+            super.onBackPressed()
+        } else {
+            lastBackPressTime = currentTime
+            Toast.makeText(this, getString(R.string.press_back_again_to_exit), Toast.LENGTH_SHORT).show()
         }
     }
 

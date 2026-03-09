@@ -46,23 +46,8 @@ internal class AapControlMedia(
                 AppLog.i("RX: Video Focus Request - mode: %s, reason: %s", focusRequest.mode, focusRequest.reason)
 
                 if (focusRequest.mode == Media.VideoFocusMode.VIDEO_FOCUS_NATIVE) {
-                    val now = System.currentTimeMillis()
-                    if (now - lastNativeFocusRequestTime < NATIVE_FOCUS_DEBOUNCE_MS) {
-                        nativeFocusRequestCount++
-                    } else {
-                        nativeFocusRequestCount = 1
-                    }
-                    lastNativeFocusRequestTime = now
-
-                    if (nativeFocusRequestCount >= MAX_NATIVE_FOCUS_RETRIES) {
-                        AppLog.i("Video Focus NATIVE received $nativeFocusRequestCount times in quick succession. Stopping transport.")
-                        nativeFocusRequestCount = 0
-                        lastNativeFocusRequestTime = 0L
-                        aapTransport.stop()
-                    } else {
-                        AppLog.i("Video Focus NATIVE (attempt $nativeFocusRequestCount/$MAX_NATIVE_FOCUS_RETRIES). Re-requesting projected focus.")
-                        aapTransport.send(VideoFocusEvent(gain = true, unsolicited = true))
-                    }
+                    AppLog.i("Video Focus NATIVE received. User likely clicked Exit. Stopping transport.")
+                    aapTransport.stop()
                 }
                 return 0
             }
@@ -114,13 +99,7 @@ internal class AapControlMedia(
                 aapTransport.ignoreNextStopRequest = false
                 return 0
             }
-
-            if (aapTransport.isQuittingAllowed) {
-                AppLog.i("Video Sink Stopped -> Quitting")
-                aapTransport.stop()
-            } else {
-                AppLog.i("Video Sink Stopped -> Ignored (Background)")
-            }
+            AppLog.i("Video Sink Stopped -> Normal background/transition behavior")
         }
         return 0
     }
@@ -384,7 +363,6 @@ internal class AapControlGateway(
             AapControlSensor(aapTransport, context))
 
     override fun execute(message: AapMessage): Int {
-
         if (message.type == 7) {
             val request = message.parse(Control.ChannelOpenRequest.newBuilder()).build()
             return channelOpenRequest(request, message.channel)

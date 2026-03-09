@@ -6,15 +6,21 @@
 - **Enhanced Fullscreen Logic:** Choose between "Immersive" (hide all), "Status Only" (keep navigation bars), or "None". Improved compatibility for devices where buttons were previously obscured.
 - **Auto-Optimization Wizard:** Automatically recommends the best Resolution, DPI, and Codec for your specific hardware.
 - **Early MediaSession Initialization:** Fixes audio routing issues where the phone would sometimes play sound through its own speakers instead of the headunit.
-- **GPS Speed Fix:** Accurate speed reporting for navigation apps by correcting unit conversions.
 - **New Logging System:** Integrated log level control and file capture for easier debugging.
+- **IMPORTANT** Fixing Android Auto 16.4 intents for selfmode. In Wireless Helper too. Please update to 1.2.0
 
 ### v.1.15.1
-- New Feature: Added **Auto-Optimization Wizard** to automatically find the best Resolution, DPI, and Codec settings for your hardware.
-- Bugfix: Fixed **Self Mode** failing to start in offline/hotspot scenarios (Network ID 0 fix).
-- Bugfix: Improved **Audio Routing**. The phone is now more likely to route audio to the headunit immediately upon connection by using an early-initialized MediaSession with remote playback metadata.
-- Bugfix: Fixed **GPS Speed** calculation. Speeds were previously doubled due to an incorrect unit conversion (knots instead of mm/s).
-- UI: Improved Settings readability on small screens by allowing multi-line descriptions.
+- Added arabic language thanks to A5H0
+- Added new intent for setting day/night mode for maps
+- Added new window flags for older devices to finally fix fullscreen issues
+- Added new intents to make the headunit recognize the app as navigation app
+- Added LegacyOptimizer which will handle things directly and faster for single core cpus. Should improve the performance on Android 4.1 - 4.4 Devices
+- Fixed BT Permission Bug
+- Changed the Twilight-Calculator for better switch to day/night on auto mode to prevent to bright display
+- Added more mediasession logic to gain audio focus and audio routing
+- Merged Retry Button on connect screen, thanks to @andrecuellar
+- Merged auto connect usb feature, thanks to @andrecuellar
+- Fixed GPS Speed: Accurate speed reporting for navigation apps by correcting unit conversions.
 
 ### v.1.15.0
 - Added arabic language thanks to A5H0

@@ -80,8 +80,9 @@ class SystemOptimizer(private val context: Context) {
 
         // 3. View Mode Recommendation
         val recViewMode = when {
-            // Very old devices benefit most from direct SurfaceView
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP -> Settings.ViewMode.SURFACE
+            // Very old devices (Android 4.x) often have distortion issues with SurfaceView, 
+            // so we recommend TextureView instead.
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP -> Settings.ViewMode.TEXTURE
             
             // Middle-aged devices (5.0 - 8.1) often perform best with GLES20
             Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1 -> Settings.ViewMode.GLES

@@ -1,5 +1,6 @@
 package com.andrerinas.headunitrevived.aap
 
+import androidx.annotation.Keep
 import com.andrerinas.headunitrevived.aap.protocol.messages.Messages
 import com.andrerinas.headunitrevived.connection.AccessoryConnection
 import com.andrerinas.headunitrevived.utils.AppLog
@@ -8,6 +9,7 @@ import com.andrerinas.headunitrevived.utils.AppLog
  * Native SSL implementation using OpenSSL via JNI.
  * This is generally faster on older devices than Java SSLEngine.
  */
+@Keep
 internal class AapSslNative : AapSsl {
 
     companion object {
@@ -22,11 +24,17 @@ internal class AapSslNative : AapSsl {
         }
     }
 
+    @Keep
     private external fun native_ssl_prepare(): Int
+    @Keep
     private external fun native_ssl_do_handshake(): Int
+    @Keep
     private external fun native_ssl_bio_read(offset: Int, res_len: Int, res_buf: ByteArray): Int
+    @Keep
     private external fun native_ssl_bio_write(offset: Int, msg_len: Int, msg_buf: ByteArray): Int
+    @Keep
     private external fun native_ssl_read(offset: Int, res_len: Int, res_buf: ByteArray): Int
+    @Keep
     private external fun native_ssl_write(offset: Int, msg_len: Int, msg_buf: ByteArray): Int
 
     private val bio_read = ByteArray(Messages.DEF_BUFFER_LENGTH)
