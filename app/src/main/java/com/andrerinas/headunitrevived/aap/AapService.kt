@@ -224,7 +224,22 @@ class AapService : Service(), UsbReceiver.Listener {
     private fun onConnected() {
         isSwitchingToAccessory.set(false)
         updateNotification()
-        mediaSession = MediaSessionCompat(this, "HeadunitRevived").apply { isActive = true }
+        
+        // Fix: Don't create a new session if one is already active, just ensure it's active.
+        // If we must recreate it, we should release the old one first.
+        if (mediaSession == null) {
+            mediaSession = MediaSessionCompat(this, "HeadunitRevived").apply {
+                setCallback(object : MediaSessionCompat.Callback() {})
+                // Add the remote volume provider here as well if it was lost
+                setPlaybackToRemote(object : androidx.media.VolumeProviderCompat(
+                    androidx.media.VolumeProviderCompat.VOLUME_CONTROL_RELATIVE, 100, 50
+                ) {
+                    override fun onAdjustVolume(direction: Int) {}
+                })
+            }
+        }
+        mediaSession?.isActive = true
+        
         serviceScope.launch { commManager.startHandshake() }
         startActivity(AapProjectionActivity.intent(this).apply {
             putExtra(AapProjectionActivity.EXTRA_FOCUS, true)
