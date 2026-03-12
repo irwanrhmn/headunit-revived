@@ -189,10 +189,11 @@
     <string name="mic_input_source">Microphone Input Source</string>
     <string name="mic_input_source_description">Choose the audio source for the microphone.</string>
     <string-array name="mic_input_sources">
-        <item>Default</item>
-        <item>Microphone</item>
-        <item>Voice Recognition</item>
-        <item>Voice Communication</item>
+        <item>Default (System decides)</item>
+        <item>Built-in Microphone (Raw input)</item>
+        <item>Voice Recognition (Noise reduced)</item>
+        <item>Voice Communication (Echo + noise cancelled)</item>
+        <item>Bluetooth Headset (SCO)</item>
     </string-array>
 
     <!-- Info Settings -->

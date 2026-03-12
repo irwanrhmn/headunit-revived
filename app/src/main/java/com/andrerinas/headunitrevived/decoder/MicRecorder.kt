@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.media.AudioFormat
+import android.media.AudioManager
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import androidx.core.content.PermissionChecker
@@ -40,6 +41,14 @@ class MicRecorder(private val micSampleRate: Int, private val context: Context) 
     private var threadMicAudio: Thread? = null
     var listener: Listener? = null
 
+    // Tracks whether this instance started Bluetooth SCO so we can clean it up
+    private var bluetoothScoStarted = false
+
+    companion object {
+        // Sentinel value stored in settings to indicate Bluetooth SCO mode
+        const val SOURCE_BLUETOOTH_SCO = 100
+    }
+
     interface Listener {
         fun onMicDataAvailable(mic_buf: ByteArray, mic_audio_len: Int)
     }
@@ -57,6 +66,15 @@ class MicRecorder(private val micSampleRate: Int, private val context: Context) 
             audioRecord!!.stop()
             audioRecord!!.release()                                     // Release AudioTrack resources
             audioRecord = null
+        }
+
+        if (bluetoothScoStarted) {
+            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            audioManager.stopBluetoothSco()
+            @Suppress("DEPRECATION")
+            audioManager.isBluetoothScoOn = false
+            bluetoothScoStarted = false
+            AppLog.i("MicRecorder: Bluetooth SCO stopped")
         }
     }
 
@@ -90,7 +108,20 @@ class MicRecorder(private val micSampleRate: Int, private val context: Context) 
                 audioRecord = null
                 return -3
             }
-            audioRecord = AudioRecord(settings.micInputSource, micSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, micBufferSize)
+            val configuredSource = settings.micInputSource
+            val actualSource: Int
+            if (configuredSource == SOURCE_BLUETOOTH_SCO) {
+                val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                audioManager.startBluetoothSco()
+                @Suppress("DEPRECATION")
+                audioManager.isBluetoothScoOn = true
+                bluetoothScoStarted = true
+                actualSource = MediaRecorder.AudioSource.VOICE_COMMUNICATION
+                AppLog.i("MicRecorder: Bluetooth SCO started, using VOICE_COMMUNICATION source")
+            } else {
+                actualSource = configuredSource
+            }
+            audioRecord = AudioRecord(actualSource, micSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, micBufferSize)
             audioRecord!!.startRecording()
             // Start input
 

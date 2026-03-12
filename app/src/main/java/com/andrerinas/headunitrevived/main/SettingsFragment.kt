@@ -807,7 +807,7 @@ class SettingsFragment : Fragment() {
         ))
 
         val micSources = resources.getStringArray(R.array.mic_input_sources)
-        val micSourceValues = intArrayOf(0, 1, 6, 7) // DEFAULT, MIC, VOICE_RECOGNITION, VOICE_COMMUNICATION
+        val micSourceValues = intArrayOf(0, 1, 6, 7, 100) // DEFAULT, MIC, VOICE_RECOGNITION, VOICE_COMMUNICATION, BT_SCO
         val currentSourceIndex = micSourceValues.indexOf(pendingMicInputSource ?: 0).coerceAtLeast(0)
 
         items.add(SettingItem.SettingEntry(

@@ -180,10 +180,11 @@
     <string name="mic_input_source">Fonte de entrada do microfone</string>
     <string name="mic_input_source_description">Escolha a fonte de áudio para o microfone.</string>
     <string-array name="mic_input_sources">
-        <item>Padrão</item>
-        <item>Microfone</item>
-        <item>Reconhecimento de voz</item>
-        <item>Comunicação de voz</item>
+        <item>Padrão (sistema decide)</item>
+        <item>Microfone embutido (entrada bruta)</item>
+        <item>Reconhecimento de voz (redução de ruído)</item>
+        <item>Comunicação de voz (cancelamento de eco e ruído)</item>
+        <item>Fone Bluetooth (SCO)</item>
     </string-array>
 
     <!-- Info Settings -->
