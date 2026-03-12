@@ -705,11 +705,24 @@ class AapService : Service(), UsbReceiver.Listener {
             }
         }
 
-        // Single-USB mode: if exactly one non-accessory device is present, connect to it
+        // Single-USB mode: connect if there's exactly one candidate device.
+        // If the user has marked specific devices as "Allowed" in the USB list,
+        // only count those — so non-AA peripherals (dashcams, USB audio, etc.)
+        // don't prevent auto-connect. Falls back to counting all devices when
+        // no devices have been explicitly allowed (fresh install).
         if (singleUsb) {
             val nonAccessoryDevices = deviceList.values.filter { !UsbDeviceCompat.isInAccessoryMode(it) }
-            if (nonAccessoryDevices.size == 1) {
-                performSingleUsbConnect(nonAccessoryDevices[0])
+            val allowed = settings.allowedDevices
+            val candidates = if (allowed.isNotEmpty()) {
+                nonAccessoryDevices.filter { allowed.contains(UsbDeviceCompat(it).uniqueName) }
+            } else {
+                nonAccessoryDevices
+            }
+            if (allowed.isNotEmpty() && candidates.size != nonAccessoryDevices.size) {
+                AppLog.i("Single USB auto-connect: ${nonAccessoryDevices.size} USB device(s) present, ${candidates.size} allowed")
+            }
+            if (candidates.size == 1) {
+                performSingleUsbConnect(candidates[0])
             }
         }
     }
