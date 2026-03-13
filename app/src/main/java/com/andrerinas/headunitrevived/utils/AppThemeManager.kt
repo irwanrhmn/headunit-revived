@@ -9,6 +9,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings as SystemSettings
@@ -111,9 +112,14 @@ class AppThemeManager(
             if (!isObserverRegistered) {
                 context.contentResolver.registerContentObserver(
                     SystemSettings.System.getUriFor(SystemSettings.System.SCREEN_BRIGHTNESS),
-                    false,
-                    brightnessObserver
+                    false, brightnessObserver
                 )
+                if (Build.VERSION.SDK_INT >= 28) {
+                    context.contentResolver.registerContentObserver(
+                        SystemSettings.System.getUriFor("screen_brightness_float"),
+                        false, brightnessObserver
+                    )
+                }
                 isObserverRegistered = true
             }
         } else {
@@ -143,21 +149,16 @@ class AppThemeManager(
                 }
             }
             Settings.AppTheme.SCREEN_BRIGHTNESS -> {
-                try {
-                    currentBrightness = SystemSettings.System.getInt(
-                        context.contentResolver,
-                        SystemSettings.System.SCREEN_BRIGHTNESS
-                    )
-                    val hyst = 10
+                currentBrightness = readBrightnessPercent()
+                if (currentBrightness >= 0) {
+                    val hyst = 4
                     val currentIsNight = lastEmittedNight ?: false
                     isNight = if (currentIsNight) {
                         currentBrightness < (thresholdBrightness + hyst)
                     } else {
                         currentBrightness < thresholdBrightness
                     }
-                    AppLog.d("AppThemeManager: SCREEN_BRIGHTNESS brightness=$currentBrightness threshold=$thresholdBrightness isNight=$isNight")
-                } catch (e: Exception) {
-                    AppLog.e("AppThemeManager: Failed to read brightness", e)
+                    AppLog.d("AppThemeManager: SCREEN_BRIGHTNESS brightness=$currentBrightness% threshold=$thresholdBrightness% isNight=$isNight")
                 }
             }
             Settings.AppTheme.AUTO_SUNRISE -> {
@@ -218,6 +219,22 @@ class AppThemeManager(
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+
+    private fun readBrightnessPercent(): Int {
+        return try {
+            if (Build.VERSION.SDK_INT >= 28) {
+                val floatVal = SystemSettings.System.getFloat(
+                    context.contentResolver, "screen_brightness_float"
+                )
+                (floatVal * 100).toInt().coerceIn(0, 100)
+            } else {
+                val intVal = SystemSettings.System.getInt(
+                    context.contentResolver, SystemSettings.System.SCREEN_BRIGHTNESS
+                )
+                (intVal * 100 / 255).coerceIn(0, 100)
+            }
+        } catch (e: Exception) { -1 }
+    }
 
     fun getCurrentLux(): Float = currentLux
     fun getCurrentBrightness(): Int = currentBrightness

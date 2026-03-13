@@ -27,10 +27,13 @@ import com.andrerinas.headunitrevived.utils.AppThemeManager
 import com.andrerinas.headunitrevived.utils.Settings
 import com.andrerinas.headunitrevived.utils.LocaleHelper
 import com.andrerinas.headunitrevived.BuildConfig
+import android.database.ContentObserver
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Handler
+import android.os.Looper
 import java.util.Locale
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.appbar.MaterialToolbar
@@ -101,6 +104,17 @@ class SettingsFragment : Fragment(), SensorEventListener {
     // Direct light sensor reading (independent of AppThemeManager)
     private var cachedLux: Float = -1f
     private var sensorManager: SensorManager? = null
+    private val refreshHandler = Handler(Looper.getMainLooper())
+    private val refreshRunnable = Runnable {
+        if (isAdded && ::settingsAdapter.isInitialized) {
+            updateSettingsList()
+        }
+    }
+    private val brightnessObserver = object : ContentObserver(refreshHandler) {
+        override fun onChange(selfChange: Boolean) {
+            scheduleListRefresh()
+        }
+    }
 
     private var pendingMediaVolumeOffset: Int? = null
     private var pendingAssistantVolumeOffset: Int? = null
@@ -177,7 +191,11 @@ class SettingsFragment : Fragment(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor.type == Sensor.TYPE_LIGHT) {
-            cachedLux = event.values[0]
+            val newLux = event.values[0]
+            if (kotlin.math.abs(newLux - cachedLux) >= 1.0f || cachedLux < 0f) {
+                cachedLux = newLux
+                scheduleListRefresh()
+            }
         }
     }
 
@@ -592,15 +610,9 @@ class SettingsFragment : Fragment(), SensorEventListener {
             val currentReading = if (isSensor) {
                 if (cachedLux >= 0) getString(R.string.current_light_reading, cachedLux.toInt()) else ""
             } else {
-                try {
-                    val brightness = android.provider.Settings.System.getInt(
-                        requireContext().contentResolver,
-                        android.provider.Settings.System.SCREEN_BRIGHTNESS
-                    )
-                    getString(R.string.current_brightness_reading, brightness * 100 / 255)
-                } catch (e: Exception) { "" }
+                val bp = readBrightnessPercent()
+                if (bp >= 0) getString(R.string.current_brightness_reading, bp) else ""
             }
-            // Show threshold + current reading in list for clarity
             val displayValue = if (isSensor) {
                 val base = "${currentValue ?: 0} Lux"
                 if (currentReading.isNotEmpty()) "$base ($currentReading)" else base
@@ -710,13 +722,8 @@ class SettingsFragment : Fragment(), SensorEventListener {
             val nmCurrentReading = if (isSensor) {
                 if (cachedLux >= 0) getString(R.string.current_light_reading, cachedLux.toInt()) else ""
             } else {
-                try {
-                    val brightness = android.provider.Settings.System.getInt(
-                        requireContext().contentResolver,
-                        android.provider.Settings.System.SCREEN_BRIGHTNESS
-                    )
-                    getString(R.string.current_brightness_reading, brightness * 100 / 255)
-                } catch (e: Exception) { "" }
+                val bp = readBrightnessPercent()
+                if (bp >= 0) getString(R.string.current_brightness_reading, bp) else ""
             }
             val displayValue = if (isSensor) {
                 val base = "${currentValue ?: 0} Lux"
@@ -1348,6 +1355,17 @@ class SettingsFragment : Fragment(), SensorEventListener {
         if (lightSensor != null) {
             sensorManager?.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL)
         }
+        // Register brightness observer for live updates
+        requireContext().contentResolver.registerContentObserver(
+            android.provider.Settings.System.getUriFor(android.provider.Settings.System.SCREEN_BRIGHTNESS),
+            false, brightnessObserver
+        )
+        if (Build.VERSION.SDK_INT >= 28) {
+            requireContext().contentResolver.registerContentObserver(
+                android.provider.Settings.System.getUriFor("screen_brightness_float"),
+                false, brightnessObserver
+            )
+        }
         // Refresh settings list when returning from sub-screens (e.g. AutoConnectFragment)
         if (::settingsAdapter.isInitialized) {
             settings = App.provide(requireContext()).settings
@@ -1358,6 +1376,8 @@ class SettingsFragment : Fragment(), SensorEventListener {
     override fun onPause() {
         super.onPause()
         sensorManager?.unregisterListener(this)
+        try { requireContext().contentResolver.unregisterContentObserver(brightnessObserver) } catch (_: Exception) {}
+        refreshHandler.removeCallbacks(refreshRunnable)
     }
 
     private fun getAutoConnectSummary(): String {
@@ -1548,9 +1568,31 @@ class SettingsFragment : Fragment(), SensorEventListener {
             .show()
     }
 
+    private fun readBrightnessPercent(): Int {
+        return try {
+            if (Build.VERSION.SDK_INT >= 28) {
+                val floatVal = android.provider.Settings.System.getFloat(
+                    requireContext().contentResolver, "screen_brightness_float"
+                )
+                (floatVal * 100).toInt().coerceIn(0, 100)
+            } else {
+                val intVal = android.provider.Settings.System.getInt(
+                    requireContext().contentResolver,
+                    android.provider.Settings.System.SCREEN_BRIGHTNESS
+                )
+                (intVal * 100 / 255).coerceIn(0, 100)
+            }
+        } catch (e: Exception) { -1 }
+    }
+
+    private fun scheduleListRefresh() {
+        refreshHandler.removeCallbacks(refreshRunnable)
+        refreshHandler.postDelayed(refreshRunnable, 500)
+    }
+
     companion object {
         private val SAVE_ITEM_ID = 1001
         private const val LUX_MAX = 10000
-        private const val BRIGHTNESS_MAX = 255
+        private const val BRIGHTNESS_MAX = 100
     }
 }
