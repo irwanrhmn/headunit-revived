@@ -31,6 +31,9 @@ import com.andrerinas.headunitrevived.connection.CommManager
 import com.andrerinas.headunitrevived.connection.NetworkDiscovery
 import com.andrerinas.headunitrevived.connection.WifiDirectManager
 import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.PlaybackStateCompat
+import androidx.media.VolumeProviderCompat
 import androidx.media.session.MediaButtonReceiver
 import com.andrerinas.headunitrevived.connection.UsbAccessoryMode
 import com.andrerinas.headunitrevived.connection.UsbDeviceCompat
@@ -305,14 +308,10 @@ class AapService : Service(), UsbReceiver.Listener {
                     return super.onMediaButtonEvent(mediaButtonEvent)
                 }
             })
-            setPlaybackToRemote(object : androidx.media.VolumeProviderCompat(
-                androidx.media.VolumeProviderCompat.VOLUME_CONTROL_RELATIVE, 100, 50
-            ) {
-                override fun onAdjustVolume(direction: Int) {}
-            })
-            setMetadata(android.support.v4.media.MediaMetadataCompat.Builder()
-                .putString(android.support.v4.media.MediaMetadataCompat.METADATA_KEY_TITLE, "Android Auto")
-                .putString(android.support.v4.media.MediaMetadataCompat.METADATA_KEY_ARTIST, "Connected")
+            setPlaybackToLocal(android.media.AudioManager.STREAM_MUSIC)
+            setMetadata(MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Android Auto")
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "Connected")
                 .build())
         }
     }
