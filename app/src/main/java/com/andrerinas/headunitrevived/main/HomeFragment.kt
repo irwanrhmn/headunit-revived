@@ -70,17 +70,7 @@ class HomeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                commManager.connectionState.collect { state ->
-                    updateProjectionButtonText()
-                    if (state is com.andrerinas.headunitrevived.connection.CommManager.ConnectionState.Disconnected
-                        && !state.isClean) {
-                        val msg = getString(R.string.wifi_disconnect_toast)
-                        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
-                        view?.postDelayed({
-                            if (isAdded) Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
-                        }, 3500)
-                    }
-                }
+                commManager.connectionState.collect { updateProjectionButtonText() }
             }
         }
 

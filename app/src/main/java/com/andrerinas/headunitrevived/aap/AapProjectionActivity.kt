@@ -154,6 +154,9 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
                 commManager.connectionState.collect { state ->
                     when (state) {
                         is CommManager.ConnectionState.Disconnected -> {
+                            if (!state.isClean) {
+                                Toast.makeText(this@AapProjectionActivity, getString(R.string.wifi_disconnect_toast), Toast.LENGTH_LONG).show()
+                            }
                             hideReconnectingOverlay()
                             finish()
                         }
