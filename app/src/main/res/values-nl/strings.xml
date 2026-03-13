@@ -23,6 +23,10 @@
     <string name="enter_threshold_value">Voer drempelwaarde in</string>
     <string name="threshold_lux_desc">Lux waarde (0-10000). Hieronder = Nacht.</string>
     <string name="threshold_brightness_desc">Helderheidswaarde (0-255). Hieronder = Nacht.</string>
+    <string name="threshold_light_title">Lichtgevoeligheid</string>
+    <string name="threshold_brightness_title">Helderheidsniveau</string>
+    <string name="threshold_light_hint">Donkere modus wordt geactiveerd wanneer het omgevingslicht onder dit niveau daalt</string>
+    <string name="threshold_brightness_hint">Donkere modus wordt geactiveerd wanneer de schermhelderheid onder dit niveau is</string>
     <string name="night_mode_start">Starttijd nachtmodus</string>
     <string name="night_mode_end">Eindtijd nachtmodus</string>
 

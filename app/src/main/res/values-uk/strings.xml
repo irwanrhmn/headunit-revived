@@ -24,6 +24,10 @@
     <string name="enter_threshold_value">Введіть порогове значення</string>
     <string name="threshold_lux_desc">Значення люкс (0-10000). Нижче = Ніч.</string>
     <string name="threshold_brightness_desc">Значення яскравості (0-255). Нижче = Ніч.</string>
+    <string name="threshold_light_title">Чутливість до світла</string>
+    <string name="threshold_brightness_title">Рівень яскравості</string>
+    <string name="threshold_light_hint">Темний режим активується, коли рівень навколишнього освітлення падає нижче цього значення</string>
+    <string name="threshold_brightness_hint">Темний режим активується, коли яскравість екрана нижче цього значення</string>
     <string name="night_mode_start">Час початку нічного режиму</string>
     <string name="night_mode_end">Час закінчення нічного режиму</string>
 

@@ -24,6 +24,10 @@
     <string name="enter_threshold_value">Introducir valor de umbral</string>
     <string name="threshold_lux_desc">Valor de lux (0-10000). Por debajo = Noche.</string>
     <string name="threshold_brightness_desc">Valor de brillo (0-255). Por debajo = Noche.</string>
+    <string name="threshold_light_title">Sensibilidad a la luz</string>
+    <string name="threshold_brightness_title">Nivel de brillo</string>
+    <string name="threshold_light_hint">El modo oscuro se activa cuando la luz ambiental desciende por debajo de este nivel</string>
+    <string name="threshold_brightness_hint">El modo oscuro se activa cuando el brillo de la pantalla es inferior a este nivel</string>
     <string name="night_mode_start">Hora de inicio del modo noche</string>
     <string name="night_mode_end">Hora de fin del modo noche</string>
 

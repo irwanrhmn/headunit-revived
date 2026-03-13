@@ -24,6 +24,10 @@
     <string name="enter_threshold_value">Schwellenwert eingeben</string>
     <string name="threshold_lux_desc">Lux Wert (0-10000). Darunter = Nacht.</string>
     <string name="threshold_brightness_desc">Helligkeit (0-255). Darunter = Nacht.</string>
+    <string name="threshold_light_title">Lichtempfindlichkeit</string>
+    <string name="threshold_brightness_title">Helligkeitsstufe</string>
+    <string name="threshold_light_hint">Der Dunkelmodus wird aktiviert, wenn das Umgebungslicht unter diesen Wert fällt</string>
+    <string name="threshold_brightness_hint">Der Dunkelmodus wird aktiviert, wenn die Bildschirmhelligkeit unter diesem Wert liegt</string>
     <string name="night_mode_start">Nachtmodus Startzeit</string>
     <string name="night_mode_end">Nachtmodus Endzeit</string>
 

@@ -23,6 +23,10 @@
     <string name="enter_threshold_value">輸入閾值</string>
     <string name="threshold_lux_desc">Lux 值 (0-10000)。低於此值 = 夜間。</string>
     <string name="threshold_brightness_desc">亮度值 (0-255)。低於此值 = 夜間。</string>
+    <string name="threshold_light_title">光線敏感度</string>
+    <string name="threshold_brightness_title">亮度等級</string>
+    <string name="threshold_light_hint">當環境光線低於此等級時啟用深色模式</string>
+    <string name="threshold_brightness_hint">當螢幕亮度低於此等級時啟用深色模式</string>
     <string name="night_mode_start">夜間模式開始時間</string>
     <string name="night_mode_end">夜間模式結束時間</string>
 

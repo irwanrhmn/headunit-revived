@@ -24,6 +24,10 @@
     <string name="enter_threshold_value">Zadejte hodnotu prahu</string>
     <string name="threshold_lux_desc">Hodnota Lux (0-10000). Pod touto hodnotou = Noc.</string>
     <string name="threshold_brightness_desc">Hodnota jasu (0-255). Pod touto hodnotou = Noc.</string>
+    <string name="threshold_light_title">Citlivost na světlo</string>
+    <string name="threshold_brightness_title">Úroveň jasu</string>
+    <string name="threshold_light_hint">Tmavý režim se aktivuje, když okolní světlo klesne pod tuto úroveň</string>
+    <string name="threshold_brightness_hint">Tmavý režim se aktivuje, když je jas obrazovky pod touto úrovní</string>
     <string name="night_mode_start">Čas zahájení nočního režimu</string>
     <string name="night_mode_end">Čas ukončení nočního režimu</string>
 

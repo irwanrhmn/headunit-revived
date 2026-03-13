@@ -24,6 +24,10 @@
     <string name="enter_threshold_value">Enter Threshold Value</string>
     <string name="threshold_lux_desc">Lux value (0–10000). Below this = Night.</string>
     <string name="threshold_brightness_desc">Brightness value (0–255). Below this = Night.</string>
+    <string name="threshold_light_title">Light Sensitivity</string>
+    <string name="threshold_brightness_title">Brightness Level</string>
+    <string name="threshold_light_hint">Dark mode activates when ambient light drops below this level</string>
+    <string name="threshold_brightness_hint">Dark mode activates when screen brightness is below this level</string>
     <string name="night_mode_start">Night Mode Start Time</string>
     <string name="night_mode_end">Night Mode End Time</string>
 

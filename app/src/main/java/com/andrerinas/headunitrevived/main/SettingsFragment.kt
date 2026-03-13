@@ -567,15 +567,30 @@ class SettingsFragment : Fragment() {
             val maxVal = if (isSensor) LUX_MAX else BRIGHTNESS_MAX
             val currentValue = if (isSensor) pendingThresholdLux else pendingThresholdBrightness
             val percentage = ((currentValue ?: 0) * 100 / maxVal).coerceIn(0, 100)
+            val title = getString(if (isSensor) R.string.threshold_light_title else R.string.threshold_brightness_title)
+            val hint = getString(if (isSensor) R.string.threshold_light_hint else R.string.threshold_brightness_hint)
+            val displayValue = if (isSensor) {
+                "${currentValue ?: 0} Lux"
+            } else {
+                "$percentage%"
+            }
 
             items.add(SettingItem.SettingEntry(
                 stableId = "appThemeThreshold",
-                nameResId = R.string.night_mode_threshold,
-                value = "$percentage%",
+                nameResId = if (isSensor) R.string.threshold_light_title else R.string.threshold_brightness_title,
+                value = displayValue,
                 onClick = { _ ->
                     showSliderDialog(
-                        title = getString(R.string.night_mode_threshold),
+                        title = title,
+                        message = hint,
                         initialPercentage = percentage,
+                        minLabel = if (isSensor) "0 Lux" else "0%",
+                        maxLabel = if (isSensor) "10,000 Lux" else "100%",
+                        formatValue = if (isSensor) {
+                            { p -> "${p * LUX_MAX / 100} Lux" }
+                        } else {
+                            { p -> "$p%" }
+                        },
                         onConfirm = { newPercentage ->
                             val newVal = newPercentage * maxVal / 100
                             if (isSensor) {
@@ -656,15 +671,30 @@ class SettingsFragment : Fragment() {
             val maxVal = if (isSensor) LUX_MAX else BRIGHTNESS_MAX
             val currentValue = if (isSensor) pendingThresholdLux else pendingThresholdBrightness
             val percentage = ((currentValue ?: 0) * 100 / maxVal).coerceIn(0, 100)
+            val title = getString(if (isSensor) R.string.threshold_light_title else R.string.threshold_brightness_title)
+            val hint = getString(if (isSensor) R.string.threshold_light_hint else R.string.threshold_brightness_hint)
+            val displayValue = if (isSensor) {
+                "${currentValue ?: 0} Lux"
+            } else {
+                "$percentage%"
+            }
 
             items.add(SettingItem.SettingEntry(
                 stableId = "nightModeThreshold",
-                nameResId = R.string.night_mode_threshold,
-                value = "$percentage%",
+                nameResId = if (isSensor) R.string.threshold_light_title else R.string.threshold_brightness_title,
+                value = displayValue,
                 onClick = { _ ->
                     showSliderDialog(
-                        title = getString(R.string.night_mode_threshold),
+                        title = title,
+                        message = hint,
                         initialPercentage = percentage,
+                        minLabel = if (isSensor) "0 Lux" else "0%",
+                        maxLabel = if (isSensor) "10,000 Lux" else "100%",
+                        formatValue = if (isSensor) {
+                            { p -> "${p * LUX_MAX / 100} Lux" }
+                        } else {
+                            { p -> "$p%" }
+                        },
                         onConfirm = { newPercentage ->
                             val newVal = newPercentage * maxVal / 100
                             if (isSensor) {
@@ -1352,20 +1382,40 @@ class SettingsFragment : Fragment() {
 
     private fun showSliderDialog(
         title: String,
+        message: String,
         initialPercentage: Int,
+        minLabel: String,
+        maxLabel: String,
+        formatValue: (Int) -> String,
         onConfirm: (Int) -> Unit
     ) {
         val context = requireContext()
+        val density = context.resources.displayMetrics.density
+        val padding = (24 * density).toInt()
+
         val layout = android.widget.LinearLayout(context).apply {
             orientation = android.widget.LinearLayout.VERTICAL
-            val padding = (24 * context.resources.displayMetrics.density).toInt()
-            setPadding(padding, padding, padding, 0)
+            setPadding(padding, (8 * density).toInt(), padding, 0)
         }
 
+        val hint = android.widget.TextView(context).apply {
+            text = message
+            textSize = 14f
+            setTextColor(context.resources.getColor(android.R.color.darker_gray, null))
+        }
+        layout.addView(hint)
+
         val label = android.widget.TextView(context).apply {
-            text = "${initialPercentage.coerceIn(0, 100)}%"
-            textSize = 18f
+            text = formatValue(initialPercentage.coerceIn(0, 100))
+            textSize = 24f
             gravity = android.view.Gravity.CENTER
+            val topMargin = (16 * density).toInt()
+            val lp = android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            lp.topMargin = topMargin
+            layoutParams = lp
         }
         layout.addView(label)
 
@@ -1374,13 +1424,41 @@ class SettingsFragment : Fragment() {
             progress = initialPercentage.coerceIn(0, 100)
             setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: android.widget.SeekBar?, progress: Int, fromUser: Boolean) {
-                    label.text = "$progress%"
+                    label.text = formatValue(progress)
                 }
                 override fun onStartTrackingTouch(seekBar: android.widget.SeekBar?) {}
                 override fun onStopTrackingTouch(seekBar: android.widget.SeekBar?) {}
             })
         }
         layout.addView(seekBar)
+
+        // Min/Max labels row
+        val rangeRow = android.widget.LinearLayout(context).apply {
+            orientation = android.widget.LinearLayout.HORIZONTAL
+            val lp = android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            layoutParams = lp
+        }
+        val minText = android.widget.TextView(context).apply {
+            text = minLabel
+            textSize = 12f
+            setTextColor(context.resources.getColor(android.R.color.darker_gray, null))
+            val lp = android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            layoutParams = lp
+        }
+        val maxText = android.widget.TextView(context).apply {
+            text = maxLabel
+            textSize = 12f
+            gravity = android.view.Gravity.END
+            setTextColor(context.resources.getColor(android.R.color.darker_gray, null))
+            val lp = android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            layoutParams = lp
+        }
+        rangeRow.addView(minText)
+        rangeRow.addView(maxText)
+        layout.addView(rangeRow)
 
         MaterialAlertDialogBuilder(context, R.style.DarkAlertDialog)
             .setTitle(title)
@@ -1397,7 +1475,7 @@ class SettingsFragment : Fragment() {
 
     companion object {
         private val SAVE_ITEM_ID = 1001
-        private const val LUX_MAX = 500
+        private const val LUX_MAX = 10000
         private const val BRIGHTNESS_MAX = 255
     }
 }

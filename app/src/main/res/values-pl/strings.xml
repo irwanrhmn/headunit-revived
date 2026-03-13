@@ -24,6 +24,10 @@
     <string name="enter_threshold_value">Wprowadź wartość progu</string>
     <string name="threshold_lux_desc">Wartość Lux (0-10000). Poniżej = Noc.</string>
     <string name="threshold_brightness_desc">Jasność (0-255). Poniżej = Noc.</string>
+    <string name="threshold_light_title">Czułość na światło</string>
+    <string name="threshold_brightness_title">Poziom jasności</string>
+    <string name="threshold_light_hint">Tryb ciemny aktywuje się, gdy światło otoczenia spadnie poniżej tego poziomu</string>
+    <string name="threshold_brightness_hint">Tryb ciemny aktywuje się, gdy jasność ekranu jest poniżej tego poziomu</string>
     <string name="night_mode_start">Czas rozpoczęcia trybu nocnego</string>
     <string name="night_mode_end">Czas zakończenia trybu nocnego</string>
 

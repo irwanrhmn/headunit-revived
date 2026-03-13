@@ -24,6 +24,10 @@
     <string name="enter_threshold_value">Introdu valoarea pragului</string>
     <string name="threshold_lux_desc">Valoare Lux (0–10000). Sub aceasta = Noapte.</string>
     <string name="threshold_brightness_desc">Luminozitate (0–255). Sub aceasta = Noapte.</string>
+    <string name="threshold_light_title">Sensibilitate la lumină</string>
+    <string name="threshold_brightness_title">Nivel de luminozitate</string>
+    <string name="threshold_light_hint">Modul întunecat se activează când lumina ambientală scade sub acest nivel</string>
+    <string name="threshold_brightness_hint">Modul întunecat se activează când luminozitatea ecranului este sub acest nivel</string>
     <string name="night_mode_start">Oră început mod de noapte</string>
     <string name="night_mode_end">Oră sfârșit mod de noapte</string>
 
