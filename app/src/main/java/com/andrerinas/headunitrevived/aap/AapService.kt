@@ -11,6 +11,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
+import android.net.wifi.WifiManager
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.net.ConnectivityManager
@@ -84,6 +85,7 @@ class AapService : Service(), UsbReceiver.Listener {
     private var hasEverConnected = false
     private var accessoryHandshakeFailures = 0
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
+    private var wifiLock: WifiManager.WifiLock? = null
 
     /**
      * Guards against duplicate [UsbAccessoryMode.connectAndSwitch] calls.
@@ -140,7 +142,12 @@ class AapService : Service(), UsbReceiver.Listener {
         super.onCreate()
         AppLog.i("AapService creating...")
 
-        startForeground(1, createNotification())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(1, createNotification(),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE or ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+        } else {
+            startForeground(1, createNotification())
+        }
         setupCarMode()
         setupNightMode()
         observeConnectionState()
@@ -258,7 +265,8 @@ class AapService : Service(), UsbReceiver.Listener {
     private fun onConnected() {
         isSwitchingToAccessory.set(false)
         updateNotification()
-        
+        acquireWifiLock()
+
         // Fix: Don't create a new session if one is already active, just ensure it's active.
         // If we must recreate it, we should release the old one first.
         if (mediaSession == null) {
@@ -290,6 +298,7 @@ class AapService : Service(), UsbReceiver.Listener {
      */
     private fun onDisconnected(state: CommManager.ConnectionState.Disconnected) {
         isSwitchingToAccessory.set(false)
+        releaseWifiLock()
         if (!isDestroying) updateNotification()
         mediaSession?.isActive = false
         mediaSession?.release()
@@ -406,9 +415,28 @@ class AapService : Service(), UsbReceiver.Listener {
         }
     }
 
+    private fun acquireWifiLock() {
+        if (wifiLock == null) {
+            val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "HeadunitRevived:Connection")
+        }
+        if (wifiLock?.isHeld == false) {
+            wifiLock?.acquire()
+            AppLog.i("WifiLock acquired (HIGH_PERF)")
+        }
+    }
+
+    private fun releaseWifiLock() {
+        if (wifiLock?.isHeld == true) {
+            wifiLock?.release()
+            AppLog.i("WifiLock released")
+        }
+    }
+
     override fun onDestroy() {
         AppLog.i("AapService destroying...")
         isDestroying = true
+        releaseWifiLock()
         unregisterNetworkMonitor()
         stopForeground(true)
         stopWirelessServer()
@@ -437,7 +465,12 @@ class AapService : Service(), UsbReceiver.Listener {
             return START_NOT_STICKY
         }
 
-        startForeground(1, createNotification())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(1, createNotification(),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE or ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+        } else {
+            startForeground(1, createNotification())
+        }
         when (intent?.action) {
             ACTION_START_SELF_MODE       -> startSelfMode()
             ACTION_START_WIRELESS        -> startWirelessServer()
