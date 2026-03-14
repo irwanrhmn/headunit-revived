@@ -1,4 +1,8 @@
 # Changelog
+### v.2.0.2-beta1
+- Fixed: 60FPS never applied
+- Fixed: SSL Handshake fix for truncated messages
+- Added: Clear mode, dark mode and xtreme dark mode setting for the app itself
 
 ### v.2.0.1
 - Fixed: Multiple volume sliders appearing on modern devices (Pixel 9 fix)

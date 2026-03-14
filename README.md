@@ -58,6 +58,11 @@ adb shell am start -a android.intent.action.VIEW -d "headunit://connect?ip=192.1
 - **Wireless Connection Drops:** If the connection drops frequently, disable **"WiFi Assistant"** or **"Switch between networks"** in your phone's WiFi settings to prevent it from killing the connection due to "no internet."
 
 ## Changelog
+### v.2.0.2-beta1
+- Fixed: 60FPS never applied
+- Fixed: SSL Handshake fix for truncated messages
+- Added: Clear mode, dark mode and xtreme dark mode setting for the app itself
+
 ### v.2.0.1
 - Fixed: Multiple volume sliders appearing on modern devices (Pixel 9 fix)
 - Added: Support for Media Button emulation (SWC improvement for MacroDroid etc.)
