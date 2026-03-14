@@ -31,6 +31,9 @@ import com.andrerinas.headunitrevived.connection.CommManager
 import com.andrerinas.headunitrevived.connection.NetworkDiscovery
 import com.andrerinas.headunitrevived.connection.WifiDirectManager
 import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.PlaybackStateCompat
+import androidx.media.VolumeProviderCompat
 import androidx.media.session.MediaButtonReceiver
 import com.andrerinas.headunitrevived.connection.UsbAccessoryMode
 import com.andrerinas.headunitrevived.connection.UsbDeviceCompat
@@ -127,20 +130,20 @@ class AapService : Service(), UsbReceiver.Listener {
 
     fun updateMediaSessionState(isPlaying: Boolean) {
         val state = if (isPlaying) {
-            android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
+            PlaybackStateCompat.STATE_PLAYING
         } else {
-            android.support.v4.media.session.PlaybackStateCompat.STATE_STOPPED
+            PlaybackStateCompat.STATE_STOPPED
         }
 
         mediaSession?.setPlaybackState(
-            android.support.v4.media.session.PlaybackStateCompat.Builder()
+            PlaybackStateCompat.Builder()
                 .setState(state, 0, 1.0f)
-                .setActions(android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY or
-                           android.support.v4.media.session.PlaybackStateCompat.ACTION_PAUSE or
-                           android.support.v4.media.session.PlaybackStateCompat.ACTION_STOP or
-                           android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
-                           android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
-                           android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE)
+                .setActions(PlaybackStateCompat.ACTION_PLAY or
+                           PlaybackStateCompat.ACTION_PAUSE or
+                           PlaybackStateCompat.ACTION_STOP or
+                           PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+                           PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+                           PlaybackStateCompat.ACTION_PLAY_PAUSE)
                 .build()
         )
         AppLog.d("MediaSession: State updated to ${if (isPlaying) "PLAYING" else "STOPPED"}")
@@ -305,14 +308,10 @@ class AapService : Service(), UsbReceiver.Listener {
                     return super.onMediaButtonEvent(mediaButtonEvent)
                 }
             })
-            setPlaybackToRemote(object : androidx.media.VolumeProviderCompat(
-                androidx.media.VolumeProviderCompat.VOLUME_CONTROL_RELATIVE, 100, 50
-            ) {
-                override fun onAdjustVolume(direction: Int) {}
-            })
-            setMetadata(android.support.v4.media.MediaMetadataCompat.Builder()
-                .putString(android.support.v4.media.MediaMetadataCompat.METADATA_KEY_TITLE, "Android Auto")
-                .putString(android.support.v4.media.MediaMetadataCompat.METADATA_KEY_ARTIST, "Connected")
+            setPlaybackToLocal(android.media.AudioManager.STREAM_MUSIC)
+            setMetadata(MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Android Auto")
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "Connected")
                 .build())
         }
     }

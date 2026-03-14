@@ -329,4 +329,7 @@
     <string name="monochrome_icons_description">استخدام أيقونات رمادية على الشاشة الرئيسية في الوضع الداكن أو الداكن المطلق</string>
     <string name="use_extreme_dark">استخدام الوضع الداكن المطلق</string>
     <string name="use_extreme_dark_description">استخدام خلفية سوداء بالكامل عند تفعيل الوضع الداكن</string>
+    <string name="nav_action_destination">الوصول</string>
+    <string name="show_fps_counter">إظهار عداد FPS</string>
+    <string name="show_fps_counter_description">إظهار معدل الإطارات في الوقت الفعلي في الزاوية العلوية اليسرى أثناء العرض.</string>
 </resources>

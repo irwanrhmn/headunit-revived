@@ -328,4 +328,6 @@
     <string name="monochrome_icons_description">在深色或極致黑暗模式中使用灰階圖示</string>
     <string name="use_extreme_dark">使用極致黑暗</string>
     <string name="use_extreme_dark_description">在深色模式啟用時使用純黑背景</string>
+    <string name="show_fps_counter">顯示 FPS 計數器</string>
+    <string name="show_fps_counter_description">在投影期間於左上角顯示即時 FPS 資訊。</string>
 </resources>

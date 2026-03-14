@@ -329,4 +329,6 @@
     <string name="monochrome_icons_description">Używaj szarych ikon na ekranie głównym w trybie ciemnym lub ekstremalnie ciemnym</string>
     <string name="use_extreme_dark">Użyj ekstremalnie ciemnego</string>
     <string name="use_extreme_dark_description">Używaj czystego czarnego tła gdy tryb ciemny jest aktywny</string>
+    <string name="show_fps_counter">Pokaż licznik FPS</string>
+    <string name="show_fps_counter_description">Wyświetla licznik FPS w czasie rzeczywistym w lewym górnym rogu podczas projekcji.</string>
     </resources>

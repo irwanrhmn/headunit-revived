@@ -403,6 +403,11 @@ class Settings(context: Context) {
     var appThemeManualEnd: Int
         get() = prefs.getInt("app-theme-manual-end", 420)
         set(value) { prefs.edit().putInt("app-theme-manual-end", value).apply() }
+    var showFpsCounter: Boolean
+        get() = prefs.getBoolean("show-fps-counter", false)
+        set(value) {
+            prefs.edit().putBoolean("show-fps-counter", value).apply()
+        }
 
     companion object {
         const val CONNECTION_TYPE_WIFI = "wifi"

@@ -93,8 +93,8 @@ message Service
 
             enum VideoFrameRateType
             {
-                _30 = 1;
-                _60 = 2;
+                _60 = 1;
+                _30 = 2;
             }
             required VideoCodecResolutionType codec_resolution = 1;
             required VideoFrameRateType frame_rate = 2;

@@ -329,4 +329,6 @@
     <string name="monochrome_icons_description">Використовувати сірі значки на головному екрані в темному або надтемному режимі</string>
     <string name="use_extreme_dark">Використовувати надтемний режим</string>
     <string name="use_extreme_dark_description">Використовувати повністю чорний фон при активному темному режимі</string>
+    <string name="show_fps_counter">Показувати лічильник FPS</string>
+    <string name="show_fps_counter_description">Відображати частоту кадрів у реальному часі у верхньому лівому куті під час проекції.</string>
     </resources>

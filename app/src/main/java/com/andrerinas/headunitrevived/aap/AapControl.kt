@@ -63,7 +63,7 @@ internal class AapControlMedia(
     }
 
     private fun mediaStartRequest(request: Media.Start, channel: Int): Int {
-        AppLog.i("Media Start Request %s: %s", Channel.name(channel), request)
+        AppLog.i("Media Start Request %s: session=%d, config_index=%d", Channel.name(channel), request.sessionId, request.configurationIndex)
 
         aapTransport.setSessionId(channel, request.sessionId)
         return 0
@@ -76,7 +76,12 @@ internal class AapControlMedia(
         val configResponse = Media.Config.newBuilder().apply {
             status = Media.Config.ConfigStatus.HEADUNIT
             // Use higher maxUnacked for audio to prevent stuttering/drops
-            maxUnacked = if (Channel.isAudio(channel)) 3 else 1
+            maxUnacked = if (Channel.isAudio(channel)) {
+                3
+            } else {
+                1
+            }
+            
             addConfigurationIndices(0)
         }.build()
         AppLog.i("Config response: %s", configResponse)

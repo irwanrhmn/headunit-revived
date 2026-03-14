@@ -328,4 +328,6 @@
     <string name="monochrome_icons_description">Grijstinten pictogrammen op het startscherm gebruiken in Donker of Extra donker modus</string>
     <string name="use_extreme_dark">Extra donker gebruiken</string>
     <string name="use_extreme_dark_description">Puur zwarte achtergrond gebruiken wanneer donkere modus actief is</string>
+    <string name="show_fps_counter">FPS-teller weergeven</string>
+    <string name="show_fps_counter_description">Toon een real-time FPS-overlay in de linkerbovenhoek tijdens projectie.</string>
     </resources>

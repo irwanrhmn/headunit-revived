@@ -85,6 +85,8 @@ class SettingsFragment : Fragment(), SensorEventListener {
     private var pendingUseNativeSsl: Boolean? = null
     private var pendingAutoStartBtName: String? = null
     private var pendingAutoStartBtMac: String? = null
+    private var pendingAutoStartOnUsb: Boolean? = null
+    private var pendingShowFpsCounter: Boolean? = null
     private var pendingScreenOrientation: Settings.ScreenOrientation? = null
     private var pendingAppLanguage: String? = null
     private var pendingThresholdLux: Int? = null
@@ -158,6 +160,7 @@ class SettingsFragment : Fragment(), SensorEventListener {
         pendingAutoStartBtName = settings.autoStartBluetoothDeviceName
         pendingAutoStartBtMac = settings.autoStartBluetoothDeviceMac
         pendingAutoStartOnUsb = settings.autoStartOnUsb
+        pendingShowFpsCounter = settings.showFpsCounter
         pendingScreenOrientation = settings.screenOrientation
         pendingAppLanguage = settings.appLanguage
         
@@ -302,6 +305,7 @@ class SettingsFragment : Fragment(), SensorEventListener {
         pendingAutoStartBtName?.let { settings.autoStartBluetoothDeviceName = it }
         pendingAutoStartBtMac?.let { settings.autoStartBluetoothDeviceMac = it }
         pendingAutoStartOnUsb?.let { settings.autoStartOnUsb = it }
+        pendingShowFpsCounter?.let { settings.showFpsCounter = it }
         pendingScreenOrientation?.let { settings.screenOrientation = it }
 
         pendingMediaVolumeOffset?.let { settings.mediaVolumeOffset = it }
@@ -420,6 +424,7 @@ class SettingsFragment : Fragment(), SensorEventListener {
                         pendingUseNativeSsl != settings.useNativeSsl ||
                         pendingAutoStartBtMac != settings.autoStartBluetoothDeviceMac ||
                         pendingAutoStartOnUsb != settings.autoStartOnUsb ||
+                        pendingShowFpsCounter != settings.showFpsCounter ||
                         pendingScreenOrientation != settings.screenOrientation ||
                         pendingAppLanguage != settings.appLanguage ||
                         pendingInsetLeft != settings.insetLeft ||
@@ -1130,6 +1135,18 @@ class SettingsFragment : Fragment(), SensorEventListener {
 
         // --- Debug Settings ---
         items.add(SettingItem.CategoryHeader("debug", R.string.category_debug))
+
+        items.add(SettingItem.ToggleSettingEntry(
+            stableId = "showFpsCounter",
+            nameResId = R.string.show_fps_counter,
+            descriptionResId = R.string.show_fps_counter_description,
+            isChecked = pendingShowFpsCounter!!,
+            onCheckedChanged = { isChecked ->
+                pendingShowFpsCounter = isChecked
+                checkChanges()
+                updateSettingsList()
+            }
+        ))
 
         val logLevels = com.andrerinas.headunitrevived.utils.LogExporter.LogLevel.entries
         val logLevelNames = logLevels.map { it.name.lowercase().replaceFirstChar { c -> c.uppercase() } }.toTypedArray()

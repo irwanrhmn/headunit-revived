@@ -329,4 +329,6 @@
     <string name="monochrome_icons_description">Utilizați pictograme în tonuri de gri pe ecranul principal în modul Întunecat sau Negru extrem</string>
     <string name="use_extreme_dark">Folosiți negru extrem</string>
     <string name="use_extreme_dark_description">Utilizați fundal negru pur când modul întunecat este activ</string>
+    <string name="show_fps_counter">Afișează contor FPS</string>
+    <string name="show_fps_counter_description">Afișează FPS în timp real în colțul din stânga sus în timpul proiecției.</string>
 </resources>

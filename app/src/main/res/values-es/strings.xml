@@ -329,4 +329,6 @@
     <string name="monochrome_icons_description">Usar iconos en escala de grises en la pantalla principal en modo Oscuro o Oscuro Extremo</string>
     <string name="use_extreme_dark">Usar oscuro extremo</string>
     <string name="use_extreme_dark_description">Usar fondo negro puro cuando el modo oscuro está activo</string>
+    <string name="show_fps_counter">Mostrar contador de FPS</string>
+    <string name="show_fps_counter_description">Muestra una superposición de FPS en tiempo real en la esquina superior izquierda durante la proyección.</string>
 </resources>

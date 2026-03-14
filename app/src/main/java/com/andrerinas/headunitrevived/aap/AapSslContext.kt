@@ -20,12 +20,10 @@ class AapSslContext(keyManager: SingleKeyKeyManager): AapSsl {
     override fun performHandshake(connection: AccessoryConnection): Boolean {
         if (prepare() < 0) return false
 
-        val buffer = ByteArray(Messages.DEF_BUFFER_LENGTH)
-        // Accumulates bytes across NEED_UNWRAP iterations when a TLS record is fragmented
-        // across multiple USB packets. JSSE returns BUFFER_UNDERFLOW when the input is too
-        // short to hold a complete record; without this accumulation the previous
-        // handshakeWrite() inner loop would spin forever on the same partial data.
+        // Buffer for unencrypted TLS records extracted from AAP messages.
+        // We use a local queue or buffer to keep track of bytes ready for the SSLEngine.
         var pendingTlsData = ByteArray(0)
+        
         // Hard cap on the entire SSL phase.
         val deadline = android.os.SystemClock.elapsedRealtime() + SSL_HANDSHAKE_TIMEOUT_MS
 
@@ -39,15 +37,10 @@ class AapSslContext(keyManager: SingleKeyKeyManager): AapSsl {
 
             when (getHandshakeStatus()) {
                 SSLEngineResult.HandshakeStatus.NEED_UNWRAP -> {
-                    // Use buffered data first; only block on USB if the buffer is empty
-                    // (normal case) or after BUFFER_UNDERFLOW appended more data below.
+                    // If we don't have enough data for a meaningful unwrap, read a full AAP message
                     if (pendingTlsData.isEmpty()) {
-                        val size = connection.recvBlocking(buffer, buffer.size, 2000, false)
-                        if (size <= 6) {
-                            AppLog.e("SSL Handshake: Receive failed or too small ($size)")
-                            return false
-                        }
-                        pendingTlsData = buffer.copyOfRange(6, size)
+                        val messageData = readAapMessage(connection) ?: return false
+                        pendingTlsData = messageData
                     }
 
                     rxBuffer.clear()
@@ -57,22 +50,17 @@ class AapSslContext(keyManager: SingleKeyKeyManager): AapSsl {
 
                     when (result.status) {
                         SSLEngineResult.Status.OK -> {
-                            // Keep any unconsumed bytes (e.g. next record already in the packet).
+                            // Keep any unconsumed bytes (e.g. next TLS record already in the buffer).
                             pendingTlsData = if (data.hasRemaining())
                                 ByteArray(data.remaining()).also { data.get(it) }
                             else ByteArray(0)
                         }
                         SSLEngineResult.Status.BUFFER_UNDERFLOW -> {
-                            // Partial TLS record — read the next USB packet and append it.
-                            // The outer loop re-enters NEED_UNWRAP and retries unwrap with
-                            // the now-larger buffer (pendingTlsData non-empty → no extra USB read).
-                            val size = connection.recvBlocking(buffer, buffer.size, 2000, false)
-                            if (size <= 6) {
-                                AppLog.e("SSL Handshake: Receive failed during accumulation ($size)")
-                                return false
-                            }
-                            pendingTlsData += buffer.copyOfRange(6, size)
-                            AppLog.d("SSL Handshake: partial TLS record, ${pendingTlsData.size} B buffered")
+                            // The current pendingTlsData doesn't contain a full TLS record.
+                            // Read another AAP message and append it.
+                            val nextMessage = readAapMessage(connection) ?: return false
+                            pendingTlsData += nextMessage
+                            AppLog.d("SSL Handshake: buffered ${pendingTlsData.size} B after underflow")
                         }
                         else -> {
                             AppLog.e("SSL Handshake: unwrap failed with status ${result.status}")
@@ -100,8 +88,7 @@ class AapSslContext(keyManager: SingleKeyKeyManager): AapSsl {
                 }
             }
         }
-        // Log the session ID so we can verify resumption in logcat: two consecutive connects
-        // with the same non-empty base-64 value means the abbreviated handshake was used.
+        
         val sessionId = sslEngine.session?.id
         if (sessionId != null && sessionId.isNotEmpty()) {
             AppLog.i("SSL handshake complete. Session id: ${android.util.Base64.encodeToString(sessionId, android.util.Base64.NO_WRAP)}")
@@ -109,6 +96,39 @@ class AapSslContext(keyManager: SingleKeyKeyManager): AapSsl {
             AppLog.i("SSL handshake complete. No session id (full handshake).")
         }
         return true
+    }
+
+    /**
+     * Reads a single complete AAP message from the connection.
+     * This ensures that we always respect AAP framing boundaries.
+     */
+    private fun readAapMessage(connection: AccessoryConnection): ByteArray? {
+        val header = ByteArray(6)
+        // Read exactly 6 bytes for the AAP header
+        if (connection.recvBlocking(header, 6, 2000, true) != 6) {
+            AppLog.e("SSL Handshake: Failed to read AAP header")
+            return null
+        }
+
+        // AAP Header: [0]=Channel, [1]=Flags, [2..3]=Length (Big Endian), [4..5]=Type
+        // The length in the header includes the 4 bytes of channel/flags/length itself? 
+        // No, in Messages.kt: size + 2 is stored in bytes 2..3. 
+        // So payload length = (header[2]*256 + header[3]) - 2.
+        val totalLength = ((header[2].toInt() and 0xFF) shl 8) or (header[3].toInt() and 0xFF)
+        val payloadLength = totalLength - 2 // Minus the 2 bytes for the type field (bytes 4-5)
+
+        if (payloadLength < 0 || payloadLength > Messages.DEF_BUFFER_LENGTH) {
+            AppLog.e("SSL Handshake: Invalid AAP payload length: $payloadLength")
+            return null
+        }
+
+        val payload = ByteArray(payloadLength)
+        if (connection.recvBlocking(payload, payloadLength, 2000, true) != payloadLength) {
+            AppLog.e("SSL Handshake: Failed to read AAP payload ($payloadLength bytes)")
+            return null
+        }
+
+        return payload
     }
 
     private fun prepare(): Int {

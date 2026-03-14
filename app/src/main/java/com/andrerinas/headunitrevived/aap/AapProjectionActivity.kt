@@ -3,9 +3,12 @@ package com.andrerinas.headunitrevived.aap
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.TextureView
@@ -146,6 +149,35 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
         }
 
         setContentView(R.layout.activity_headunit)
+
+        if (settings.showFpsCounter) {
+            val container = findViewById<FrameLayout>(R.id.container)
+            val fpsText = TextView(this).apply {
+                setTextColor(Color.YELLOW)
+                textSize = 12f
+                setTypeface(null, Typeface.BOLD)
+                setBackgroundColor(Color.parseColor("#80000000"))
+                setPadding(10, 5, 10, 5)
+                text = "FPS: --"
+                // Lift it above everything
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    elevation = 100f
+                    translationZ = 100f
+                }
+            }
+            val params = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = Gravity.TOP or Gravity.START
+                setMargins(20, 20, 0, 0)
+            }
+            container.addView(fpsText, params)
+
+            videoDecoder.onFpsChanged = { fps ->
+                runOnUiThread { fpsText.text = "FPS: $fps" }
+            }
+        }
 
         videoDecoder.dimensionsListener = this
 

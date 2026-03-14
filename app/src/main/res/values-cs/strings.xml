@@ -329,4 +329,6 @@
     <string name="monochrome_icons_description">Použít šedé ikony na domovské obrazovce v tmavém nebo extrémně tmavém režimu</string>
     <string name="use_extreme_dark">Použít extrémně tmavý režim</string>
     <string name="use_extreme_dark_description">Použít čistě černé pozadí při aktivním tmavém režimu</string>
+    <string name="show_fps_counter">Zobrazit počítadlo FPS</string>
+    <string name="show_fps_counter_description">Během projekce zobrazí v levém horním rohu aktuální FPS.</string>
 </resources>

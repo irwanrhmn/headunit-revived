@@ -329,4 +329,6 @@
     <string name="monochrome_icons_description">Usar ícones em tons de cinza na tela inicial no modo Escuro ou Escuro Extremo</string>
     <string name="use_extreme_dark">Usar escuro extremo</string>
     <string name="use_extreme_dark_description">Usar fundo preto puro quando o modo escuro está ativo</string>
+    <string name="show_fps_counter">Mostrar contador de FPS</string>
+    <string name="show_fps_counter_description">Exibe a contagem de FPS em tempo real no canto superior esquerdo durante a projeção.</string>
 </resources>

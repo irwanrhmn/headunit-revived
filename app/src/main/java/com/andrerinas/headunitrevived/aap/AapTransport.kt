@@ -60,7 +60,7 @@ class AapTransport(
         audioDecoder: AudioDecoder,
         videoDecoder: VideoDecoder,
         audioManager: AudioManager,
-        private val settings: Settings,
+        internal val settings: Settings,
         private val notification: BackgroundNotification,
         private val context: Context,
         private val externalSsl: AapSslContext? = null)

@@ -328,4 +328,6 @@
     <string name="monochrome_icons_description">Szürkeárnyalatos ikonok használata a kezdőképernyőn Sötét vagy Extrém sötét módban</string>
     <string name="use_extreme_dark">Extrém sötét használata</string>
     <string name="use_extreme_dark_description">Tiszta fekete háttér használata sötét módban</string>
+    <string name="show_fps_counter">FPS számláló megjelenítése</string>
+    <string name="show_fps_counter_description">Valós idejű FPS számláló megjelenítése a bal felső sarokban a kivetítés alatt.</string>
 </resources>

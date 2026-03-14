@@ -47,6 +47,9 @@ class VideoDecoder(private val settings: Settings) {
     private var legacyFrameBuffer: ByteArray? = null
 
     var dimensionsListener: VideoDimensionsListener? = null
+    var onFpsChanged: ((Int) -> Unit)? = null
+    private var frameCount = 0
+    private var lastFpsLogTime = 0L
     // @Volatile so the output thread sees the value written by the caller (typically the main
     // thread). Fired on the first releaseOutputBuffer — i.e. when the frame is actually rendered.
     @Volatile var onFirstFrameListener: (() -> Unit)? = null
@@ -416,6 +419,19 @@ class VideoDecoder(private val settings: Settings) {
                     currentCodec.releaseOutputBuffer(outputIndex, true)
                     lastFrameRenderedMs = SystemClock.elapsedRealtime()
                     onFirstFrameListener?.let { it(); onFirstFrameListener = null }
+
+                    // Track FPS
+                    frameCount++
+                    val now = System.currentTimeMillis()
+                    val elapsed = now - lastFpsLogTime
+                    if (elapsed >= 1000) {
+                        if (lastFpsLogTime != 0L) {
+                            val fps = (frameCount * 1000 / elapsed).toInt()
+                            onFpsChanged?.invoke(fps)
+                        }
+                        frameCount = 0
+                        lastFpsLogTime = now
+                    }
                 } else if (outputIndex == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
                     handleOutputFormatChange(currentCodec.outputFormat)
                 }

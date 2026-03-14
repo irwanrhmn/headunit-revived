@@ -329,4 +329,6 @@
     <string name="monochrome_icons_description">Использовать серые значки на главном экране в тёмном или сверхтёмном режиме</string>
     <string name="use_extreme_dark">Использовать сверхтёмный режим</string>
     <string name="use_extreme_dark_description">Использовать чисто чёрный фон при активном тёмном режиме</string>
+    <string name="show_fps_counter">Показывать счетчик FPS</string>
+    <string name="show_fps_counter_description">Отображать текущую частоту кадров в верхнем левом углу во время проекции.</string>
 </resources>

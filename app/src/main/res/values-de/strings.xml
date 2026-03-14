@@ -329,4 +329,6 @@
     <string name="monochrome_icons_description">Graustufen-Symbole auf dem Startbildschirm im Dunkel- oder Extra-Dunkel-Modus verwenden</string>
     <string name="use_extreme_dark">Extra Dunkel verwenden</string>
     <string name="use_extreme_dark_description">Rein schwarzen Hintergrund verwenden, wenn der Dunkelmodus aktiv ist</string>
+    <string name="show_fps_counter">FPS-Zähler anzeigen</string>
+    <string name="show_fps_counter_description">Echtzeit-FPS oben links während der Projektion einblenden.</string>
 </resources>
