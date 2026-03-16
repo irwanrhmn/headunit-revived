@@ -62,7 +62,6 @@
         android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/title"
-        android:appCategory="maps"
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
