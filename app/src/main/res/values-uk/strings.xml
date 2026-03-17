@@ -144,10 +144,10 @@
     <string name="auto_start_bt_description">Автоматично відкривати Headunit Revived при підключенні певного пристрою Bluetooth.</string>
     <string name="auto_start_usb_label">Автозапуск через USB</string>
     <string name="auto_start_usb_description">Автоматично відкривати застосунок при підключенні USB-пристрою</string>
-    <string name="auto_start_settings">Auto-start settings</string>
-    <string name="auto_start_settings_description">Configure when the app starts automatically</string>
-    <string name="auto_start_on_boot_label">Start on boot</string>
-    <string name="auto_start_on_boot_description">Start the app service automatically when the device boots</string>
+    <string name="auto_start_settings">Налаштування автозапуску</string>
+    <string name="auto_start_settings_description">Налаштуйте, коли додаток запускається автоматично</string>
+    <string name="auto_start_on_boot_label">Запуск при завантаженні</string>
+    <string name="auto_start_on_boot_description">Автоматично запускати службу додатка при завантаженні пристрою</string>
     <string name="select_bt_device">Вибрати Bluetooth-пристрій</string>
     <string name="bt_device_not_set">Не задано</string>
     <string name="bt_permission_denied_title">Потрібен дозвіл Bluetooth</string>
