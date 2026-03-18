@@ -718,8 +718,13 @@ class AapService : Service(), UsbReceiver.Listener {
                 val deviceName = UsbDeviceCompat(device).uniqueName
                 AppLog.i("Found device already in accessory mode: $deviceName")
                 if (!usbManager.hasPermission(device)) {
-                    AppLog.i("Accessory-mode device has no permission (re-enumerated); requesting: $deviceName")
-                    requestUsbPermission(device)
+                    AppLog.i("Accessory-mode device has no permission (re-enumerated); launching UsbAttachedActivity: $deviceName")
+                    // Launch UsbAttachedActivity to handle permission request from foreground
+                    startActivity(Intent(this, UsbAttachedActivity::class.java).apply {
+                        action = UsbManager.ACTION_USB_DEVICE_ATTACHED
+                        putExtra(UsbManager.EXTRA_DEVICE, device)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    })
                     return
                 }
                 isSwitchingToAccessory.set(true)

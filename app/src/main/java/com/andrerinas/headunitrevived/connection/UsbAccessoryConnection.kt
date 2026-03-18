@@ -74,16 +74,22 @@ class UsbAccessoryConnection(private val usbMgr: UsbManager, private val device:
 
         for (i in 0 until 3) {
             try {
-                connection = usbMgr.openDevice(device)
-                if (connection != null) break
+                if (!usbMgr.hasPermission(device)) {
+                    AppLog.w("No permission for USB device ${UsbDeviceCompat.getUniqueName(device)}. Waiting for system popup...")
+                    // We can't request permission here easily because we need a BroadcastReceiver.
+                    // But we can wait and see if the user granted it via the system dialog.
+                } else {
+                    connection = usbMgr.openDevice(device)
+                    if (connection != null) break
+                }
             } catch (t: Throwable) {
                 lastError = t
                 AppLog.w("Attempt ${i+1} to openDevice failed: ${t.message}")
             }
-            if (i < 2) try { Thread.sleep(500) } catch (_: Exception) {}
+            if (i < 2) try { Thread.sleep(1000) } catch (_: Exception) {}
         }
 
-        usbDeviceConnection = connection ?: throw UsbOpenException(lastError ?: Throwable("openDevice: connection is null"))
+        usbDeviceConnection = connection ?: throw UsbOpenException(lastError ?: Throwable("openDevice: connection is null (Permission missing?)"))
 
         AppLog.i("Established connection: " + usbDeviceConnection!!)
 
