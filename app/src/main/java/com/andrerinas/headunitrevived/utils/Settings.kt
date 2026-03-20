@@ -55,7 +55,7 @@ class Settings(context: Context) {
 
     // Flag to determine if the projection should stretch and ignore aspect ratio to fill the screen
     var stretchToFill: Boolean
-        get() = prefs.getBoolean("stretch_to_fill", true)
+        get() = prefs.getBoolean("stretch_to_fill", false)
         set(value) { prefs.edit().putBoolean("stretch_to_fill", value).apply() }
 
     var micSampleRate: Int
