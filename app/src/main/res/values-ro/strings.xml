@@ -201,6 +201,8 @@
     <string name="add_new">Adaugă nou</string>
     <string name="cancel">Anulează</string>
     <string name="enable">Activează</string>
+    <string name="pref_stretch_screen_title">Întindere pentru a umple ecranul</string>
+    <string name="pref_stretch_screen_summary">Ignoră raportul de aspect pentru a umple întregul afișaj (elimină barele negre)</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>
