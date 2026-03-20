@@ -702,9 +702,8 @@ class AapService : Service(), UsbReceiver.Listener {
         val settings = App.provide(this).settings
         val lastSession = settings.autoConnectLastSession
         val singleUsb = settings.autoConnectSingleUsbDevice
-        val usbAutoStart = settings.autoStartOnUsb
 
-        if (!force && !lastSession && !singleUsb && !usbAutoStart) return
+        if (!force && !lastSession && !singleUsb) return
         if (commManager.isConnected ||
             commManager.connectionState.value is CommManager.ConnectionState.Connecting ||
             isSwitchingToAccessory.get()) return
@@ -763,15 +762,6 @@ class AapService : Service(), UsbReceiver.Listener {
                         return
                     }
                 }
-            }
-        }
-
-        // USB auto-start mode: attempt AOA switch for any single non-accessory device
-        if (usbAutoStart) {
-            val nonAccessoryDevices = deviceList.values.filter { !UsbDeviceCompat.isInAccessoryMode(it) }
-            if (nonAccessoryDevices.size == 1) {
-                performSingleUsbConnect(nonAccessoryDevices[0])
-                return
             }
         }
 

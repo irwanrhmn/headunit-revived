@@ -54,17 +54,6 @@ class UsbAttachedActivity : Activity() {
         }
 
         val settings = Settings(this)
-        if (settings.autoStartOnUsb && !App.provide(this).commManager.isConnected) {
-            AppLog.i("USB auto-start: launching app")
-            try {
-                startActivity(Intent(this, MainActivity::class.java).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    putExtra(MainActivity.EXTRA_LAUNCH_SOURCE, "USB auto-start")
-                })
-            } catch (e: Exception) {
-                AppLog.w("Could not start UI from USB auto-start: ${e.message}")
-            }
-        }
 
         if (App.provide(this).commManager.connectionState.value is CommManager.ConnectionState.TransportStarted) {
             AppLog.e("Thread already running")
@@ -82,10 +71,23 @@ class UsbAttachedActivity : Activity() {
         }
 
         val deviceCompat = UsbDeviceCompat(device)
-        if (!settings.autoStartOnUsb && !settings.isConnectingDevice(deviceCompat)) {
-            AppLog.i("Skipping device ${deviceCompat.uniqueName} (not allowed and USB auto-start disabled)")
+        if (!settings.isConnectingDevice(deviceCompat)) {
+            AppLog.i("Skipping device ${deviceCompat.uniqueName} (not in allowed list)")
             finish()
             return
+        }
+
+        // Device is allowed — launch app UI if USB auto-start is enabled
+        if (settings.autoStartOnUsb && !App.provide(this).commManager.isConnected) {
+            AppLog.i("USB auto-start: launching app for allowed device ${deviceCompat.uniqueName}")
+            try {
+                startActivity(Intent(this, MainActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    putExtra(MainActivity.EXTRA_LAUNCH_SOURCE, "USB auto-start")
+                })
+            } catch (e: Exception) {
+                AppLog.w("Could not start UI from USB auto-start: ${e.message}")
+            }
         }
 
         val usbManager = getSystemService(Context.USB_SERVICE) as UsbManager

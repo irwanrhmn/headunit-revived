@@ -142,7 +142,7 @@
     <string name="auto_start_bt_label">Automatisch starten bij Bluetooth</string>
     <string name="auto_start_bt_description">Start Headunit Revived automatisch wanneer een specifiek Bluetooth-apparaat verbinding maakt.</string>
     <string name="auto_start_usb_label">Automatisch starten via USB</string>
-    <string name="auto_start_usb_description">De app automatisch openen en verbinding proberen te maken wanneer een compatibel USB-apparaat wordt aangesloten</string>
+    <string name="auto_start_usb_description">De app automatisch openen wanneer een toegestaan USB-apparaat wordt aangesloten. Alleen apparaten die als toegestaan zijn gemarkeerd in de USB-lijst activeren dit</string>
     <string name="auto_start_settings">Instellingen automatisch starten</string>
     <string name="auto_start_settings_description">Stel in wanneer de app automatisch start</string>
     <string name="auto_start_on_boot_label">Starten bij opstarten</string>

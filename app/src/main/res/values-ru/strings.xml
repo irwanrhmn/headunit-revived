@@ -143,7 +143,7 @@
     <string name="auto_start_bt_label">Автозапуск при Bluetooth</string>
     <string name="auto_start_bt_description">Автоматически открывать Headunit Revived при подключении определенного Bluetooth-устройства.</string>
     <string name="auto_start_usb_label">Автозапуск при USB</string>
-    <string name="auto_start_usb_description">Автоматически открывать приложение и пытаться подключиться при подключении совместимого USB-устройства</string>
+    <string name="auto_start_usb_description">Автоматически открывать приложение при подключении разрешённого USB-устройства. Только устройства, отмеченные как разрешённые в списке USB, активируют это</string>
     <string name="auto_start_settings">Настройки автозапуска</string>
     <string name="auto_start_settings_description">Настройте, когда приложение запускается автоматически</string>
     <string name="auto_start_on_boot_label">Запуск при загрузке</string>

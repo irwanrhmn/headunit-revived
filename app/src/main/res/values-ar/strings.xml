@@ -143,7 +143,7 @@
     <string name="auto_start_bt_label">التشغيل التلقائي عبر البلوتوث</string>
     <string name="auto_start_bt_description">فتح Headunit Revived تلقائيا عند اتصال جهاز بلوتوث محدد.</string>
     <string name="auto_start_usb_label">تشغيل تلقائي عند توصيل USB</string>
-    <string name="auto_start_usb_description">فتح التطبيق تلقائيًا ومحاولة الاتصال عند توصيل جهاز USB متوافق</string>
+    <string name="auto_start_usb_description">فتح التطبيق تلقائيًا عند توصيل جهاز USB مسموح به. فقط الأجهزة المحددة كمسموح بها في قائمة USB ستفعّل هذا</string>
     <string name="auto_start_settings">إعدادات التشغيل التلقائي</string>
     <string name="auto_start_settings_description">تهيئة متى يبدأ التطبيق تلقائياً</string>
     <string name="auto_start_on_boot_label">التشغيل عند الإقلاع</string>
