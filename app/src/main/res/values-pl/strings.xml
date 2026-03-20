@@ -196,6 +196,8 @@
     <string name="add_new">Dodaj nowy</string>
     <string name="cancel">Anuluj</string>
     <string name="enable">Włącz</string>
+    <string name="pref_stretch_screen_title">Rozciągnij na cały ekran</string>
+    <string name="pref_stretch_screen_summary">Ignoruje proporcje ekranu, aby wypełnić cały wyświetlacz (usuwa czarne paski)</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Dźwięk</string>

@@ -199,6 +199,8 @@
     <string name="add_new">Hinzufügen</string>
     <string name="cancel">Abbrechen</string>
     <string name="enable">Aktivieren</string>
+    <string name="pref_stretch_screen_title">Auf Bildschirmgröße strecken</string>
+    <string name="pref_stretch_screen_summary">Ignoriert das Seitenverhältnis, um das gesamte Display auszufüllen (entfernt schwarze Balken)</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>

@@ -196,6 +196,8 @@
     <string name="add_new">Añadir nuevo</string>
     <string name="cancel">Cancelar</string>
     <string name="enable">Activar</string>
+    <string name="pref_stretch_screen_title">Estirar para llenar la pantalla</string>
+    <string name="pref_stretch_screen_summary">Ignora la relación de aspecto para rellenar toda la pantalla (elimina las barras negras)</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>

@@ -196,6 +196,8 @@
     <string name="add_new">Adicionar novo</string>
     <string name="cancel">Cancelar</string>
     <string name="enable">Ativar</string>
+    <string name="pref_stretch_screen_title">Esticar para preencher a tela</string>
+    <string name="pref_stretch_screen_summary">Ignora a proporção original para preencher todo o visor (remove as barras pretas)</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Áudio</string>

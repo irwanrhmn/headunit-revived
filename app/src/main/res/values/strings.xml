@@ -209,6 +209,9 @@
     <string name="add_new">Add new</string>
     <string name="cancel">Cancel</string>
     <string name="enable">Enable</string>
+    <string name="pref_stretch_screen_title">Stretch to fill screen</string>
+    <string name="pref_stretch_screen_summary">Ignores aspect ratio to fill the entire display (removes black bars)</string>
+
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>
@@ -358,4 +361,3 @@
     <!-- Theme -->
     <string name="use_white_background">Use white home screen wallpaper</string>
 </resources>
-

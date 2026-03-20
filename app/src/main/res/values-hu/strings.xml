@@ -195,6 +195,8 @@
     <string name="add_new">Új hozzáadása</string>
     <string name="cancel">Mégse</string>
     <string name="enable">Engedélyezés</string>
+    <string name="pref_stretch_screen_title">Kinyújtás teljes képernyőre</string>
+    <string name="pref_stretch_screen_summary">Figyelmen kívül hagyja a képarányt a teljes kijelző kitöltéséhez (eltávolítja a fekete sávokat)</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Hang</string>
