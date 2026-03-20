@@ -225,7 +225,11 @@ object HeadUnitScreenConfig {
         return if (stretchToFill) {
             // Legacy behavior: Stretches the projection to completely fill the screen bounds.
             // This prevents letterboxing (black bars) on non-standard displays like 1024x600.
-            divideOrOne(getNegotiatedHeight().toFloat(), screenHeightPx.toFloat())
+            if (getNegotiatedHeight() > screenHeightPx) {
+                divideOrOne(getNegotiatedHeight().toFloat(), screenHeightPx.toFloat())
+            } else {
+                1.0f
+            }
         } else {
             // PR #233 behavior: Maintains the negotiated aspect ratio strictly.
             // This prevents distortion but might introduce black bars on screens that don't match the aspect ratio.
