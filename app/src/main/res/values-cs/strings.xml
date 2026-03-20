@@ -192,6 +192,8 @@
     <string name="add_new">Přidat nové</string>
     <string name="cancel">Zrušit</string>
     <string name="enable">Povolit</string>
+    <string name="pref_stretch_screen_title">Roztáhnout na celou obrazovku</string>
+    <string name="pref_stretch_screen_summary">Ignoruje poměr stran a vyplní celý displej (odstraní černé pruhy)</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>
