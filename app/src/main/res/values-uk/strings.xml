@@ -192,6 +192,8 @@
     <string name="add_new">Додати новий</string>
     <string name="cancel">Скасувати</string>
     <string name="enable">Увімкнути</string>
+    <string name="pref_stretch_screen_title">Розтягнути на весь екран</string>
+    <string name="pref_stretch_screen_summary">Ігнорує співвідношення сторін для заповнення всього дисплея (прибирає чорні смуги)</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Звук</string>

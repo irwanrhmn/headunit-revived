@@ -192,6 +192,8 @@
     <string name="add_new">إضافة جديد</string>
     <string name="cancel">إلغاء</string>
     <string name="enable">تمكين</string>
+    <string name="pref_stretch_screen_title">تمديد لملء الشاشة</string>
+    <string name="pref_stretch_screen_summary">يتجاهل نسبة العرض إلى الارتفاع لملء الشاشة بأكملها (يزيل الأشرطة السوداء)</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">الصوت</string>

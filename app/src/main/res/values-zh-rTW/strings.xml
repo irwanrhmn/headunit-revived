@@ -191,6 +191,8 @@
     <string name="add_new">加入新的</string>
     <string name="cancel">取消</string>
     <string name="enable">啟用</string>
+    <string name="pref_stretch_screen_title">延展以填滿螢幕</string>
+    <string name="pref_stretch_screen_summary">忽略長寬比以填滿整個顯示器（移除黑邊）</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">音訊</string>

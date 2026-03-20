@@ -79,6 +79,10 @@ class SettingsFragment : Fragment() {
     private var pendingShowFpsCounter: Boolean? = null
     private var pendingScreenOrientation: Settings.ScreenOrientation? = null
     private var pendingAppLanguage: String? = null
+    
+    // Flag to determine if the projection should stretch to fill the screen
+    private var pendingStretchToFill: Boolean? = null
+    
     // Custom Insets
     private var pendingInsetLeft: Int? = null
     private var pendingInsetTop: Int? = null
@@ -126,6 +130,9 @@ class SettingsFragment : Fragment() {
         pendingShowFpsCounter = settings.showFpsCounter
         pendingScreenOrientation = settings.screenOrientation
         pendingAppLanguage = settings.appLanguage
+        
+        // Initialize local state for stretch to fill
+        pendingStretchToFill = settings.stretchToFill
         
         pendingInsetLeft = settings.insetLeft
         pendingInsetTop = settings.insetTop
@@ -246,6 +253,9 @@ class SettingsFragment : Fragment() {
         pendingNavigationVolumeOffset?.let { settings.navigationVolumeOffset = it }
 
         pendingAppLanguage?.let { settings.appLanguage = it }
+
+        // Save the stretch to fill preference
+        pendingStretchToFill?.let { settings.stretchToFill = it }
         
         pendingInsetLeft?.let { settings.insetLeft = it }
         pendingInsetTop?.let { settings.insetTop = it }
@@ -324,6 +334,7 @@ class SettingsFragment : Fragment() {
                         pendingShowFpsCounter != settings.showFpsCounter ||
                         pendingScreenOrientation != settings.screenOrientation ||
                         pendingAppLanguage != settings.appLanguage ||
+                        pendingStretchToFill != settings.stretchToFill ||
                         pendingInsetLeft != settings.insetLeft ||
                         pendingInsetTop != settings.insetTop ||
                         pendingInsetRight != settings.insetRight ||
@@ -643,6 +654,20 @@ class SettingsFragment : Fragment() {
                         updateSettingsList()
                     }
                     .show()
+            }
+        ))
+
+        // Add the toggle for Stretch to Fill
+        items.add(SettingItem.ToggleSettingEntry(
+            stableId = "stretchToFill",
+            nameResId = R.string.pref_stretch_screen_title,
+            descriptionResId = R.string.pref_stretch_screen_summary,
+            isChecked = pendingStretchToFill!!,
+            onCheckedChanged = { isChecked ->
+                pendingStretchToFill = isChecked
+                requiresRestart = true // Requires a reconnect to apply the new rendering bounds
+                checkChanges()
+                updateSettingsList()
             }
         ))
 

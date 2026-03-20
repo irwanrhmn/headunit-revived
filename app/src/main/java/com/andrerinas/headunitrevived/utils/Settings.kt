@@ -53,6 +53,11 @@ class Settings(context: Context) {
         get() = prefs.getInt("resolutionId", 0)
         set(value) = prefs.edit().putInt("resolutionId", value).apply()
 
+    // Flag to determine if the projection should stretch and ignore aspect ratio to fill the screen
+    var stretchToFill: Boolean
+        get() = prefs.getBoolean("stretch_to_fill", false)
+        set(value) { prefs.edit().putBoolean("stretch_to_fill", value).apply() }
+
     var micSampleRate: Int
         get() = prefs.getInt("mic-sample-rate", 16000)
         set(sampleRate) {

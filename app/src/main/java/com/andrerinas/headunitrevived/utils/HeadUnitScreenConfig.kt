@@ -16,6 +16,10 @@ object HeadUnitScreenConfig {
     private var isSmallScreen: Boolean = true
     private var isPortraitScaled: Boolean = false
     private var isInitialized: Boolean = false // New flag
+    
+    // Flag to determine if the projection should stretch and ignore aspect ratio
+    private var stretchToFill: Boolean = false 
+    
     var negotiatedResolutionType: Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType? = null
     private lateinit var currentSettings: Settings // Store settings instance
 
@@ -35,6 +39,9 @@ object HeadUnitScreenConfig {
 
 
     fun init(context: Context, displayMetrics: DisplayMetrics, settings: Settings) {
+        // Read user preference for stretching the screen from the app's Settings
+        stretchToFill = settings.stretchToFill
+
         val screenWidth: Int
         val screenHeight: Int
 
@@ -209,14 +216,22 @@ object HeadUnitScreenConfig {
         }
         return 1.0f
     }
-
-    fun getScaleY(): Float {
+        // Stretch option PR #259
+        fun getScaleY(): Float {
         if (getNegotiatedHeight() > screenHeightPx) {
-            return divideOrOne((screenWidthPx.toFloat() / screenHeightPx.toFloat()), getAspectRatio())
+            return if (stretchToFill) {
+                // Before PR #233 Fix scaler Y
+                divideOrOne(getNegotiatedHeight().toFloat(), screenHeightPx.toFloat())
+            } else {
+                // After PR #233 Fix scaler Y
+                divideOrOne((screenWidthPx.toFloat() / screenHeightPx.toFloat()), getAspectRatio())
+            }
         }
+
         if (isPortraitScaled) {
             return 1.0f
         }
+
         return divideOrOne((screenWidthPx.toFloat() / screenHeightPx.toFloat()), getAspectRatio())
     }
 
