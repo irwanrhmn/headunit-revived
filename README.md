@@ -61,6 +61,7 @@ adb shell am start -a android.intent.action.VIEW -d "headunit://connect?ip=192.1
 ### v.2.1.0-beta1
 - Fixed: Exit Intent not working. Thanks to benyjr
 - Added: Rotary Support
+- Fixed: Crash in Android < 5
 
 ### v.2.0.2
 - Fixed: 60FPS never applied

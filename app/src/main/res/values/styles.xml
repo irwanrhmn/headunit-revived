@@ -30,15 +30,14 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="DarkAlertDialog" parent="Theme.Material3.DayNight.Dialog.Alert">
+    <style name="DarkAlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/brand_teal</item>
         <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorSecondary">@color/brand_teal</item>
         <item name="colorOnSecondary">@android:color/white</item>
         <item name="android:colorAccent">@color/brand_teal</item>
-        <item name="colorSurface">@color/setting_background_color</item>
         <item name="android:background">@color/setting_background_color</item>
-        <item name="android:textColorPrimary">?attr/colorOnSurface</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
         <item name="buttonBarPositiveButtonStyle">@style/DialogButton.Positive</item>
         <item name="buttonBarNegativeButtonStyle">@style/DialogButton.Negative</item>
     </style>
