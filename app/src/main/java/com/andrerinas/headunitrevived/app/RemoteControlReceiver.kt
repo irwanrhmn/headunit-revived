@@ -31,8 +31,9 @@ class RemoteControlReceiver : BroadcastReceiver() {
             }
             
             event?.let {
-                AppLog.i("ACTION_MEDIA_BUTTON: " + it.keyCode)
-                App.provide(context).commManager.send(it.keyCode, it.action == KeyEvent.ACTION_DOWN)
+                AppLog.i("ACTION_MEDIA_BUTTON: " + it.keyCode + " (handled via MediaSession)")
+                // We no longer send to commManager here to prevent double-skips.
+                // The active MediaSession in AapService handles ACTION_MEDIA_BUTTON.
 
                 // Also broadcast for the UI
                 val keyIntent = Intent(com.andrerinas.headunitrevived.contract.KeyIntent.action).apply {

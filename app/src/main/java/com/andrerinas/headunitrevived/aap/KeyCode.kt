@@ -56,6 +56,16 @@ object KeyCode {
         65536, 65537, 65538 // Rotary controller
     ).distinct().sorted()
 
+    val KeyEvent.isMediaSessionKey: Boolean
+        get() = keyCode == KeyEvent.KEYCODE_MEDIA_PLAY ||
+                keyCode == KeyEvent.KEYCODE_MEDIA_PAUSE ||
+                keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE ||
+                keyCode == KeyEvent.KEYCODE_MEDIA_NEXT ||
+                keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS ||
+                keyCode == KeyEvent.KEYCODE_MEDIA_STOP ||
+                keyCode == KeyEvent.KEYCODE_MEDIA_FAST_FORWARD ||
+                keyCode == KeyEvent.KEYCODE_MEDIA_REWIND
+
     internal fun convert(keyCode: Int): Int {
         when (keyCode) {
             KeyEvent.KEYCODE_DPAD_UP,
@@ -74,7 +84,6 @@ object KeyCode {
             KeyEvent.KEYCODE_SOFT_LEFT,
             KeyEvent.KEYCODE_SOFT_RIGHT,
             KeyEvent.KEYCODE_MUSIC,
-            KeyEvent.KEYCODE_ENTER,
             KeyEvent.KEYCODE_TAB,
             KeyEvent.KEYCODE_SPACE,
             KeyEvent.KEYCODE_VOLUME_UP,
@@ -94,6 +103,7 @@ object KeyCode {
             KeyEvent.KEYCODE_STAR,
             KeyEvent.KEYCODE_POUND
                 -> return keyCode
+            KeyEvent.KEYCODE_ENTER -> return KeyEvent.KEYCODE_DPAD_CENTER
             KeyEvent.KEYCODE_HEADSETHOOK -> return KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
             KeyEvent.KEYCODE_MEDIA_STOP -> return KeyEvent.KEYCODE_MEDIA_PAUSE
             // Add any custom or rotary codes that should be passed through directly
