@@ -736,7 +736,7 @@ class SettingsFragment : Fragment() {
             stableId = "enableRotary",
             nameResId = R.string.enable_rotary,
             descriptionResId = R.string.enable_rotary_description,
-            isChecked = pendingEnableRotary!!,
+            isChecked = pendingEnableRotary ?: false,
             onCheckedChanged = { isChecked ->
                 pendingEnableRotary = isChecked
                 checkChanges()
