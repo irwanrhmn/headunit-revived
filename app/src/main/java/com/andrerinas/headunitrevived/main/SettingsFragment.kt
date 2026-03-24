@@ -1137,15 +1137,37 @@ class SettingsFragment : Fragment() {
             .setNegativeButton(android.R.string.cancel, null)
             .create()
 
+        dialog.show()
+
+        // Disable the positive button and show a countdown
+        val positiveButton = dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE)
+        positiveButton.isEnabled = false
+        val baseText = getString(R.string.kill_on_disconnect_disable_and_enable)
+        val handler = android.os.Handler(android.os.Looper.getMainLooper())
+        var remaining = 3
+
+        val countdownRunnable = object : Runnable {
+            override fun run() {
+                if (remaining > 0) {
+                    positiveButton.text = "$baseText (${remaining}s)"
+                    remaining--
+                    handler.postDelayed(this, 1000)
+                } else {
+                    positiveButton.text = baseText
+                    positiveButton.isEnabled = true
+                }
+            }
+        }
+        handler.post(countdownRunnable)
+
         dialog.setOnDismissListener {
+            handler.removeCallbacks(countdownRunnable)
             if (!confirmed) {
                 pendingKillOnDisconnect = false
                 checkChanges()
                 updateSettingsList()
             }
         }
-
-        dialog.show()
     }
 
     private fun disableKillOnDisconnectConflicts() {
