@@ -374,4 +374,5 @@
     <string name="kill_on_disconnect_disable_and_enable">Disable and enable</string>
     <string name="kill_on_disconnect_conflicts_disabled">Conflicting settings have been disabled</string>
 
+    <string name="wifi_disabled_info">Info: Wi-Fi is disabled.</string>
 </resources>

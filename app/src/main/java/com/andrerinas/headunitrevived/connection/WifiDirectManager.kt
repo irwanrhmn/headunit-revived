@@ -12,7 +12,9 @@ import android.net.wifi.p2p.WifiP2pManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.andrerinas.headunitrevived.R
 import com.andrerinas.headunitrevived.aap.AapService
 import com.andrerinas.headunitrevived.utils.AppLog
 import java.net.InetSocketAddress
@@ -110,22 +112,8 @@ class WifiDirectManager(private val context: Context) : WifiP2pManager.Connectio
         // Ensure WiFi is enabled (Required for P2P)
         val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
         if (!wifiManager.isWifiEnabled) {
-            AppLog.i("WifiDirectManager: WiFi is disabled. Attempting to enable...")
-            if (Build.VERSION.SDK_INT < 29) {
-                @Suppress("DEPRECATION")
-                wifiManager.isWifiEnabled = true
-            } else {
-                // On Android 10+, apps cannot enable WiFi automatically. 
-                // We should ideally show a prompt or open settings.
-                try {
-                    val intent = Intent(android.provider.Settings.ACTION_WIFI_SETTINGS).apply {
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    }
-                    context.startActivity(intent)
-                } catch (e: Exception) {}
-            }
-            // Wait a bit for WiFi to wake up before continuing
-            handler.postDelayed({ makeVisible() }, 2000L)
+            AppLog.w("WifiDirectManager: WiFi is disabled. Cannot start P2P discovery.")
+            Toast.makeText(context, context.getString(R.string.wifi_disabled_info), Toast.LENGTH_LONG).show()
             return
         }
 

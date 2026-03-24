@@ -493,7 +493,12 @@ class AapService : Service(), UsbReceiver.Listener {
     private fun initWifiMode() {
         if (App.provide(this).settings.wifiConnectionMode == 2) {
             startWirelessServer()
-            wifiDirectManager?.makeVisible()
+            val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
+            if (wifiManager.isWifiEnabled) {
+                wifiDirectManager?.makeVisible()
+            } else {
+                AppLog.i("AapService: WiFi is disabled, skipping Wi-Fi Direct visibility.")
+            }
         }
     }
 
