@@ -288,8 +288,12 @@ class AutoStartFragment : Fragment() {
             return
         }
 
-        val bluetoothManager = requireContext().getSystemService(Context.BLUETOOTH_SERVICE) as android.bluetooth.BluetoothManager
-        val adapter = bluetoothManager.adapter
+        val adapter = if (Build.VERSION.SDK_INT >= 18) {
+            (requireContext().getSystemService(Context.BLUETOOTH_SERVICE) as android.bluetooth.BluetoothManager).adapter
+        } else {
+            @Suppress("DEPRECATION")
+            android.bluetooth.BluetoothAdapter.getDefaultAdapter()
+        }
 
         if (adapter == null || !adapter.isEnabled) {
             val enableIntent = Intent(android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE)
