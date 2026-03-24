@@ -246,7 +246,7 @@ class VideoDecoder(private val settings: Settings) {
                                 dimensionsListener?.onVideoDimensionsChanged(mWidth, mHeight)
                             }
                         }
-                    } catch (e: Exception) {}
+                    } catch (e: Exception) { AppLog.e("Failed to parse SPS data", e) }
                 } else if (nalType == 8) pps = nalData // PPS
             } else {
                 val nalType = (nalFirstByte and 0x7E) shr 1
