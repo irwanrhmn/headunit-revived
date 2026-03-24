@@ -1123,6 +1123,7 @@ class SettingsFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.kill_on_disconnect_warning_title)
             .setMessage(message)
+            .setCancelable(false)
             .setPositiveButton(R.string.kill_on_disconnect_disable_and_enable) { _, _ ->
                 disableKillOnDisconnectConflicts()
                 pendingKillOnDisconnect = true
@@ -1131,11 +1132,6 @@ class SettingsFragment : Fragment() {
                 Toast.makeText(context, getString(R.string.kill_on_disconnect_conflicts_disabled), Toast.LENGTH_LONG).show()
             }
             .setNegativeButton(android.R.string.cancel) { _, _ ->
-                pendingKillOnDisconnect = false
-                checkChanges()
-                updateSettingsList()
-            }
-            .setOnCancelListener {
                 pendingKillOnDisconnect = false
                 checkChanges()
                 updateSettingsList()
