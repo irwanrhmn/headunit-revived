@@ -16,11 +16,14 @@ class AapMediaPlayback(private val notification: BackgroundNotification) {
 
         when (message.type) {
             MediaPlayback.MsgType.MSG_PLAYBACK_METADATA_VALUE -> {
-                val request = message.parse(MediaPlayback.MediaMetaData.newBuilder()).build()
-                notifyRequest(request)
+                try {
+                    val request = message.parse(MediaPlayback.MediaMetaData.newBuilder()).build()
+                    notifyRequest(request)
+                } catch (e: Exception) {
+                    AppLog.w("AapMediaPlayback: Failed to parse metadata (single packet): ${e.message}")
+                }
             }
-            MediaPlayback.MsgType.MSG_PLAYBACK_METADATASTART_VALUE -> {
-                if (flags == 0x09) {
+            MediaPlayback.MsgType.MSG_PLAYBACK_METADATASTART_VALUE -> {                if (flags == 0x09) {
                     messageBuffer.put(message.data, message.dataOffset, message.size - message.dataOffset)
                     this.started = true
                     // If First fragment
