@@ -382,7 +382,7 @@ class CommManager(
     fun disconnect(sendByeBye: Boolean = true) {
         if (_connectionState.value is ConnectionState.Disconnected) return
 
-        _connectionState.value = ConnectionState.Disconnected()
+        _connectionState.value = ConnectionState.Disconnected(isUserExit = true)
         _disconnectJob = _scope.launch { doDisconnect(sendByeBye) }
     }
 

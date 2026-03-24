@@ -279,7 +279,7 @@
     <string name="android_auto_starting">Android Auto uruchamia się…</string>
     <string name="connection_interrupted">Utracono połączenie</string>
     <string name="connection_interrupted_detail">Ponawianie próby…</string>
-    <string name="wifi_disconnect_toast">Jeśli używasz bezprzewodowego AA, wyłącz \"Przełączanie między sieciami\" lub \"Przyspieszenie sieci\" w ustawieniach WiFi telefonu</string>
+    <string name="wifi_disconnect_toast">Android Auto rozłączono: Jeśli używasz bezprzewodowego AA, wyłącz \"Przełączanie między sieciami\" lub \"Przyspieszenie sieci\" w ustawieniach WiFi telefonu</string>
     <string name="reset_usb_option">Zresetuj połączenie USB</string>
     <string name="reset_usb_timeout">Nie znaleziono urządzenia USB. Sprawdź połączenie.</string>
     <string name="notification_service_running">Headunit Revived działa</string>

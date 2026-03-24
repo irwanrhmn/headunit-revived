@@ -282,7 +282,7 @@
     <string name="android_auto_starting">Android Auto startet…</string>
     <string name="connection_interrupted">Verbindung verloren</string>
     <string name="connection_interrupted_detail">Erneuter Versuch…</string>
-    <string name="wifi_disconnect_toast">Bei kabellosem AA \"Zwischen Netzwerken wechseln\" oder \"Netzwerkbeschleunigung\" in den WLAN-Einstellungen deaktivieren</string>
+    <string name="wifi_disconnect_toast">Android Auto getrennt: Bei kabellosem AA \"Zwischen Netzwerken wechseln\" oder \"Netzwerkbeschleunigung\" in den WLAN-Einstellungen deaktivieren</string>
     <string name="notification_service_running">Headunit Revived läuft</string>
     <string name="notification_projection_active">Android Auto wird projiziert</string>
     <string name="shortcut_connect_title">Verbinden</string>

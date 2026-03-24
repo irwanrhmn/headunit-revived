@@ -279,7 +279,7 @@
     <string name="android_auto_starting">Запуск Android Auto…</string>
     <string name="connection_interrupted">З\'єднання втрачено</string>
     <string name="connection_interrupted_detail">Повторна спроба…</string>
-    <string name="wifi_disconnect_toast">При бездротовому AA вимкніть \"Перемикання між мережами\" або \"Прискорення мережі\" в налаштуваннях WiFi телефону</string>
+    <string name="wifi_disconnect_toast">Android Auto від\'єднано: При бездротовому AA вимкніть \"Перемикання між мережами\" або \"Прискорення мережі\" в налаштуваннях WiFi телефону</string>
     <string name="reset_usb_option">Скинути USB-підключення</string>
     <string name="reset_usb_timeout">USB-пристрій не знайдено. Перевірте підключення.</string>
     <string name="notification_service_running">Headunit Revived запущено</string>
