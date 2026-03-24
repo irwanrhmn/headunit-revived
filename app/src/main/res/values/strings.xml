@@ -372,5 +372,6 @@
     <string name="kill_on_disconnect_warning_title">Warning</string>
     <string name="kill_on_disconnect_warning">The following settings will conflict with closing the app on disconnect. The app may close before these features have a chance to work:\n\n%1$s\n\nWould you like to disable them and enable close on disconnect?</string>
     <string name="kill_on_disconnect_disable_and_enable">Disable and enable</string>
+    <string name="kill_on_disconnect_conflicts_disabled">Conflicting settings have been disabled</string>
 
 </resources>

@@ -1106,7 +1106,7 @@ class SettingsFragment : Fragment() {
         if (settings.reopenOnReconnection) {
             conflicts.add(getString(R.string.reopen_on_reconnection_label))
         }
-        if (settings.wifiConnectionMode == 1) {
+        if (pendingWifiConnectionMode == 1) {
             conflicts.add(getString(R.string.wireless_mode))
         }
         return conflicts
@@ -1124,19 +1124,31 @@ class SettingsFragment : Fragment() {
                 pendingKillOnDisconnect = true
                 checkChanges()
                 updateSettingsList()
+                Toast.makeText(context, getString(R.string.kill_on_disconnect_conflicts_disabled), Toast.LENGTH_LONG).show()
             }
-            .setNegativeButton(android.R.string.cancel, null)
+            .setNegativeButton(android.R.string.cancel) { _, _ ->
+                pendingKillOnDisconnect = false
+                checkChanges()
+                updateSettingsList()
+            }
+            .setOnCancelListener {
+                pendingKillOnDisconnect = false
+                checkChanges()
+                updateSettingsList()
+            }
             .show()
     }
 
     private fun disableKillOnDisconnectConflicts() {
+        // These settings live in sub-fragments, so save directly to prefs
         settings.autoConnectLastSession = false
         settings.autoConnectSingleUsbDevice = false
         settings.autoStartSelfMode = false
         settings.autoStartOnUsb = false
         settings.reopenOnReconnection = false
-        if (settings.wifiConnectionMode == 1) {
-            settings.wifiConnectionMode = 0
+        // WiFi mode is a pending var on this screen, update both
+        if (pendingWifiConnectionMode == 1) {
+            pendingWifiConnectionMode = 0
         }
     }
 
