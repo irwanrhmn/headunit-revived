@@ -44,7 +44,7 @@
     <string name="category_dark_mode">Tmavý režim</string>
     <string name="dark_mode_settings">Nastavení tmavého režimu</string>
     <string name="app_theme_short">App</string>
-    <string name="night_mode_short">AA</string>
+    <string name="night_mode_short">Android Auto</string>
     <string name="aa_monochrome">Černobílý Android Auto</string>
     <string name="aa_monochrome_description">Snižuje barvy Android Auto pro noční jízdu. Vyžaduje režim zobrazení GLES. Projeví se pouze při zapnutém tmavém režimu</string>
     <string name="aa_desaturation">Desaturace</string>

@@ -44,7 +44,7 @@
     <string name="category_dark_mode">Mod întunecat</string>
     <string name="dark_mode_settings">Setări mod întunecat</string>
     <string name="app_theme_short">App</string>
-    <string name="night_mode_short">AA</string>
+    <string name="night_mode_short">Android Auto</string>
     <string name="aa_monochrome">Android Auto monocrom</string>
     <string name="aa_monochrome_description">Reduce culorile din Android Auto pentru condusul pe timp de noapte. Necesită modul de vizualizare GLES. Are efect doar când modul întunecat este activat</string>
     <string name="aa_desaturation">Desaturare</string>

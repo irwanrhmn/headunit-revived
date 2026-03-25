@@ -44,7 +44,7 @@
     <string name="category_dark_mode">Sötét mód</string>
     <string name="dark_mode_settings">Sötét mód beállítások</string>
     <string name="app_theme_short">App</string>
-    <string name="night_mode_short">AA</string>
+    <string name="night_mode_short">Android Auto</string>
     <string name="aa_monochrome">Android Auto monokróm megjelenítés</string>
     <string name="aa_monochrome_description">Csökkenti az Android Auto színeit az éjszakai vezetéshez. GLES megjelenítési mód szükséges. Csak bekapcsolt sötét módban lép érvénybe</string>
     <string name="aa_desaturation">Színtelenítés</string>

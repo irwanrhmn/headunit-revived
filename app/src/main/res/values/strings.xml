@@ -48,7 +48,7 @@
     <string name="category_dark_mode">Dark Mode</string>
     <string name="dark_mode_settings">Dark Mode Settings</string>
     <string name="app_theme_short">App</string>
-    <string name="night_mode_short">AA</string>
+    <string name="night_mode_short">Android Auto</string>
     <string name="aa_monochrome">Make Android Auto Monochrome</string>
     <string name="aa_monochrome_description">Reduces Android Auto colors for night driving. Requires GLES view mode. Only takes effect when dark mode is enabled</string>
     <string name="aa_desaturation">Desaturation</string>

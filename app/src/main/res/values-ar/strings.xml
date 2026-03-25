@@ -44,7 +44,7 @@
     <string name="category_dark_mode">الوضع الداكن</string>
     <string name="dark_mode_settings">إعدادات الوضع الداكن</string>
     <string name="app_theme_short">App</string>
-    <string name="night_mode_short">AA</string>
+    <string name="night_mode_short">Android Auto</string>
     <string name="aa_monochrome">جعل Android Auto أحادي اللون</string>
     <string name="aa_monochrome_description">يقلل ألوان Android Auto للقيادة الليلية. يتطلب وضع عرض GLES. يسري فقط عند تفعيل الوضع الداكن</string>
     <string name="aa_desaturation">إزالة التشبع</string>

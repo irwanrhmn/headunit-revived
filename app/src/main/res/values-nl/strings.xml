@@ -43,7 +43,7 @@
     <string name="category_dark_mode">Donkere modus</string>
     <string name="dark_mode_settings">Instellingen donkere modus</string>
     <string name="app_theme_short">App</string>
-    <string name="night_mode_short">AA</string>
+    <string name="night_mode_short">Android Auto</string>
     <string name="aa_monochrome">Android Auto monochroom maken</string>
     <string name="aa_monochrome_description">Vermindert de kleuren van Android Auto voor nachtelijk rijden. Vereist GLES-weergavemodus. Werkt alleen wanneer donkere modus is ingeschakeld</string>
     <string name="aa_desaturation">Desaturatie</string>

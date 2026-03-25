@@ -44,7 +44,7 @@
     <string name="category_dark_mode">Тёмный режим</string>
     <string name="dark_mode_settings">Настройки тёмного режима</string>
     <string name="app_theme_short">App</string>
-    <string name="night_mode_short">AA</string>
+    <string name="night_mode_short">Android Auto</string>
     <string name="aa_monochrome">Монохромный Android Auto</string>
     <string name="aa_monochrome_description">Уменьшает цвета Android Auto для ночного вождения. Требуется режим отображения GLES. Действует только при включённом тёмном режиме</string>
     <string name="aa_desaturation">Обесцвечивание</string>

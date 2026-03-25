@@ -44,7 +44,7 @@
     <string name="category_dark_mode">Dunkelmodus</string>
     <string name="dark_mode_settings">Dunkelmodus-Einstellungen</string>
     <string name="app_theme_short">App</string>
-    <string name="night_mode_short">AA</string>
+    <string name="night_mode_short">Android Auto</string>
     <string name="aa_monochrome">Android Auto einfarbig darstellen</string>
     <string name="aa_monochrome_description">Reduziert die Farben von Android Auto für Nachtfahrten. Erfordert den GLES-Anzeigemodus. Wirkt nur bei aktiviertem Dunkelmodus</string>
     <string name="aa_desaturation">Entsättigung</string>
