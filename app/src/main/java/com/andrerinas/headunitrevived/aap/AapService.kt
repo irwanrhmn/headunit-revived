@@ -55,6 +55,7 @@ import android.provider.Settings as AndroidSettings
 import android.view.View
 import android.view.WindowManager
 import com.andrerinas.headunitrevived.app.UsbAttachedActivity
+import com.andrerinas.headunitrevived.utils.HotspotManager
 import java.net.ServerSocket
 
 /**
@@ -493,6 +494,10 @@ class AapService : Service(), UsbReceiver.Listener {
     private fun initWifiMode() {
         if (App.provide(this).settings.wifiConnectionMode == 2) {
             startWirelessServer()
+            if (App.provide(this).settings.autoEnableHotspot) {
+                AppLog.i("AapService: Auto-enabling hotspot...")
+                HotspotManager.setHotspotEnabled(this, true)
+            }
             val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
             if (wifiManager.isWifiEnabled) {
                 wifiDirectManager?.makeVisible()
@@ -523,6 +528,12 @@ class AapService : Service(), UsbReceiver.Listener {
     override fun onDestroy() {
         AppLog.i("AapService destroying...")
         isDestroying = true
+        
+        if (App.provide(this).settings.autoEnableHotspot) {
+            AppLog.i("AapService: Auto-disabling hotspot...")
+            com.andrerinas.headunitrevived.utils.HotspotManager.setHotspotEnabled(this, false)
+        }
+        
         releaseWifiLock()
         unregisterNetworkMonitor()
         stopForeground(true)

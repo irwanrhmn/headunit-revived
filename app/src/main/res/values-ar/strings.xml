@@ -369,4 +369,10 @@
     <string name="kill_on_disconnect_disable_and_enable">تعطيل وتفعيل</string>
     <string name="kill_on_disconnect_conflicts_disabled">تم تعطيل الإعدادات المتعارضة</string>
     <string name="wifi_disabled_info">معلومات: واي فاي معطل.</string>
+    <string name="auto_enable_hotspot">تفعيل نقطة الاتصال تلقائياً</string>
+    <string name="auto_enable_hotspot_description">يُفعِّل تلقائياً نقطة اتصال Wi-Fi على هذا الجهاز. (يتطلب وضع المساعد)</string>
+    <string name="hotspot_warning_title">ميزة تجريبية</string>
+    <string name="hotspot_warning_message">تستخدم هذه الميزة الانعكاس وقد لا تعمل على جميع الأجهزة. قد تحتاج إلى منح إذن \"تعديل إعدادات النظام\" يدوياً.</string>
+    <string name="hotspot_permission_title">إذن مطلوب</string>
+    <string name="hotspot_permission_message">تتطلب ميزة نقطة الاتصال إذن \"تعديل إعدادات النظام\". يرجى تفعيله في الشاشة التالية.</string>
 </resources>

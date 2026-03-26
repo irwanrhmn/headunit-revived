@@ -369,4 +369,10 @@
     <string name="kill_on_disconnect_disable_and_enable">Dezactivează și activează</string>
     <string name="kill_on_disconnect_conflicts_disabled">Setările conflictuale au fost dezactivate</string>
     <string name="wifi_disabled_info">Info: Wi-Fi este dezactivat.</string>
+    <string name="auto_enable_hotspot">Activare automată hotspot</string>
+    <string name="auto_enable_hotspot_description">Activează automat un hotspot Wi-Fi pe acest dispozitiv. (Necesită modul Helper)</string>
+    <string name="hotspot_warning_title">Funcție experimentală</string>
+    <string name="hotspot_warning_message">Această funcție folosește reflexie și este posibil să nu funcționeze pe toate dispozitivele. Este posibil să fie nevoie să acordați manual permisiunea \"Modificare setări de sistem\".</string>
+    <string name="hotspot_permission_title">Permisiune necesară</string>
+    <string name="hotspot_permission_message">Funcția de hotspot necesită permisiunea \"Modificare setări de sistem\". Vă rugăm să o activați pe ecranul următor.</string>
 </resources>

@@ -369,4 +369,10 @@
     <string name="kill_on_disconnect_disable_and_enable">Deaktivovat a povolit</string>
     <string name="kill_on_disconnect_conflicts_disabled">Konfliktní nastavení byla deaktivována</string>
     <string name="wifi_disabled_info">Info: Wi-Fi je vypnuto.</string>
+    <string name="auto_enable_hotspot">Automaticky zapnout hotspot</string>
+    <string name="auto_enable_hotspot_description">Automaticky zapne Wi-Fi hotspot na tomto zařízení. (Vyžaduje režim Helper)</string>
+    <string name="hotspot_warning_title">Experimentální funkce</string>
+    <string name="hotspot_warning_message">Tato funkce používá reflexi a nemusí fungovat na všech zařízeních. Může být nutné ručně udělit oprávnění \"Změna systémových nastavení\".</string>
+    <string name="hotspot_permission_title">Vyžadováno oprávnění</string>
+    <string name="hotspot_permission_message">Funkce hotspotu vyžaduje oprávnění \"Změna systémových nastavení\". Povolte jej prosím na další obrazovce.</string>
 </resources>

@@ -369,4 +369,10 @@
     <string name="kill_on_disconnect_disable_and_enable">Deaktivieren und aktivieren</string>
     <string name="kill_on_disconnect_conflicts_disabled">Konfliktierende Einstellungen wurden deaktiviert</string>
     <string name="wifi_disabled_info">Info: WLAN ist deaktiviert.</string>
+    <string name="auto_enable_hotspot">Hotspot automatisch aktivieren</string>
+    <string name="auto_enable_hotspot_description">Aktiviert automatisch einen WLAN-Hotspot auf diesem Gerät. (Nur im Helper-Modus)</string>
+    <string name="hotspot_warning_title">Experimentelle Funktion</string>
+    <string name="hotspot_warning_message">Diese Funktion nutzt Reflection und funktioniert möglicherweise nicht auf allen Geräten. Eventuell muss die Berechtigung \"Systemeinstellungen ändern\" manuell erteilt werden.</string>
+    <string name="hotspot_permission_title">Berechtigung erforderlich</string>
+    <string name="hotspot_permission_message">Die Hotspot-Funktion benötigt die Berechtigung \"Systemeinstellungen ändern\". Bitte aktivieren Sie diese im nächsten Bildschirm.</string>
 </resources>

@@ -368,4 +368,10 @@
     <string name="kill_on_disconnect_disable_and_enable">Letiltás és engedélyezés</string>
     <string name="kill_on_disconnect_conflicts_disabled">Az ütköző beállítások letiltásra kerültek</string>
     <string name="wifi_disabled_info">Infó: A Wi-Fi ki van kapcsolva.</string>
+    <string name="auto_enable_hotspot">Hotspot automatikus bekapcsolása</string>
+    <string name="auto_enable_hotspot_description">Automatikusan bekapcsolja a Wi-Fi hotspotot ezen az eszközön. (Helper mód szükséges)</string>
+    <string name="hotspot_warning_title">Kísérleti funkció</string>
+    <string name="hotspot_warning_message">Ez a funkció reflexiót használ, és nem minden eszközön működik. Szükség lehet a \"Rendszerbeállítások módosítása\" engedély manuális megadására.</string>
+    <string name="hotspot_permission_title">Engedély szükséges</string>
+    <string name="hotspot_permission_message">A hotspot funkció a \"Rendszerbeállítások módosítása\" engedélyt igényli. Kérjük, engedélyezze a következő képernyőn.</string>
 </resources>

@@ -368,4 +368,10 @@
     <string name="kill_on_disconnect_disable_and_enable">Uitschakelen en inschakelen</string>
     <string name="kill_on_disconnect_conflicts_disabled">Conflicterende instellingen zijn uitgeschakeld</string>
     <string name="wifi_disabled_info">Info: Wi-Fi is uitgeschakeld.</string>
+    <string name="auto_enable_hotspot">Hotspot automatisch inschakelen</string>
+    <string name="auto_enable_hotspot_description">Schakelt automatisch een Wi-Fi-hotspot in op dit apparaat. (Vereist Helper-modus)</string>
+    <string name="hotspot_warning_title">Experimentele functie</string>
+    <string name="hotspot_warning_message">Deze functie gebruikt reflectie en werkt mogelijk niet op alle apparaten. Mogelijk moet u handmatig de toestemming \"Systeeminstellingen wijzigen\" verlenen.</string>
+    <string name="hotspot_permission_title">Toestemming vereist</string>
+    <string name="hotspot_permission_message">De hotspotfunctie vereist de toestemming \"Systeeminstellingen wijzigen\". Schakel deze in op het volgende scherm.</string>
 </resources>

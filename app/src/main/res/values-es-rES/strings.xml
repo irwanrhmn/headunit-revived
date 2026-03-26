@@ -369,4 +369,10 @@
     <string name="kill_on_disconnect_disable_and_enable">Desactivar y activar</string>
     <string name="kill_on_disconnect_conflicts_disabled">Los ajustes en conflicto han sido desactivados</string>
     <string name="wifi_disabled_info">Info: El Wi-Fi está desactivado.</string>
+    <string name="auto_enable_hotspot">Activar punto de acceso automáticamente</string>
+    <string name="auto_enable_hotspot_description">Activa automáticamente un punto de acceso Wi-Fi en este dispositivo. (Requiere modo Helper)</string>
+    <string name="hotspot_warning_title">Función experimental</string>
+    <string name="hotspot_warning_message">Esta función usa reflexión y podría no funcionar en todos los dispositivos. Es posible que necesite conceder manualmente el permiso \"Modificar ajustes del sistema\".</string>
+    <string name="hotspot_permission_title">Permiso requerido</string>
+    <string name="hotspot_permission_message">La función de punto de acceso requiere el permiso \"Modificar ajustes del sistema\". Por favor, actívelo en la siguiente pantalla.</string>
 </resources>

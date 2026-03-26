@@ -1,4 +1,8 @@
 # Changelog
+### v.2.1.1-beta1
+- Fixed: Layout crash on Android 4.2
+- Added: Enable Hotspot option. Note: This will not work on every device. Especially after Android 13!
+
 ### v.2.1.0
 - Fixed: Exit Intent not working. Thanks to benyjr
 - Added: Rotary Support
