@@ -226,8 +226,12 @@ class HomeFragment : Fragment() {
     private fun setupListeners() {
         exitButton.setOnClickListener {
             val appSettings = App.provide(requireContext()).settings
-            if (appSettings.autoStartOnUsb && appSettings.reopenOnReconnection) {
-                // Keep the service alive so the runtime UsbReceiver can detect reconnections
+            // Keep the service alive when auto-start is enabled:
+            // - autoStartOnBoot: service must survive hibernate to detect SCREEN_ON wake
+            // - autoStartOnUsb + reopenOnReconnection: service detects USB reconnections
+            val keepServiceAlive = appSettings.autoStartOnBoot ||
+                (appSettings.autoStartOnUsb && appSettings.reopenOnReconnection)
+            if (keepServiceAlive) {
                 val disconnectIntent = Intent(requireContext(), AapService::class.java).apply {
                     action = AapService.ACTION_DISCONNECT
                 }
