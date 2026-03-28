@@ -49,6 +49,10 @@ import com.andrerinas.headunitrevived.utils.NightModeManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import android.os.SystemClock
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.atomic.AtomicBoolean
 import android.app.NotificationManager
 import android.content.pm.ServiceInfo
@@ -105,6 +109,9 @@ class AapService : Service(), UsbReceiver.Listener {
      * service harder for MediaTek's background power saving to kill.
      */
     private var bootWakeLock: PowerManager.WakeLock? = null
+
+    /** Job for the Quick Boot diagnostic heartbeat logger. */
+    private var diagJob: Job? = null
 
     /**
      * Runtime-registered receiver for MEDIA_BUTTON intents.
@@ -345,8 +352,9 @@ class AapService : Service(), UsbReceiver.Listener {
         }
         lastWakeHandledTimestamp = now
 
-        // Acquire wake lock to resist power saving cleanup on Quick Boot devices
+        // Acquire wake lock and start diagnostic to resist/track power saving cleanup
         acquireBootWakeLock()
+        startBootDiagnostic()
 
         if (commManager.isConnected) {
             // Connection still alive — return to projection screen
@@ -828,6 +836,86 @@ class AapService : Service(), UsbReceiver.Listener {
         bootWakeLock = null
     }
 
+    // -------------------------------------------------------------------------
+    // Quick Boot diagnostic heartbeat
+    // -------------------------------------------------------------------------
+
+    /**
+     * Writes a heartbeat log to /sdcard/headunit-quickboot-diag.txt every 2s.
+     * This file persists even after the firmware force-stops the app, so the
+     * user can open it from the file manager to see exactly when HUR was killed.
+     */
+    private fun startBootDiagnostic() {
+        if (diagJob?.isActive == true) return
+
+        val df = SimpleDateFormat("HH:mm:ss.SSS", Locale.US)
+        val diagFile = File("/sdcard/headunit-quickboot-diag.txt")
+
+        // Write header with system info
+        try {
+            diagFile.writeText(buildString {
+                appendLine("=== HUR Quick Boot Diagnostic ===")
+                appendLine("Boot start: ${df.format(Date())}")
+                appendLine("Uptime: ${readUptime()}s")
+                appendLine("Boot reason: ${sysProp("ro.boot.bootreason")}")
+                appendLine("ACC signal: ${sysProp("persist.acc.signal.status")}")
+                appendLine("IPO disable: ${sysProp("sys.ipo.disable")}")
+                appendLine("Boot completed: ${sysProp("sys.boot_completed")}")
+                appendLine("Platform: ${sysProp("ro.mediatek.platform")}")
+                appendLine("BG power saving: ${sysProp("ro.mtk_bg_power_saving_support")}")
+                appendLine("WakeLock held: ${bootWakeLock?.isHeld == true}")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+                    appendLine("Battery opt exempt: ${pm.isIgnoringBatteryOptimizations(packageName)}")
+                    appendLine("Device idle: ${pm.isDeviceIdleMode}")
+                }
+                appendLine("PID: ${android.os.Process.myPid()}")
+                appendLine()
+                appendLine("=== Heartbeat (every 2s) ===")
+                appendLine("Time         | Uptime   | ACC | WakeLock | Notes")
+                appendLine("-------------|----------|-----|----------|------")
+            })
+        } catch (e: Exception) {
+            AppLog.e("Diag: failed to write header: ${e.message}")
+            return
+        }
+
+        diagJob = serviceScope.launch(Dispatchers.IO) {
+            var tick = 0
+            while (isActive) {
+                try {
+                    val acc = sysProp("persist.acc.signal.status")
+                    val wl = if (bootWakeLock?.isHeld == true) "yes" else "NO"
+                    val line = "${df.format(Date())} | ${readUptime().padEnd(8)} | ${acc.padEnd(3)} | ${wl.padEnd(8)} | tick=$tick\n"
+                    diagFile.appendText(line)
+                } catch (_: Exception) {}
+                tick++
+                delay(2000)
+            }
+            // This line only runs if the coroutine is cancelled gracefully (service stop)
+            try {
+                diagFile.appendText("${df.format(Date())} | ${readUptime().padEnd(8)} |     |          | SERVICE STOPPED GRACEFULLY\n")
+            } catch (_: Exception) {}
+        }
+
+        AppLog.i("Diag: heartbeat started, writing to ${diagFile.absolutePath}")
+    }
+
+    private fun stopBootDiagnostic() {
+        diagJob?.cancel()
+        diagJob = null
+    }
+
+    private fun readUptime(): String = try {
+        File("/proc/uptime").readText().split(" ").first()
+    } catch (_: Exception) { "?" }
+
+    @Suppress("SameParameterValue")
+    private fun sysProp(key: String): String = try {
+        val c = Class.forName("android.os.SystemProperties")
+        c.getMethod("get", String::class.java).invoke(null, key) as? String ?: ""
+    } catch (_: Exception) { "" }
+
     override fun onTaskRemoved(rootIntent: Intent?) {
         AppLog.i("AapService: onTaskRemoved — attempting restart")
         try {
@@ -842,6 +930,7 @@ class AapService : Service(), UsbReceiver.Listener {
     override fun onDestroy() {
         AppLog.i("AapService destroying... (wakeLock held=${bootWakeLock?.isHeld == true})")
         isDestroying = true
+        stopBootDiagnostic()
         releaseBootWakeLock()
         releaseWifiLock()
         unregisterNetworkMonitor()
@@ -899,6 +988,7 @@ class AapService : Service(), UsbReceiver.Listener {
         if (intent?.getBooleanExtra(BootCompleteReceiver.EXTRA_BOOT_START, false) == true ||
             intent?.action == ACTION_CHECK_USB) {
             acquireBootWakeLock()
+            startBootDiagnostic()
         }
 
         if (intent?.getBooleanExtra(BootCompleteReceiver.EXTRA_BOOT_START, false) == true) {
