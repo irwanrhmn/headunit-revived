@@ -401,9 +401,10 @@
     <string name="vehicle_id_description">Internal identifier only. Changing this will cause your phone to treat this as a different vehicle, resetting your Android Auto preferences for this car.</string>
     <string name="head_unit_make_label">Make</string>
     <string name="head_unit_make_description">Head unit manufacturer</string>
+    <string name="head_unit_make_hint">Your phone shows this name in Android Auto settings.</string>
     <string name="head_unit_model_label">Model</string>
     <string name="head_unit_model_description">Head unit model</string>
     <string name="vehicle_year_error_invalid">Enter a valid year</string>
     <string name="vehicle_year_error_max">Year cannot be later than %1$d</string>
-    <string name="vehicle_info_restart_note">Changes will apply on the next Android Auto connection.</string>
+    <string name="vehicle_info_restart_note">This data is sent to Android Auto every time you connect.</string>
 </resources>

@@ -394,9 +394,10 @@
     <string name="vehicle_id_description">僅為內部識別碼。更改此項將導致您的手機將此視為不同的車輛，重置此車的 Android Auto 偏好設定。</string>
     <string name="head_unit_make_label">製造商</string>
     <string name="head_unit_make_description">車機製造商</string>
+    <string name="head_unit_make_hint">您的手機會在 Android Auto 設定中顯示此名稱。</string>
     <string name="head_unit_model_label">型號</string>
     <string name="head_unit_model_description">車機型號</string>
     <string name="vehicle_year_error_invalid">請輸入有效年份</string>
     <string name="vehicle_year_error_max">年份不能晚於 %1$d</string>
-    <string name="vehicle_info_restart_note">變更將在下次連接 Android Auto 時生效。</string>
+    <string name="vehicle_info_restart_note">每次連接時，這些資料都會傳送至 Android Auto。</string>
 </resources>

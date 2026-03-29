@@ -247,7 +247,11 @@ class VehicleInfoFragment : Fragment() {
             nameResId = R.string.head_unit_make_label,
             value = pendingHeadUnitMake ?: "",
             onClick = {
-                showTextInputDialog(R.string.head_unit_make_label, pendingHeadUnitMake ?: "") { value ->
+                showTextInputDialogWithMessage(
+                    R.string.head_unit_make_label,
+                    R.string.head_unit_make_hint,
+                    pendingHeadUnitMake ?: ""
+                ) { value ->
                     pendingHeadUnitMake = value
                     checkChanges()
                     updateSettingsList()

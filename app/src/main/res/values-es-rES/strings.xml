@@ -395,9 +395,10 @@
     <string name="vehicle_id_description">Identificador interno únicamente. Cambiarlo hará que tu móvil detecte este como un vehículo diferente, reiniciando las preferencias de Android Auto para este coche.</string>
     <string name="head_unit_make_label">Fabricante</string>
     <string name="head_unit_make_description">Fabricante de la radio</string>
+    <string name="head_unit_make_hint">Tu móvil muestra este nombre en los ajustes de Android Auto.</string>
     <string name="head_unit_model_label">Modelo</string>
     <string name="head_unit_model_description">Modelo de la radio</string>
     <string name="vehicle_year_error_invalid">Introduce un año válido</string>
     <string name="vehicle_year_error_max">El año no puede ser posterior a %1$d</string>
-    <string name="vehicle_info_restart_note">Los cambios se aplicarán en la próxima conexión de Android Auto.</string>
+    <string name="vehicle_info_restart_note">Estos datos se envían a Android Auto cada vez que te conectas.</string>
 </resources>

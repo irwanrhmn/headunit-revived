@@ -393,9 +393,10 @@
     <string name="vehicle_id_description">Csak belső azonosító. Megváltoztatása azt eredményezi, hogy telefonja ezt más járműként érzékeli, visszaállítva az Android Auto beállításait ehhez az autóhoz.</string>
     <string name="head_unit_make_label">Gyártó</string>
     <string name="head_unit_make_description">Fejegység gyártója</string>
+    <string name="head_unit_make_hint">A telefonja ezt a nevet jeleníti meg az Android Auto beállításaiban.</string>
     <string name="head_unit_model_label">Modell</string>
     <string name="head_unit_model_description">Fejegység modellje</string>
     <string name="vehicle_year_error_invalid">Adjon meg egy érvényes évet</string>
     <string name="vehicle_year_error_max">Az év nem lehet későbbi, mint %1$d</string>
-    <string name="vehicle_info_restart_note">A változások a következő Android Auto csatlakozáskor lépnek érvénybe.</string>
+    <string name="vehicle_info_restart_note">Ezek az adatok minden csatlakozáskor elküldésre kerülnek az Android Auto-nak.</string>
 </resources>

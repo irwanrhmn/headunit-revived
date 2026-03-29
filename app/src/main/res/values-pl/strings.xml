@@ -395,9 +395,10 @@
     <string name="vehicle_id_description">Tylko wewnętrzny identyfikator. Jego zmiana spowoduje, że telefon potraktuje to jako inny pojazd, resetując preferencje Android Auto dla tego samochodu.</string>
     <string name="head_unit_make_label">Producent</string>
     <string name="head_unit_make_description">Producent radia</string>
+    <string name="head_unit_make_hint">Twój telefon wyświetla tę nazwę w ustawieniach Android Auto.</string>
     <string name="head_unit_model_label">Model</string>
     <string name="head_unit_model_description">Model radia</string>
     <string name="vehicle_year_error_invalid">Wprowadź prawidłowy rok</string>
     <string name="vehicle_year_error_max">Rok nie może być późniejszy niż %1$d</string>
-    <string name="vehicle_info_restart_note">Zmiany zostaną zastosowane przy następnym połączeniu Android Auto.</string>
+    <string name="vehicle_info_restart_note">Te dane są wysyłane do Android Auto przy każdym połączeniu.</string>
 </resources>

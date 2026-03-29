@@ -394,9 +394,10 @@
     <string name="vehicle_id_description">Alleen interne identificatie. Wijzigen zorgt ervoor dat uw telefoon dit als een ander voertuig detecteert, waardoor uw Android Auto-voorkeuren voor deze auto worden gereset.</string>
     <string name="head_unit_make_label">Merk</string>
     <string name="head_unit_make_description">Fabrikant van de headunit</string>
+    <string name="head_unit_make_hint">Uw telefoon toont deze naam in de Android Auto-instellingen.</string>
     <string name="head_unit_model_label">Model</string>
     <string name="head_unit_model_description">Model van de headunit</string>
     <string name="vehicle_year_error_invalid">Voer een geldig jaar in</string>
     <string name="vehicle_year_error_max">Het jaar mag niet later zijn dan %1$d</string>
-    <string name="vehicle_info_restart_note">Wijzigingen worden toegepast bij de volgende Android Auto-verbinding.</string>
+    <string name="vehicle_info_restart_note">Deze gegevens worden elke keer dat u verbinding maakt naar Android Auto verzonden.</string>
 </resources>

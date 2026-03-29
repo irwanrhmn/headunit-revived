@@ -395,9 +395,10 @@
     <string name="vehicle_id_description">Pouze interní identifikátor. Jeho změna způsobí, že váš telefon bude toto vozidlo považovat za jiné, čímž se resetují vaše předvolby Android Auto pro toto auto.</string>
     <string name="head_unit_make_label">Výrobce</string>
     <string name="head_unit_make_description">Výrobce autorádia</string>
+    <string name="head_unit_make_hint">Váš telefon zobrazuje tento název v nastavení Android Auto.</string>
     <string name="head_unit_model_label">Model</string>
     <string name="head_unit_model_description">Model autorádia</string>
     <string name="vehicle_year_error_invalid">Zadejte platný rok</string>
     <string name="vehicle_year_error_max">Rok nemůže být pozdější než %1$d</string>
-    <string name="vehicle_info_restart_note">Změny se projeví při dalším připojení Android Auto.</string>
+    <string name="vehicle_info_restart_note">Tyto údaje jsou odeslány do Android Auto při každém připojení.</string>
 </resources>

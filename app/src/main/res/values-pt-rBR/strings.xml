@@ -395,9 +395,10 @@
     <string name="vehicle_id_description">Apenas identificador interno. Alterá-lo fará com que seu celular detecte este como um veículo diferente, redefinindo as preferências do Android Auto para este carro.</string>
     <string name="head_unit_make_label">Fabricante</string>
     <string name="head_unit_make_description">Fabricante da central multimídia</string>
+    <string name="head_unit_make_hint">Seu celular mostra este nome nas configurações do Android Auto.</string>
     <string name="head_unit_model_label">Modelo</string>
     <string name="head_unit_model_description">Modelo da central multimídia</string>
     <string name="vehicle_year_error_invalid">Insira um ano válido</string>
     <string name="vehicle_year_error_max">O ano não pode ser posterior a %1$d</string>
-    <string name="vehicle_info_restart_note">As alterações serão aplicadas na próxima conexão do Android Auto.</string>
+    <string name="vehicle_info_restart_note">Estes dados são enviados ao Android Auto toda vez que você se conecta.</string>
 </resources>

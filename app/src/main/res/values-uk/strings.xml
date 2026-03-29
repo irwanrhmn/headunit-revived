@@ -395,9 +395,10 @@
     <string name="vehicle_id_description">Лише внутрішній ідентифікатор. Його зміна призведе до того, що телефон визначить це як інший автомобіль, скинувши налаштування Android Auto для цієї машини.</string>
     <string name="head_unit_make_label">Виробник</string>
     <string name="head_unit_make_description">Виробник головного пристрою</string>
+    <string name="head_unit_make_hint">Ваш телефон показує це ім\'я у налаштуваннях Android Auto.</string>
     <string name="head_unit_model_label">Модель</string>
     <string name="head_unit_model_description">Модель головного пристрою</string>
     <string name="vehicle_year_error_invalid">Введіть коректний рік</string>
     <string name="vehicle_year_error_max">Рік не може бути пізніше %1$d</string>
-    <string name="vehicle_info_restart_note">Зміни набудуть чинності при наступному підключенні Android Auto.</string>
+    <string name="vehicle_info_restart_note">Ці дані надсилаються до Android Auto щоразу, коли ви підключаєтесь.</string>
 </resources>
