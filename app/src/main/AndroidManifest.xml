@@ -63,6 +63,7 @@
         android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/title"
+        android:supportsRtl="true"
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
@@ -155,6 +156,7 @@
         <service
             android:name=".aap.AapService"
             android:foregroundServiceType="connectedDevice|mediaPlayback"
+            android:stopWithTask="false"
             android:exported="false">
             <!-- MediaButtonReceiver looks for a Service with this intent-filter -->
             <intent-filter>
@@ -191,10 +193,22 @@
             android:directBootAware="true"
             android:exported="true">
             <intent-filter>
+                <!-- Standard Android boot -->
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <!-- Generic / OEM quick boot -->
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+                <!-- MediaTek IPO (Instant Power On) -->
+                <action android:name="com.mediatek.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.mediatek.intent.action.BOOT_IPO" />
+                <!-- FYT / GLSX head units (ACC ignition wake) -->
+                <action android:name="com.fyt.boot.ACCON" />
+                <action android:name="com.glsx.boot.ACCON" />
+                <action android:name="android.intent.action.ACTION_MT_COMMAND_SLEEP_OUT" />
+                <!-- Microntek / MTCD / PX3 head units (ACC wake) -->
+                <action android:name="com.cayboy.action.ACC_ON" />
+                <action android:name="com.carboy.action.ACC_ON" />
             </intent-filter>
         </receiver>
 

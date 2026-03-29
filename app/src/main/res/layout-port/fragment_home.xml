@@ -192,7 +192,7 @@
         android:layout_margin="16dp"
         android:text="@string/exit"
         app:backgroundTint="@color/material_grey_700"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/white"
         app:cornerRadius="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
