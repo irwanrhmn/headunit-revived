@@ -401,4 +401,10 @@
     <string name="vehicle_year_error_invalid">أدخل سنة صالحة</string>
     <string name="vehicle_year_error_max">لا يمكن أن تكون السنة بعد %1$d</string>
     <string name="vehicle_info_restart_note">يتم إرسال هذه البيانات إلى Android Auto في كل مرة تتصل فيها.</string>
+    <string name="auto_enable_hotspot">تفعيل نقطة الاتصال تلقائياً</string>
+    <string name="auto_enable_hotspot_description">يُفعِّل تلقائياً نقطة اتصال Wi-Fi على هذا الجهاز. (لن تعمل على جميع الأجهزة)</string>
+    <string name="hotspot_warning_title">ميزة تجريبية</string>
+    <string name="hotspot_warning_message">تستخدم هذه الميزة الانعكاس وقد لا تعمل على جميع الأجهزة. قد تحتاج إلى منح إذن \"تعديل إعدادات النظام\" يدوياً.</string>
+    <string name="hotspot_permission_title">إذن مطلوب</string>
+    <string name="hotspot_permission_message">تتطلب ميزة نقطة الاتصال إذن \"تعديل إعدادات النظام\". يرجى تفعيله في الشاشة التالية.</string>
 </resources>

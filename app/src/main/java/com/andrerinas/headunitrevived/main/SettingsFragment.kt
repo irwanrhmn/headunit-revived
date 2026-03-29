@@ -60,6 +60,7 @@ class SettingsFragment : Fragment() {
     private var pendingStretchToFill: Boolean? = null
 
     private var pendingKillOnDisconnect: Boolean? = null
+    private var pendingAutoEnableHotspot: Boolean? = null
     
     // Custom Insets
     private var pendingInsetLeft: Int? = null
@@ -110,6 +111,7 @@ class SettingsFragment : Fragment() {
         pendingStretchToFill = settings.stretchToFill
 
         pendingKillOnDisconnect = settings.killOnDisconnect
+        pendingAutoEnableHotspot = settings.autoEnableHotspot
         
         pendingInsetLeft = settings.insetLeft
         pendingInsetTop = settings.insetTop
@@ -232,6 +234,7 @@ class SettingsFragment : Fragment() {
         pendingStretchToFill?.let { settings.stretchToFill = it }
 
         pendingKillOnDisconnect?.let { settings.killOnDisconnect = it }
+        pendingAutoEnableHotspot?.let { settings.autoEnableHotspot = it }
         
         pendingInsetLeft?.let { settings.insetLeft = it }
         pendingInsetTop?.let { settings.insetTop = it }
@@ -298,7 +301,8 @@ class SettingsFragment : Fragment() {
                         pendingMediaVolumeOffset != settings.mediaVolumeOffset ||
                         pendingAssistantVolumeOffset != settings.assistantVolumeOffset ||
                         pendingNavigationVolumeOffset != settings.navigationVolumeOffset ||
-                        pendingKillOnDisconnect != settings.killOnDisconnect
+                        pendingKillOnDisconnect != settings.killOnDisconnect ||
+                        pendingAutoEnableHotspot != settings.autoEnableHotspot
 
         hasChanges = anyChange
 
@@ -393,6 +397,60 @@ class SettingsFragment : Fragment() {
                     .show()
             }
         ))
+
+        // Auto-Enable Hotspot Toggle (only visible if not in Manual Mode)
+        if (pendingWifiConnectionMode != 0) {
+            items.add(SettingItem.ToggleSettingEntry(
+                stableId = "autoEnableHotspot",
+                nameResId = R.string.auto_enable_hotspot,
+                descriptionResId = R.string.auto_enable_hotspot_description,
+                isChecked = pendingAutoEnableHotspot ?: false,
+                onCheckedChanged = { isChecked ->
+                    if (isChecked) {
+                        // Check WRITE_SETTINGS permission (required for hotspot on API 23+)
+                        if (android.os.Build.VERSION.SDK_INT >= 23 &&
+                            !android.provider.Settings.System.canWrite(requireContext())) {
+                            pendingAutoEnableHotspot = true // Mark intent so onResume can finalize
+                            checkChanges()
+                            updateSettingsList()
+                            MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+                                .setTitle(R.string.hotspot_permission_title)
+                                .setMessage(R.string.hotspot_permission_message)
+                                .setPositiveButton(R.string.open_settings) { dialog, _ ->
+                                    val intent = Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS).apply {
+                                        data = android.net.Uri.parse("package:${requireContext().packageName}")
+                                    }
+                                    startActivity(intent)
+                                    dialog.dismiss()
+                                }
+                                .setNegativeButton(android.R.string.cancel) { _, _ ->
+                                    pendingAutoEnableHotspot = false
+                                    checkChanges()
+                                    updateSettingsList()
+                                }
+                                .show()
+                        } else {
+                            // Permission granted or not needed — show experimental warning
+                            MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+                                .setTitle(R.string.hotspot_warning_title)
+                                .setMessage(R.string.hotspot_warning_message)
+                                .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                                    pendingAutoEnableHotspot = true
+                                    checkChanges()
+                                    updateSettingsList()
+                                    dialog.dismiss()
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .show()
+                        }
+                    } else {
+                        pendingAutoEnableHotspot = false
+                        checkChanges()
+                        updateSettingsList()
+                    }
+                }
+            ))
+        }
 
         items.add(SettingItem.SettingEntry(
             stableId = "vehicleInfoSettings",
@@ -1096,6 +1154,16 @@ class SettingsFragment : Fragment() {
         // Refresh settings list when returning from sub-screens (e.g. AutoConnectFragment, DarkModeFragment)
         if (::settingsAdapter.isInitialized) {
             settings = App.provide(requireContext()).settings
+
+            // Re-check WRITE_SETTINGS after returning from system settings
+            if (pendingAutoEnableHotspot == true &&
+                android.os.Build.VERSION.SDK_INT >= 23 &&
+                !android.provider.Settings.System.canWrite(requireContext())) {
+                // Permission still not granted — revert toggle
+                pendingAutoEnableHotspot = false
+                checkChanges()
+            }
+
             updateSettingsList()
         }
     }

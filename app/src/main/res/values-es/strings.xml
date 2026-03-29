@@ -401,4 +401,10 @@
     <string name="vehicle_year_error_invalid">Introduce un año válido</string>
     <string name="vehicle_year_error_max">El año no puede ser posterior a %1$d</string>
     <string name="vehicle_info_restart_note">Estos datos se envían a Android Auto cada vez que te conectas.</string>
+    <string name="auto_enable_hotspot">Activar punto de acceso automáticamente</string>
+    <string name="auto_enable_hotspot_description">Inicia automáticamente un punto de acceso Wi-Fi en este dispositivo. (No funcionará en todos los dispositivos)</string>
+    <string name="hotspot_warning_title">Función experimental</string>
+    <string name="hotspot_warning_message">Esta función utiliza reflexión y es posible que no funcione en todos los dispositivos. También puede requerir que se otorgue manualmente el permiso \"Modificar ajustes del sistema\".</string>
+    <string name="hotspot_permission_title">Permiso requerido</string>
+    <string name="hotspot_permission_message">La función de punto de acceso requiere el permiso \"Modificar ajustes del sistema\". Por favor, actívelo en la siguiente pantalla.</string>
 </resources>

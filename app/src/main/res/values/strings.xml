@@ -407,4 +407,11 @@
     <string name="vehicle_year_error_invalid">Enter a valid year</string>
     <string name="vehicle_year_error_max">Year cannot be later than %1$d</string>
     <string name="vehicle_info_restart_note">This data is sent to Android Auto every time you connect.</string>
+
+    <string name="auto_enable_hotspot">Auto-Enable Hotspot</string>
+    <string name="auto_enable_hotspot_description">Automatically starts a Wi-Fi hotspot on this device. (Won\'t work on every device)</string>
+    <string name="hotspot_warning_title">Experimental Feature</string>
+    <string name="hotspot_warning_message">This feature uses reflection and might not work on all devices. It may also require the "Modify system settings" permission to be granted manually.</string>
+    <string name="hotspot_permission_title">Permission Required</string>
+    <string name="hotspot_permission_message">The hotspot feature requires the \"Modify system settings\" permission. Please enable it in the next screen.</string>
 </resources>

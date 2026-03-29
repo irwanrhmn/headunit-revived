@@ -40,6 +40,9 @@ dependencies {
     // Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
+
+    // DexMaker for runtime subclassing (Hotspot Fix)
+    implementation("com.linkedin.dexmaker:dexmaker:2.28.3")
 }
 
 android {
@@ -96,8 +99,8 @@ android {
         minSdk = 16
 //        minSdk = 21 // 21 only for google play console. App should work in minSDK 16
         targetSdk = 36
-        versionCode = 53
-        versionName = "2.1.0"
+        versionCode = 54
+        versionName = "2.1.1-beta1"
         setProperty("archivesBaseName", "${applicationId}_${versionName}")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true

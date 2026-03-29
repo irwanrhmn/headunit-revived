@@ -370,7 +370,7 @@
     <string name="kill_on_disconnect">Cerrar app al desconectar</string>
     <string name="kill_on_disconnect_description">Cerrar automáticamente la aplicación cuando Android Auto se desconecta</string>
     <string name="kill_on_disconnect_warning_title">Advertencia</string>
-    <string name="kill_on_disconnect_warning">Los siguientes ajustes de reconexión entrarán en conflicto con el cierre de la app al desconectar:\n\n%1$s\n\nLos ajustes de conexión inicial (conexión automática, inicio automático) seguirán funcionando cuando la radio encienda. Sin embargo, tras la primera desconexión la app se cerrará inmediatamente en lugar de intentar reconectar.\n\nNota: Algunas radios aftermarket nunca se apagan completamente, solo hibernan, similar a un teléfono que bloquea la pantalla pero nunca se apaga realmente. Con esta opción activada, la app se cerrará tras la primera desconexión y podría no reabrirse automáticamente en el siguiente encendido.\n\n¿Deseas desactivar los ajustes de reconexión mencionados?</string>
+    <string name="kill_on_disconnect_warning">Los siguientes ajustes de reconexión entrarán en conflicto con el cierre de la app al desconectar:\n\n%1$s\n\nTus ajustes de conexión inicial (auto-conectar, auto-iniciar) seguirán funcionando cuando la radio del auto se encienda. Sin embargo, después de la primera desconexión la app se cerrará inmediatamente en lugar de intentar reconectarse.\n\n¿Deseas desactivar los ajustes de reconexión indicados arriba?</string>
     <string name="kill_on_disconnect_disable_and_enable">Desactivar y activar</string>
     <string name="kill_on_disconnect_enable_anyway">Activar de todos modos</string>
     <string name="kill_on_disconnect_boot_warning">Tienes \"Iniciar al arrancar\" activado. Si la app se cierra al desconectar y este dispositivo hiberna en lugar de apagarse, la app podría no reabrirse automáticamente en el siguiente encendido porque no se genera un evento de arranque — el dispositivo simplemente despierta del modo de reposo.</string>
@@ -401,4 +401,10 @@
     <string name="vehicle_year_error_invalid">Introduce un año válido</string>
     <string name="vehicle_year_error_max">El año no puede ser posterior a %1$d</string>
     <string name="vehicle_info_restart_note">Estos datos se envían a Android Auto cada vez que te conectas.</string>
+    <string name="auto_enable_hotspot">Activar punto de acceso automáticamente</string>
+    <string name="auto_enable_hotspot_description">Inicia automáticamente un punto de acceso Wi-Fi en este dispositivo. (No funcionará en todos los dispositivos)</string>
+    <string name="hotspot_warning_title">Función experimental</string>
+    <string name="hotspot_warning_message">Esta función utiliza reflexión y es posible que no funcione en todos los dispositivos. También puede requerir que se otorgue manualmente el permiso \"Modificar ajustes del sistema\".</string>
+    <string name="hotspot_permission_title">Permiso requerido</string>
+    <string name="hotspot_permission_message">La función de punto de acceso requiere el permiso \"Modificar ajustes del sistema\". Por favor, actívelo en la siguiente pantalla.</string>
 </resources>

@@ -165,6 +165,15 @@
         </service>
         <service android:name=".location.GpsLocationService" />
 
+        <service
+            android:name=".aap.DummyVpnService"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
         <!-- AndroidX MediaButtonReceiver: Routes MEDIA_BUTTON intents to AapService
              on Android 8+ where implicit broadcasts to manifest-registered receivers
              are restricted. This is the standard Android mechanism used by HUR. -->

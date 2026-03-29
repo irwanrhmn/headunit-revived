@@ -401,4 +401,10 @@
     <string name="vehicle_year_error_invalid">Введіть коректний рік</string>
     <string name="vehicle_year_error_max">Рік не може бути пізніше %1$d</string>
     <string name="vehicle_info_restart_note">Ці дані надсилаються до Android Auto щоразу, коли ви підключаєтесь.</string>
+    <string name="auto_enable_hotspot">Автоматично вмикати точку доступу</string>
+    <string name="auto_enable_hotspot_description">Автоматично вмикає точку доступу Wi-Fi на цьому пристрої. (Працюватиме не на всіх пристроях)</string>
+    <string name="hotspot_warning_title">Експериментальна функція</string>
+    <string name="hotspot_warning_message">Ця функція використовує рефлексію і може не працювати на всіх пристроях. Можливо, потрібно вручну надати дозвіл \"Зміна системних налаштувань\".</string>
+    <string name="hotspot_permission_title">Потрібен дозвіл</string>
+    <string name="hotspot_permission_message">Функція точки доступу потребує дозволу \"Зміна системних налаштувань\". Будь ласка, увімкніть його на наступному екрані.</string>
 </resources>

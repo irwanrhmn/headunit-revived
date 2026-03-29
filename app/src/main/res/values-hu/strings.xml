@@ -399,4 +399,10 @@
     <string name="vehicle_year_error_invalid">Adjon meg egy érvényes évet</string>
     <string name="vehicle_year_error_max">Az év nem lehet későbbi, mint %1$d</string>
     <string name="vehicle_info_restart_note">Ezek az adatok minden csatlakozáskor elküldésre kerülnek az Android Auto-nak.</string>
+    <string name="auto_enable_hotspot">Hotspot automatikus bekapcsolása</string>
+    <string name="auto_enable_hotspot_description">Automatikusan bekapcsolja a Wi-Fi hotspotot ezen az eszközön. (Nem minden eszközön fog működni)</string>
+    <string name="hotspot_warning_title">Kísérleti funkció</string>
+    <string name="hotspot_warning_message">Ez a funkció reflexiót használ, és nem minden eszközön működik. Szükség lehet a \"Rendszerbeállítások módosítása\" engedély manuális megadására.</string>
+    <string name="hotspot_permission_title">Engedély szükséges</string>
+    <string name="hotspot_permission_message">A hotspot funkció a \"Rendszerbeállítások módosítása\" engedélyt igényli. Kérjük, engedélyezze a következő képernyőn.</string>
 </resources>

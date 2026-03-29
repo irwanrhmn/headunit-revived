@@ -57,6 +57,8 @@ import android.provider.Settings as AndroidSettings
 import android.view.View
 import android.view.WindowManager
 import com.andrerinas.headunitrevived.app.UsbAttachedActivity
+import android.media.AudioManager
+import com.andrerinas.headunitrevived.utils.HotspotManager
 import java.net.ServerSocket
 
 /**
@@ -87,6 +89,7 @@ class AapService : Service(), UsbReceiver.Listener {
     private var wirelessServer: WirelessServer? = null
     private var networkDiscovery: NetworkDiscovery? = null
     private var mediaSession: MediaSessionCompat? = null
+    private var permanentFocusRequest: android.media.AudioFocusRequest? = null
     private var lastMediaButtonClickTime = 0L
 
     /**
@@ -420,6 +423,35 @@ class AapService : Service(), UsbReceiver.Listener {
         initWifiMode()
         checkAlreadyConnectedUsb()
         registerNetworkMonitor()
+
+        // Grab permanent AUDIOFOCUS_GAIN at service start (like HUR).
+        // This ensures the headunit owns system audio focus before any AA connection,
+        // preventing other apps from stealing it and causing AA to keep audio on the phone.
+        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val attrs = android.media.AudioAttributes.Builder()
+                .setUsage(android.media.AudioAttributes.USAGE_MEDIA)
+                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+            permanentFocusRequest = android.media.AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                .setAudioAttributes(attrs)
+                .setWillPauseWhenDucked(false)
+                .setOnAudioFocusChangeListener(AudioManager.OnAudioFocusChangeListener { focusChange ->
+                    AppLog.d("Permanent audio focus changed: $focusChange")
+                })
+                .build()
+            audioManager.requestAudioFocus(permanentFocusRequest!!)
+        } else {
+            @Suppress("DEPRECATION")
+            audioManager.requestAudioFocus(
+                AudioManager.OnAudioFocusChangeListener { focusChange ->
+                    AppLog.d("Permanent audio focus changed: $focusChange")
+                },
+                AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN
+            )
+        }
+        AppLog.i("Grabbed permanent AUDIOFOCUS_GAIN at service start")
     }
 
     /** Enables Android Automotive UI mode so the system uses car-optimised layouts. */
@@ -770,11 +802,19 @@ class AapService : Service(), UsbReceiver.Listener {
     private fun initWifiMode() {
         if (App.provide(this).settings.wifiConnectionMode == 2) {
             startWirelessServer()
-            val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
-            if (wifiManager.isWifiEnabled) {
-                wifiDirectManager?.makeVisible()
+            if (App.provide(this).settings.autoEnableHotspot) {
+                // Run on background thread since hotspot enable may sleep briefly
+                Thread {
+                    AppLog.i("AapService: Auto-enabling hotspot...")
+                    HotspotManager.setHotspotEnabled(this, true)
+                }.start()
             } else {
-                AppLog.i("AapService: WiFi is disabled, skipping Wi-Fi Direct visibility.")
+                val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
+                if (wifiManager.isWifiEnabled) {
+                    wifiDirectManager?.makeVisible()
+                } else {
+                    AppLog.i("AapService: WiFi is disabled, skipping Wi-Fi Direct visibility.")
+                }
             }
         }
     }
@@ -843,6 +883,12 @@ class AapService : Service(), UsbReceiver.Listener {
         AppLog.i("AapService destroying... (wakeLock held=${bootWakeLock?.isHeld == true})")
         isDestroying = true
         releaseBootWakeLock()
+
+        if (App.provide(this).settings.autoEnableHotspot) {
+            AppLog.i("AapService: Auto-disabling hotspot...")
+            com.andrerinas.headunitrevived.utils.HotspotManager.setHotspotEnabled(this, false)
+        }
+
         releaseWifiLock()
         unregisterNetworkMonitor()
         stopForeground(true)
@@ -1289,6 +1335,7 @@ class AapService : Service(), UsbReceiver.Listener {
         wirelessServer?.stopServer()
         wirelessServer = null
         scanningState.value = false
+        startService(Intent(this, DummyVpnService::class.java).apply { action = DummyVpnService.ACTION_STOP_VPN })
     }
 
     // -------------------------------------------------------------------------
@@ -1484,45 +1531,57 @@ class AapService : Service(), UsbReceiver.Listener {
         selfMode = true
         startWirelessServer()
 
-        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            connectivityManager.activeNetwork else null
-        val networkToUse = activeNetwork ?: createFakeNetwork(0)
-        val fakeWifiInfo = createFakeWifiInfo()
-
-        val magicalIntent = Intent().apply {
-            setClassName(
-                "com.google.android.projection.gearhead",
-                "com.google.android.apps.auto.wireless.setup.service.impl.WirelessStartupActivity"
-            )
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            putExtra("PARAM_HOST_ADDRESS", "127.0.0.1")
-            putExtra("PARAM_SERVICE_PORT", 5288)
-            networkToUse?.let { putExtra("PARAM_SERVICE_WIFI_NETWORK", it) }
-            fakeWifiInfo?.let { putExtra("wifi_info", it) }
-        }
-
-        try {
-            AppLog.i("Launching AA Wireless Startup via Activity...")
-            startActivity(magicalIntent)
-        } catch (e: Exception) {
-            AppLog.w("Activity launch failed (${e.message}). Attempting Broadcast fallback...")
-            try {
-                val receiverIntent = Intent().apply {
-                    setClassName(
-                        "com.google.android.projection.gearhead",
-                        "com.google.android.apps.auto.wireless.setup.receiver.WirelessStartupReceiver"
-                    )
-                    action = "com.google.android.apps.auto.wireless.setup.receiver.wirelessstartup.START"
-                    putExtra("ip_address", "127.0.0.1")
-                    putExtra("projection_port", 5288)
-                    addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
+        serviceScope.launch(kotlinx.coroutines.Dispatchers.Main) {
+            val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && connectivityManager.activeNetwork == null) {
+                // Wait up to 1 second for the Dummy VPN to become the active network
+                for (i in 1..10) {
+                    if (connectivityManager.activeNetwork != null) break
+                    kotlinx.coroutines.delay(100)
                 }
-                sendBroadcast(receiverIntent)
-                AppLog.i("Broadcast fallback sent successfully.")
-            } catch (e2: Exception) {
-                AppLog.e("Both Activity and Broadcast triggers failed", e2)
-                Toast.makeText(this, getString(R.string.failed_start_android_auto), Toast.LENGTH_SHORT).show()
+            }
+
+            val activeNetwork = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                connectivityManager.activeNetwork else null
+            val networkToUse = activeNetwork ?: createFakeNetwork(0)
+            val fakeWifiInfo = createFakeWifiInfo()
+
+            val magicalIntent = Intent().apply {
+                setClassName(
+                    "com.google.android.projection.gearhead",
+                    "com.google.android.apps.auto.wireless.setup.service.impl.WirelessStartupActivity"
+                )
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                putExtra("PARAM_HOST_ADDRESS", "127.0.0.1")
+                putExtra("PARAM_SERVICE_PORT", 5288)
+                networkToUse?.let { putExtra("PARAM_SERVICE_WIFI_NETWORK", it) }
+                fakeWifiInfo?.let { putExtra("wifi_info", it) }
+            }
+
+            try {
+                AppLog.i("Launching AA Wireless Startup via Activity...")
+                startActivity(magicalIntent)
+            } catch (e: Exception) {
+                AppLog.w("Activity launch failed (${e.message}). Attempting Broadcast fallback...")
+                try {
+                    val receiverIntent = Intent().apply {
+                        setClassName(
+                            "com.google.android.projection.gearhead",
+                            "com.google.android.apps.auto.wireless.setup.receiver.WirelessStartupReceiver"
+                        )
+                        action = "com.google.android.apps.auto.wireless.setup.receiver.wirelessstartup.START"
+                        putExtra("ip_address", "127.0.0.1")
+                        putExtra("projection_port", 5288)
+                        networkToUse?.let { putExtra("PARAM_SERVICE_WIFI_NETWORK", it) }
+                        fakeWifiInfo?.let { putExtra("wifi_info", it) }
+                        addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
+                    }
+                    sendBroadcast(receiverIntent)
+                    AppLog.i("Broadcast fallback sent successfully.")
+                } catch (e2: Exception) {
+                    AppLog.e("Both Activity and Broadcast triggers failed", e2)
+                    Toast.makeText(this@AapService, getString(R.string.failed_start_android_auto), Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

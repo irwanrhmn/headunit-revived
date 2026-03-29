@@ -684,4 +684,8 @@ class Settings(context: Context) {
         get() = prefs.getBoolean("kill-on-disconnect", false)
         set(value) { prefs.edit().putBoolean("kill-on-disconnect", value).apply() }
 
+    var autoEnableHotspot: Boolean
+        get() = prefs.getBoolean("auto-enable-hotspot", false)
+        set(value) { prefs.edit().putBoolean("auto-enable-hotspot", value).apply() }
+
 }
