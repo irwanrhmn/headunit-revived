@@ -411,7 +411,7 @@
     <string name="auto_enable_hotspot">Auto-Enable Hotspot</string>
     <string name="auto_enable_hotspot_description">Automatically starts a Wi-Fi hotspot on this device. (Won\'t work on every device)</string>
     <string name="native_aa_wireless">Native Android Auto Wireless</string>
-    <string name="native_aa_wireless_description">Enable official Bluetooth handshake for wireless connections. This allows the phone to automatically detect the headunit without manual interaction.</string>
+    <string name="native_aa_wireless_description">Enable official Bluetooth handshake for wireless connections. Allows the phone to automatically find and launch AA. IMPORTANT: Your phone must be PAIRED with this tablet via Bluetooth first.</string>
     <string name="hotspot_warning_title">Experimental Feature</string>
     <string name="hotspot_warning_message">This feature uses reflection and might not work on all devices. It may also require the "Modify system settings" permission to be granted manually.</string>
     <string name="hotspot_permission_title">Permission Required</string>

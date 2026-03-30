@@ -809,9 +809,10 @@ class AapService : Service(), UsbReceiver.Listener {
 
     /** Starts [WirelessServer] if the user has configured server WiFi mode (mode == 2). */
     private fun initWifiMode() {
-        if (App.provide(this).settings.wifiConnectionMode == 2) {
+        val settings = App.provide(this).settings
+        if (settings.wifiConnectionMode == 2 || settings.nativeAaWireless) {
             startWirelessServer()
-            if (App.provide(this).settings.autoEnableHotspot) {
+            if (settings.autoEnableHotspot) {
                 // Run on background thread since hotspot enable may sleep briefly
                 Thread {
                     AppLog.i("AapService: Auto-enabling hotspot...")

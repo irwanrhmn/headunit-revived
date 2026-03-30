@@ -78,7 +78,7 @@ class NativeAaHandshakeManager(
         // Start AA RFCOMM Server
         scope.launch(Dispatchers.IO + CoroutineName("NativeAa-RfcommServer")) {
             try {
-                aaServerSocket = adapter.listenUsingRfcommWithServiceRecord("Headunit Revived AA", AA_UUID)
+                aaServerSocket = adapter.listenUsingRfcommWithServiceRecord("Android Auto", AA_UUID)
                 while (isRunning && isActive) {
                     val socket = aaServerSocket?.accept()
                     if (socket != null) {
@@ -94,7 +94,7 @@ class NativeAaHandshakeManager(
         // Start HFP RFCOMM Server (Required by some phones to detect HU)
         scope.launch(Dispatchers.IO + CoroutineName("NativeAa-HfpServer")) {
             try {
-                hfpServerSocket = adapter.listenUsingRfcommWithServiceRecord("HFP", HFP_UUID)
+                hfpServerSocket = adapter.listenUsingRfcommWithServiceRecord("Hands-Free Unit", HFP_UUID)
                 while (isRunning && isActive) {
                     val socket = hfpServerSocket?.accept()
                     if (socket != null) {
