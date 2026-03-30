@@ -97,7 +97,6 @@ android {
     defaultConfig {
         applicationId = "com.andrerinas.headunitrevived"
         minSdk = 16
-//        minSdk = 21 // 21 only for google play console. App should work in minSDK 16
         targetSdk = 36
         versionCode = 55
         versionName = "2.1.1"
@@ -120,11 +119,11 @@ android {
     productFlavors {
         create("playstore") {
             dimension = "distribution"
-            // No extra config needed, this build will be clean
+            minSdk = 21
         }
         create("github") {
             dimension = "distribution"
-            // This build will contain the VpnService
+            // Default minSdk 16 from defaultConfig is used
         }
     }
 
