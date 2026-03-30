@@ -42,7 +42,10 @@
     <string name="use_gradient_background_description_on_auto">Aplicația desenează propriul fundal cu cercul de degradat centrat. Nu se aplică modului Întunecat extrem</string>
     <string name="use_gradient_background_description_off_auto">Fundalul clasic al aplicației este utilizat. Nu se aplică modului Întunecat extrem</string>
     <string name="category_dark_mode">Mod întunecat</string>
+    <string name="category_automation">Automatizare</string>
     <string name="dark_mode_settings">Setări mod întunecat</string>
+    <string name="app_theme_short">App</string>
+    <string name="night_mode_short">Android Auto</string>
     <string name="aa_monochrome">Android Auto monocrom</string>
     <string name="aa_monochrome_description">Reduce culorile din Android Auto pentru condusul pe timp de noapte. Necesită modul de vizualizare GLES. Are efect doar când modul întunecat este activat</string>
     <string name="aa_desaturation">Desaturare</string>
@@ -155,9 +158,11 @@
     <string name="auto_start_usb_description">Deschide aplicația automat și încearcă conectarea când un dispozitiv USB este conectat</string>
     <string name="auto_start_settings">Setări pornire automată</string>
     <string name="auto_start_settings_description">Configurează când aplicația pornește automat</string>
-    <string name="auto_start_oem_warning">Pe unele dispozitive (Xiaomi, Huawei, Samsung, OPPO, Vivo), pornirea automată poate necesita activarea manuală din setările de baterie sau de pornire ale dispozitivului.</string>
+    <string name="auto_start_oem_warning">Acest dispozitiv poate necesita activarea pornirii automate și eliminarea optimizării bateriei sau a restricțiilor de fundal pentru această aplicație.\n\nPe unitățile cu Quick Boot (pornire rapidă), pornirea automată ar putea să nu funcționeze. Căutați \"DuraSpeed\" în setările de sistem și activați această aplicație acolo. Pe unele unități, DuraSpeed este ascuns și este posibil să aveți nevoie de o aplicație precum \"Hidden Settings\" pentru a-l găsi. Dacă nu aveți DuraSpeed, încercați să dezactivați Quick Boot.</string>
     <string name="auto_start_on_boot_label">Pornire la boot</string>
     <string name="auto_start_on_boot_description">Deschide aplicația automat când dispozitivul pornește. Necesită permisiunea \'Afișare peste alte aplicații\' pe Android 10+</string>
+    <string name="auto_start_screen_on_label">Pornire la aprinderea ecranului</string>
+    <string name="auto_start_screen_on_description">Deschide aplicația de fiecare dată când ecranul se aprinde. Ideal pentru unitățile auto care nu se opresc niciodată complet sau folosesc moduri de pornire rapidă unde celelalte opțiuni de pornire automată nu funcționează. Nu este recomandat pentru telefoane sau tablete.</string>
     <string name="select_bt_device">Selectează dispozitivul Bluetooth</string>
     <string name="bt_device_not_set">Nesetat</string>
     <string name="bt_permission_denied_title">Permisiune Bluetooth necesară</string>
@@ -365,8 +370,41 @@
     <string name="kill_on_disconnect">Închide aplicația la deconectare</string>
     <string name="kill_on_disconnect_description">Închide automat aplicația când Android Auto se deconectează</string>
     <string name="kill_on_disconnect_warning_title">Avertisment</string>
-    <string name="kill_on_disconnect_warning">Următoarele setări de reconectare vor intra în conflict cu închiderea aplicației la deconectare:\n\n%1$s\n\nSetările tale inițiale de conexiune (conectare automată, pornire automată) vor funcționa în continuare când radioul mașinii pornește. Cu toate acestea, după prima deconectare aplicația se va închide imediat în loc să încerce să se reconecteze.\n\nDorești să dezactivezi setările de reconectare enumerate mai sus?</string>
+    <string name="kill_on_disconnect_warning">Următoarele setări de reconectare vor intra în conflict cu închiderea aplicației la deconectare:\n\n%1$s\n\nSetările de conectare inițială (conectare automată, pornire automată) vor funcționa în continuare la pornirea unității. Cu toate acestea, după prima deconectare aplicația se va închide imediat în loc să încerce reconectarea.\n\nNotă: Unele unități aftermarket nu se opresc complet niciodată — intră în hibernare, similar unui telefon care își blochează ecranul dar nu se oprește niciodată cu adevărat. Cu această opțiune activată, aplicația se va închide după prima deconectare și este posibil să nu se redeschidă automat la următoarea pornire.\n\nDoriți să dezactivați setările de reconectare menționate mai sus?</string>
     <string name="kill_on_disconnect_disable_and_enable">Dezactivează și activează</string>
+    <string name="kill_on_disconnect_enable_anyway">Activează oricum</string>
+    <string name="kill_on_disconnect_boot_warning">Aveți \"Pornire la boot\" activat. Dacă aplicația se închide la deconectare și acest dispozitiv intră în hibernare în loc să se oprească, aplicația s-ar putea să nu se redeschidă automat la următorul ciclu de pornire deoarece nu este generat un eveniment de boot — dispozitivul pur și simplu se trezește din modul de repaus.</string>
+    <string name="kill_on_disconnect_screen_on_warning">Aveți \"Pornire la aprinderea ecranului\" activată. Această setare deschide aplicația de fiecare dată când ecranul se aprinde. Combinată cu închiderea la deconectare, aplicația se va închide după deconectare, dar se va redeschide imediat când ecranul se aprinde din nou, creând o buclă de repornire.</string>
     <string name="kill_on_disconnect_conflicts_disabled">Setările conflictuale au fost dezactivate</string>
     <string name="wifi_disabled_info">Info: Wi-Fi este dezactivat.</string>
+
+    <!-- Vehicle Info Settings -->
+    <string name="vehicle_info_settings">Informații vehicul</string>
+    <string name="vehicle_info_settings_description">Personalizați cum apare vehiculul dvs. pe telefon</string>
+    <string name="category_vehicle">Vehicul</string>
+    <string name="category_head_unit">Unitate principală</string>
+    <string name="vehicle_display_name_label">Nume afișat</string>
+    <string name="vehicle_display_name_description">Numele afișat pe telefon pentru acest vehicul</string>
+    <string name="vehicle_make_label">Producător</string>
+    <string name="vehicle_make_description">Producătorul vehiculului (ex. Honda, Toyota)</string>
+    <string name="vehicle_model_label">Model</string>
+    <string name="vehicle_model_description">Modelul vehiculului (ex. Civic, Corolla)</string>
+    <string name="vehicle_year_label">An</string>
+    <string name="vehicle_year_description">Anul vehiculului</string>
+    <string name="vehicle_id_label">ID vehicul</string>
+    <string name="vehicle_id_description">Doar identificator intern. Schimbarea acestuia va face ca telefonul dvs. să detecteze acesta ca un vehicul diferit, resetând preferințele Android Auto pentru această mașină.</string>
+    <string name="head_unit_make_label">Producător</string>
+    <string name="head_unit_make_description">Producătorul unității principale</string>
+    <string name="head_unit_make_hint">Telefonul dvs. afișează acest nume în setările Android Auto.</string>
+    <string name="head_unit_model_label">Model</string>
+    <string name="head_unit_model_description">Modelul unității principale</string>
+    <string name="vehicle_year_error_invalid">Introduceți un an valid</string>
+    <string name="vehicle_year_error_max">Anul nu poate fi mai târziu de %1$d</string>
+    <string name="vehicle_info_restart_note">Aceste date sunt trimise către Android Auto de fiecare dată când vă conectați.</string>
+    <string name="auto_enable_hotspot">Activare automată hotspot</string>
+    <string name="auto_enable_hotspot_description">Activează automat un hotspot Wi-Fi pe acest dispozitiv. (Nu va funcționa pe toate dispozitivele)</string>
+    <string name="hotspot_warning_title">Funcție experimentală</string>
+    <string name="hotspot_warning_message">Această funcție folosește reflexie și este posibil să nu funcționeze pe toate dispozitivele. Este posibil să fie nevoie să acordați manual permisiunea \"Modificare setări de sistem\".</string>
+    <string name="hotspot_permission_title">Permisiune necesară</string>
+    <string name="hotspot_permission_message">Funcția de hotspot necesită permisiunea \"Modificare setări de sistem\". Vă rugăm să o activați pe ecranul următor.</string>
 </resources>

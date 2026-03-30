@@ -205,6 +205,35 @@ class Settings(context: Context) {
         get() = prefs.getBoolean("right-hand-drive", false)
         set(value) { prefs.edit().putBoolean("right-hand-drive", value).apply() }
 
+    // Vehicle info settings (sent to phone during Android Auto handshake)
+    var vehicleDisplayName: String
+        get() = prefs.getString("vehicle-display-name", "Headunit Revived")!!
+        set(value) { prefs.edit().putString("vehicle-display-name", value).apply() }
+
+    var vehicleMake: String
+        get() = prefs.getString("vehicle-make", "Google")!!
+        set(value) { prefs.edit().putString("vehicle-make", value).apply() }
+
+    var vehicleModel: String
+        get() = prefs.getString("vehicle-model", "Desktop Head Unit")!!
+        set(value) { prefs.edit().putString("vehicle-model", value).apply() }
+
+    var vehicleYear: String
+        get() = prefs.getString("vehicle-year", "2025")!!
+        set(value) { prefs.edit().putString("vehicle-year", value).apply() }
+
+    var vehicleId: String
+        get() = prefs.getString("vehicle-id", "headlessunit-001")!!
+        set(value) { prefs.edit().putString("vehicle-id", value).apply() }
+
+    var headUnitMake: String
+        get() = prefs.getString("head-unit-make", "Google")!!
+        set(value) { prefs.edit().putString("head-unit-make", value).apply() }
+
+    var headUnitModel: String
+        get() = prefs.getString("head-unit-model", "Desktop Head Unit")!!
+        set(value) { prefs.edit().putString("head-unit-model", value).apply() }
+
     // 0 = Manual, 1 = Auto (Headunit Server), 2 = Helper (Wifi Launcher)
     var wifiConnectionMode: Int
         get() {
@@ -295,6 +324,10 @@ class Settings(context: Context) {
     var autoStartOnBoot: Boolean
         get() = prefs.getBoolean("auto-start-on-boot", false)
         set(value) { prefs.edit().putBoolean("auto-start-on-boot", value).apply() }
+
+    var autoStartOnScreenOn: Boolean
+        get() = prefs.getBoolean("auto-start-on-screen-on", false)
+        set(value) { prefs.edit().putBoolean("auto-start-on-screen-on", value).apply() }
 
     var reopenOnReconnection: Boolean
         get() = prefs.getBoolean("reopen-on-reconnection", true)
@@ -469,6 +502,33 @@ class Settings(context: Context) {
             }
         }
 
+        private const val KEY_AUTO_START_ON_SCREEN_ON = "auto-start-on-screen-on"
+
+        /**
+         * Reads auto-start-on-screen-on from device-protected storage (API 24+),
+         * falling back to regular prefs on older devices.
+         * Safe to call during locked boot when credential storage is unavailable.
+         */
+        fun isAutoStartOnScreenOnEnabled(context: Context): Boolean {
+            val prefs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                val deviceContext = context.createDeviceProtectedStorageContext()
+                deviceContext.getSharedPreferences(DEVICE_PREFS_NAME, Context.MODE_PRIVATE)
+            } else {
+                context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+            }
+            return prefs.getBoolean(KEY_AUTO_START_ON_SCREEN_ON, false)
+        }
+
+        fun syncAutoStartOnScreenOnToDeviceStorage(context: Context, enabled: Boolean) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                val deviceContext = context.createDeviceProtectedStorageContext()
+                deviceContext.getSharedPreferences(DEVICE_PREFS_NAME, Context.MODE_PRIVATE)
+                    .edit()
+                    .putBoolean(KEY_AUTO_START_ON_SCREEN_ON, enabled)
+                    .apply()
+            }
+        }
+
         private const val KEY_AUTO_START_ON_USB = "auto-start-on-usb"
         private const val KEY_AUTO_START_BT_MAC = "auto-start-bt-mac"
 
@@ -623,5 +683,9 @@ class Settings(context: Context) {
     var killOnDisconnect: Boolean
         get() = prefs.getBoolean("kill-on-disconnect", false)
         set(value) { prefs.edit().putBoolean("kill-on-disconnect", value).apply() }
+
+    var autoEnableHotspot: Boolean
+        get() = prefs.getBoolean("auto-enable-hotspot", false)
+        set(value) { prefs.edit().putBoolean("auto-enable-hotspot", value).apply() }
 
 }

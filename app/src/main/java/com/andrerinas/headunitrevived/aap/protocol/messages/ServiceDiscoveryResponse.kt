@@ -202,26 +202,26 @@ class ServiceDiscoveryResponse(private val context: Context)
             services.add(navigationStatus)
 
             return Control.ServiceDiscoveryResponse.newBuilder().apply {
-                make = "Google"
-                model = "Desktop Head Unit"
-                year = "2025"
-                vehicleId = "headlessunit-001"
-                headUnitModel = "Desktop Head Unit"
-                headUnitMake = "Google"
+                make = settings.vehicleMake
+                model = settings.vehicleModel
+                year = settings.vehicleYear
+                vehicleId = settings.vehicleId
+                headUnitModel = settings.headUnitModel
+                headUnitMake = settings.headUnitMake
                 headUnitSoftwareBuild = "1"
                 headUnitSoftwareVersion = "0.1.0"
                 driverPosition = if (settings.rightHandDrive) Control.DriverPosition.DRIVER_POSITION_RIGHT else Control.DriverPosition.DRIVER_POSITION_LEFT
                 canPlayNativeMediaDuringVr = false
                 hideProjectedClock = false
-                setDisplayName("Headunit Revived")
+                setDisplayName(settings.vehicleDisplayName)
 
                 setHeadunitInfo(com.andrerinas.headunitrevived.aap.protocol.proto.Common.HeadUnitInfo.newBuilder().apply {
-                    setHeadUnitMake("Google")
-                    setHeadUnitModel("Desktop Head Unit")
-                    setMake("Google")
-                    setModel("Desktop Head Unit")
-                    setYear("2025")
-                    setVehicleId("headlessunit-001")
+                    setHeadUnitMake(settings.headUnitMake)
+                    setHeadUnitModel(settings.headUnitModel)
+                    setMake(settings.vehicleMake)
+                    setModel(settings.vehicleModel)
+                    setYear(settings.vehicleYear)
+                    setVehicleId(settings.vehicleId)
                     setHeadUnitSoftwareBuild("1")
                     setHeadUnitSoftwareVersion("0.1.0")
                 }.build())

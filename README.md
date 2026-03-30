@@ -58,6 +58,13 @@ adb shell am start -a android.intent.action.VIEW -d "headunit://connect?ip=192.1
 - **Wireless Connection Drops:** If the connection drops frequently, disable **"WiFi Assistant"** or **"Switch between networks"** in your phone's WiFi settings to prevent it from killing the connection due to "no internet."
 
 ## Changelog
+### v.2.1.1
+- Fixed: Layout crash on Android 4.2
+- Added: Enable Hotspot option. Note: This will not work on every device. Especially after Android 13!
+- Added: Fake VPN Handler for new Android Auto in offline mode. It is no longer possible to send a network to AA, so we need this hack, if your device is offline
+- Enhanced: Audio-Focus is now more aggressive to hopefully fix the audio is not coming from my tablet/headunit errors
+- Added: Auto-Boot Functionality. Thanks to @andrecuellar
+
 ### v.2.1.0
 - Fixed: Exit Intent not working. Thanks to benyjr
 - Added: Rotary Support

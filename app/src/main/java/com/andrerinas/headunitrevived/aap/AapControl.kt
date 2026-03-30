@@ -288,48 +288,27 @@ internal class AapControlService(
     private fun audioFocusRequest(notification: Control.AudioFocusRequestNotification, channel: Int): Int {
         AppLog.i("Audio Focus Request: ${notification.request}")
 
-        if (notification.request?.number == 4) {
+        // Always respond with the mapped focus state to AA — never deny.
+        // the phone must always believe the headunit
+        // has audio focus, otherwise it keeps audio output on the phone itself.
+        val mappedState = focusResponse[notification.request]
+        if (mappedState != null) {
+            val response = Control.AudioFocusNotification.newBuilder()
+                .setFocusState(mappedState)
+                .build()
+            AppLog.i("Sending immediate AudioFocusNotification: $mappedState (always-grant)")
+            aapTransport.send(AapMessage(channel, Control.ControlMsgType.MESSAGE_AUDIO_FOCUS_NOTIFICATION_VALUE, response))
+
             // Sync MediaSession
-            aapTransport.onAudioFocusStateChanged?.invoke(false)
+            val isGain = mappedState == Control.AudioFocusNotification.AudioFocusStateType.STATE_GAIN
+            aapTransport.onAudioFocusStateChanged?.invoke(isGain)
         }
 
-        val result = aapAudio.requestFocusChange(AudioConfigs.stream(channel), notification.request.number, AudioManager.OnAudioFocusChangeListener {
-            val response = Control.AudioFocusNotification.newBuilder()
-
-            focusResponse[notification.request]?.let { newSate ->
-                response.focusState = newSate
-                AppLog.i("Audio Focus async change: $newSate, system focus change: $it ${systemFocusName[it]}")
-
-                val msg = AapMessage(channel, Control.ControlMsgType.MESSAGE_AUDIO_FOCUS_NOTIFICATION_VALUE, response.build())
-                AppLog.i(msg.toString())
-                aapTransport.send(msg)
-
-                // Sync MediaSession
-                aapTransport.onAudioFocusStateChanged?.invoke(newSate == Control.AudioFocusNotification.AudioFocusStateType.STATE_GAIN)
-            }
+        // Best-effort: request system audio focus to duck other apps on the headunit.
+        // The result is intentionally ignored for the protocol response above.
+        aapAudio.requestFocusChange(AudioConfigs.stream(channel), notification.request.number, AudioManager.OnAudioFocusChangeListener {
+            AppLog.i("System audio focus changed: $it ${systemFocusName[it]}")
         })
-
-        // Immediate response
-        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            val response = Control.AudioFocusNotification.newBuilder()
-            focusResponse[notification.request]?.let { state ->
-                response.focusState = state
-                AppLog.i("Sending immediate AudioFocusNotification: $state")
-                val msg = AapMessage(channel, Control.ControlMsgType.MESSAGE_AUDIO_FOCUS_NOTIFICATION_VALUE, response.build())
-                aapTransport.send(msg)
-
-                // Notify transport about focus gain to sync MediaSession
-                if (state == Control.AudioFocusNotification.AudioFocusStateType.STATE_GAIN) {
-                    aapTransport.onAudioFocusStateChanged?.invoke(true)
-                }
-            }
-        } else {
-            AppLog.w("Audio focus request NOT granted immediately ($result). Sending LOSS.")
-            val msg = AapMessage(channel, Control.ControlMsgType.MESSAGE_AUDIO_FOCUS_NOTIFICATION_VALUE,
-                Control.AudioFocusNotification.newBuilder().setFocusState(Control.AudioFocusNotification.AudioFocusStateType.STATE_LOSS_TRANSIENT).build())
-            aapTransport.send(msg)
-            aapTransport.onAudioFocusStateChanged?.invoke(false)
-        }
 
         return 0
     }

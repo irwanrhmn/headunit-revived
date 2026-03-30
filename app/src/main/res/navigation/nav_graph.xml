@@ -63,6 +63,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_settingsFragment_to_vehicleInfoFragment"
+            app:destination="@id/vehicleInfoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -89,6 +96,11 @@
         android:id="@+id/autoStartFragment"
         android:name="com.andrerinas.headunitrevived.main.AutoStartFragment"
         android:label="@string/auto_start_settings" />
+
+    <fragment
+        android:id="@+id/vehicleInfoFragment"
+        android:name="com.andrerinas.headunitrevived.main.VehicleInfoFragment"
+        android:label="@string/vehicle_info_settings" />
 
     <fragment
         android:id="@+id/usbListFragment"

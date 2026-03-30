@@ -42,7 +42,10 @@
     <string name="use_gradient_background_description_on_auto">Додаток малює власний фон із центрованим градієнтним колом. Не застосовується до режиму Екстремально темний</string>
     <string name="use_gradient_background_description_off_auto">Використовується класичний фон додатку. Не застосовується до режиму Екстремально темний</string>
     <string name="category_dark_mode">Темний режим</string>
+    <string name="category_automation">Автоматизація</string>
     <string name="dark_mode_settings">Налаштування темного режиму</string>
+    <string name="app_theme_short">App</string>
+    <string name="night_mode_short">Android Auto</string>
     <string name="aa_monochrome">Монохромний Android Auto</string>
     <string name="aa_monochrome_description">Зменшує кольори Android Auto для нічного водіння. Потрібен режим відображення GLES. Діє лише при увімкненому темному режимі</string>
     <string name="aa_desaturation">Знебарвлення</string>
@@ -146,9 +149,11 @@
     <string name="auto_start_usb_description">Автоматично відкривати додаток і намагатися підключитися при підключенні USB-пристрою</string>
     <string name="auto_start_settings">Налаштування автозапуску</string>
     <string name="auto_start_settings_description">Налаштуйте, коли додаток запускається автоматично</string>
-    <string name="auto_start_oem_warning">На деяких пристроях (Xiaomi, Huawei, Samsung, OPPO, Vivo) автозапуск може потребувати ручного увімкнення в налаштуваннях батареї або запуску пристрою.</string>
+    <string name="auto_start_oem_warning">Цей пристрій може вимагати увімкнення автозапуску та видалення оптимізації батареї або фонових обмежень для цього додатку.\n\nНа головних пристроях з Quick Boot (швидке завантаження) автозапуск може не працювати. Знайдіть \"DuraSpeed\" у системних налаштуваннях та увімкніть там цей додаток. На деяких пристроях DuraSpeed прихований, і вам може знадобитися додаток на кшталт \"Hidden Settings\" щоб його знайти. Якщо у вас немає DuraSpeed, спробуйте вимкнути Quick Boot.</string>
     <string name="auto_start_on_boot_label">Запуск при завантаженні</string>
     <string name="auto_start_on_boot_description">Автоматично відкривати додаток при запуску пристрою. Потрібен дозвіл \'Відображення поверх інших додатків\' на Android 10+</string>
+    <string name="auto_start_screen_on_label">Запуск при увімкненні екрана</string>
+    <string name="auto_start_screen_on_description">Відкривати додаток щоразу, коли вмикається екран. Ідеально для автомагнітол, які ніколи повністю не вимикаються або використовують режими швидкого запуску, де інші параметри автозапуску не працюють. Не рекомендується для телефонів та планшетів.</string>
     <string name="select_bt_device">Вибрати Bluetooth-пристрій</string>
     <string name="bt_device_not_set">Не задано</string>
     <string name="bt_permission_denied_title">Потрібен дозвіл Bluetooth</string>
@@ -365,8 +370,41 @@
     <string name="kill_on_disconnect">Закривати додаток при відключенні</string>
     <string name="kill_on_disconnect_description">Автоматично закривати додаток, коли Android Auto відключається</string>
     <string name="kill_on_disconnect_warning_title">Попередження</string>
-    <string name="kill_on_disconnect_warning">Наступні налаштування перепідключення конфліктуватимуть із закриттям додатку при відключенні:\n\n%1$s\n\nВаші початкові налаштування підключення (автопідключення, автозапуск) продовжать працювати при увімкненні магнітоли. Однак після першого відключення додаток закриється негайно замість спроби перепідключення.\n\nБажаєте вимкнути перелічені вище налаштування перепідключення?</string>
+    <string name="kill_on_disconnect_warning">Наступні налаштування перепідключення конфліктуватимуть із закриттям додатку при відключенні:\n\n%1$s\n\nНалаштування початкового підключення (автопідключення, автозапуск) продовжать працювати при увімкненні магнітоли. Однак після першого відключення додаток одразу закриється замість спроби перепідключення.\n\nПримітка: Деякі автомагнітоли ніколи повністю не вимикаються — вони переходять у сплячий режим, подібно до телефону, який блокує екран, але ніколи не вимикається насправді. З цією опцією додаток закриється після першого відключення і може не відкритися автоматично при наступному запуску запалювання.\n\nВимкнути перелічені вище налаштування перепідключення?</string>
     <string name="kill_on_disconnect_disable_and_enable">Вимкнути та увімкнути</string>
+    <string name="kill_on_disconnect_enable_anyway">Все одно увімкнути</string>
+    <string name="kill_on_disconnect_boot_warning">У вас увімкнено \"Запуск при завантаженні\". Якщо додаток закриється при від\'єднанні, а цей пристрій перейде в режим гібернації замість вимкнення, додаток може не відкритися автоматично при наступному запуску, оскільки подія завантаження не генерується — пристрій просто прокидається з режиму сну.</string>
+    <string name="kill_on_disconnect_screen_on_warning">У вас увімкнено \"Запуск при увімкненні екрана\". Це налаштування відкриває додаток щоразу, коли вмикається екран. У поєднанні із закриттям при від\'єднанні додаток закриється після від\'єднання, але одразу відкриється знову, коли екран увімкнеться, створюючи цикл перезапуску.</string>
     <string name="kill_on_disconnect_conflicts_disabled">Конфліктуючі налаштування були вимкнені</string>
     <string name="wifi_disabled_info">Інфо: Wi-Fi вимкнено.</string>
+
+    <!-- Vehicle Info Settings -->
+    <string name="vehicle_info_settings">Інформація про транспортний засіб</string>
+    <string name="vehicle_info_settings_description">Налаштуйте, як ваш автомобіль відображається на телефоні</string>
+    <string name="category_vehicle">Транспортний засіб</string>
+    <string name="category_head_unit">Головний пристрій</string>
+    <string name="vehicle_display_name_label">Відображуване ім\'я</string>
+    <string name="vehicle_display_name_description">Ім\'я, що відображається на телефоні для цього автомобіля</string>
+    <string name="vehicle_make_label">Виробник</string>
+    <string name="vehicle_make_description">Виробник автомобіля (напр. Honda, Toyota)</string>
+    <string name="vehicle_model_label">Модель</string>
+    <string name="vehicle_model_description">Модель автомобіля (напр. Civic, Corolla)</string>
+    <string name="vehicle_year_label">Рік</string>
+    <string name="vehicle_year_description">Рік випуску автомобіля</string>
+    <string name="vehicle_id_label">ID автомобіля</string>
+    <string name="vehicle_id_description">Лише внутрішній ідентифікатор. Його зміна призведе до того, що телефон визначить це як інший автомобіль, скинувши налаштування Android Auto для цієї машини.</string>
+    <string name="head_unit_make_label">Виробник</string>
+    <string name="head_unit_make_description">Виробник головного пристрою</string>
+    <string name="head_unit_make_hint">Ваш телефон показує це ім\'я у налаштуваннях Android Auto.</string>
+    <string name="head_unit_model_label">Модель</string>
+    <string name="head_unit_model_description">Модель головного пристрою</string>
+    <string name="vehicle_year_error_invalid">Введіть коректний рік</string>
+    <string name="vehicle_year_error_max">Рік не може бути пізніше %1$d</string>
+    <string name="vehicle_info_restart_note">Ці дані надсилаються до Android Auto щоразу, коли ви підключаєтесь.</string>
+    <string name="auto_enable_hotspot">Автоматично вмикати точку доступу</string>
+    <string name="auto_enable_hotspot_description">Автоматично вмикає точку доступу Wi-Fi на цьому пристрої. (Працюватиме не на всіх пристроях)</string>
+    <string name="hotspot_warning_title">Експериментальна функція</string>
+    <string name="hotspot_warning_message">Ця функція використовує рефлексію і може не працювати на всіх пристроях. Можливо, потрібно вручну надати дозвіл \"Зміна системних налаштувань\".</string>
+    <string name="hotspot_permission_title">Потрібен дозвіл</string>
+    <string name="hotspot_permission_message">Функція точки доступу потребує дозволу \"Зміна системних налаштувань\". Будь ласка, увімкніть його на наступному екрані.</string>
 </resources>

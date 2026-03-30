@@ -21,6 +21,7 @@ import android.os.Build
 import android.os.IBinder
 import android.os.Parcel
 import android.os.Parcelable
+import android.os.PowerManager
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -47,6 +48,7 @@ import com.andrerinas.headunitrevived.utils.LogExporter
 import com.andrerinas.headunitrevived.utils.NightModeManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import android.os.SystemClock
 import java.util.concurrent.atomic.AtomicBoolean
 import android.app.NotificationManager
 import android.content.pm.ServiceInfo
@@ -55,6 +57,8 @@ import android.provider.Settings as AndroidSettings
 import android.view.View
 import android.view.WindowManager
 import com.andrerinas.headunitrevived.app.UsbAttachedActivity
+import android.media.AudioManager
+import com.andrerinas.headunitrevived.utils.HotspotManager
 import java.net.ServerSocket
 
 /**
@@ -85,6 +89,7 @@ class AapService : Service(), UsbReceiver.Listener {
     private var wirelessServer: WirelessServer? = null
     private var networkDiscovery: NetworkDiscovery? = null
     private var mediaSession: MediaSessionCompat? = null
+    private var permanentFocusRequest: android.media.AudioFocusRequest? = null
     private var lastMediaButtonClickTime = 0L
 
     /**
@@ -96,6 +101,13 @@ class AapService : Service(), UsbReceiver.Listener {
     private var accessoryHandshakeFailures = 0
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
     private var wifiLock: WifiManager.WifiLock? = null
+
+    /**
+     * Partial wake lock acquired when the service starts from boot/screen-on.
+     * Keeps the CPU active while the head unit runs without ACC, making the
+     * service harder for MediaTek's background power saving to kill.
+     */
+    private var bootWakeLock: PowerManager.WakeLock? = null
 
     /**
      * Runtime-registered receiver for MEDIA_BUTTON intents.
@@ -172,6 +184,204 @@ class AapService : Service(), UsbReceiver.Listener {
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Wake detection for hibernate/quick boot head units
+    // -------------------------------------------------------------------------
+
+    /**
+     * Timestamp (elapsedRealtime) when the screen last turned off.
+     * Used to measure how long the device was asleep and distinguish a normal
+     * screen timeout from a hibernate wake (car ACC off → on).
+     */
+    private var screenOffTimestamp = 0L
+
+    /**
+     * Debounce: last time [onHibernateWake] actually ran.
+     * Prevents double-triggering when both BootCompleteReceiver and this dynamic
+     * receiver fire for the same wake event.
+     */
+    private var lastWakeHandledTimestamp = 0L
+
+    /**
+     * Runtime-registered receiver for system wake/boot/power/screen events.
+     *
+     * On Chinese head units with Quick Boot (hibernate/resume), standard broadcasts
+     * like BOOT_COMPLETED and USB_DEVICE_ATTACHED often don't fire after waking.
+     * This receiver serves two purposes:
+     *
+     * 1. **Diagnostic logging:** Logs every received system event with the
+     *    "WakeDetect:" prefix so users can export logs and we can see which
+     *    broadcasts their specific head unit sends (or doesn't send) on wake.
+     *
+     * 2. **Universal wake detection:** Uses ACTION_SCREEN_ON (which fires on ALL
+     *    devices after hibernate) combined with screen-off duration tracking to
+     *    detect hibernate wakes and trigger auto-start — regardless of which OEM
+     *    boot/ACC intents the device sends.
+     *
+     * ACTION_SCREEN_ON can only be received by dynamically registered receivers,
+     * not manifest-declared ones — that's why the manifest-based BootCompleteReceiver
+     * can't catch it and we need this service-based approach.
+     */
+    private val wakeDetectReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val action = intent.action ?: return
+
+            when (action) {
+                Intent.ACTION_SCREEN_OFF -> {
+                    screenOffTimestamp = SystemClock.elapsedRealtime()
+                    AppLog.i("WakeDetect: SCREEN_OFF")
+                }
+                Intent.ACTION_SCREEN_ON -> {
+                    val now = SystemClock.elapsedRealtime()
+                    val offDuration = if (screenOffTimestamp > 0) now - screenOffTimestamp else -1L
+                    val offSec = if (offDuration >= 0) offDuration / 1000 else -1L
+                    screenOffTimestamp = 0
+
+                    AppLog.i("WakeDetect: SCREEN_ON (screen was off for ${offSec}s)")
+
+                    val settings = App.provide(this@AapService).settings
+
+                    // "Start on screen on" — triggers on every SCREEN_ON, designed for
+                    // head units that never truly power off (quick boot / always-on).
+                    if (settings.autoStartOnScreenOn) {
+                        AppLog.i("WakeDetect: start-on-screen-on enabled, triggering auto-start")
+                        onScreenOnAutoStart()
+                    } else if (offDuration > HIBERNATE_WAKE_THRESHOLD_MS) {
+                        // Hibernate wake detection — only for longer sleeps
+                        AppLog.i("WakeDetect: hibernate wake detected (off for ${offSec}s > ${HIBERNATE_WAKE_THRESHOLD_MS / 1000}s threshold)")
+                        onHibernateWake("SCREEN_ON after ${offSec}s sleep")
+                    }
+                }
+                Intent.ACTION_USER_PRESENT -> {
+                    AppLog.i("WakeDetect: USER_PRESENT")
+                }
+                Intent.ACTION_POWER_CONNECTED -> {
+                    AppLog.i("WakeDetect: POWER_CONNECTED")
+                    // On some head units, power connected = ACC on = car started.
+                    // Only check USB (don't launch UI) since this could also be a
+                    // charger being plugged in on a phone/tablet.
+                    onPossibleWake("POWER_CONNECTED")
+                }
+                Intent.ACTION_POWER_DISCONNECTED -> {
+                    AppLog.i("WakeDetect: POWER_DISCONNECTED")
+                }
+                Intent.ACTION_SHUTDOWN -> {
+                    AppLog.i("WakeDetect: SHUTDOWN (system shutting down, not hibernating)")
+                }
+                else -> {
+                    // OEM boot/ACC/wake intents — log with extras for diagnostics
+                    AppLog.i("WakeDetect: $action")
+                    val extras = intent.extras
+                    if (extras != null && !extras.isEmpty) {
+                        val extrasStr = extras.keySet().joinToString { "$it=${extras.get(it)}" }
+                        AppLog.i("WakeDetect: extras: $extrasStr")
+                    }
+                    // Any OEM boot/ACC intent received dynamically = definite wake
+                    onHibernateWake(action)
+                }
+            }
+        }
+    }
+
+    /**
+     * Called when we've confidently detected a hibernate wake (screen was off for
+     * a long time, or an OEM boot/ACC intent was received by the dynamic receiver).
+     */
+    private fun onHibernateWake(trigger: String) {
+        // Debounce: don't re-trigger within 10 seconds (covers BootCompleteReceiver + this)
+        val now = SystemClock.elapsedRealtime()
+        if (now - lastWakeHandledTimestamp < 10_000) {
+            AppLog.i("WakeDetect: wake already handled ${(now - lastWakeHandledTimestamp) / 1000}s ago, skipping ($trigger)")
+            return
+        }
+        lastWakeHandledTimestamp = now
+
+        if (commManager.isConnected ||
+            commManager.connectionState.value is CommManager.ConnectionState.Connecting ||
+            isSwitchingToAccessory.get()) {
+            AppLog.i("WakeDetect: already connected/connecting, skipping ($trigger)")
+            return
+        }
+
+        val settings = App.provide(this).settings
+
+        if (settings.autoStartOnBoot) {
+            AppLog.i("WakeDetect: launching UI (trigger=$trigger)")
+            launchMainActivityOnBoot()
+        }
+
+        if (settings.autoStartOnUsb) {
+            AppLog.i("WakeDetect: checking USB devices (trigger=$trigger)")
+            checkAlreadyConnectedUsb(force = true)
+        }
+    }
+
+    /**
+     * Called on events that MIGHT indicate a wake (e.g. POWER_CONNECTED) but aren't
+     * conclusive alone. Only checks USB — does not launch the UI.
+     */
+    private fun onPossibleWake(trigger: String) {
+        if (commManager.isConnected ||
+            commManager.connectionState.value is CommManager.ConnectionState.Connecting ||
+            isSwitchingToAccessory.get()) return
+
+        val settings = App.provide(this).settings
+        if (settings.autoStartOnUsb) {
+            AppLog.i("WakeDetect: possible wake, checking USB (trigger=$trigger)")
+            checkAlreadyConnectedUsb(force = true)
+        }
+    }
+
+    /**
+     * Called on every SCREEN_ON when "Start on screen on" is enabled.
+     * Designed for head units that never truly power off — screen on = car turned on.
+     *
+     * If the connection is still active (e.g. brief screen toggle), returns to the
+     * projection activity. Otherwise launches the main UI and checks USB.
+     */
+    private fun onScreenOnAutoStart() {
+        // Debounce: don't re-trigger within 5 seconds
+        val now = SystemClock.elapsedRealtime()
+        if (now - lastWakeHandledTimestamp < 5_000) {
+            AppLog.i("WakeDetect: screen-on auto-start already handled recently, skipping")
+            return
+        }
+        lastWakeHandledTimestamp = now
+
+        // Acquire wake lock to resist power saving cleanup on Quick Boot devices
+        acquireBootWakeLock()
+
+        if (commManager.isConnected) {
+            // Connection still alive — return to projection screen
+            AppLog.i("WakeDetect: connection active, returning to projection")
+            try {
+                val projectionIntent = AapProjectionActivity.intent(this).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                }
+                startActivity(projectionIntent)
+            } catch (e: Exception) {
+                AppLog.e("WakeDetect: failed to launch projection: ${e.message}")
+            }
+            return
+        }
+
+        if (commManager.connectionState.value is CommManager.ConnectionState.Connecting ||
+            isSwitchingToAccessory.get()) {
+            AppLog.i("WakeDetect: already connecting, skipping screen-on auto-start")
+            return
+        }
+
+        // Not connected — launch UI (which triggers auto-connect via HomeFragment)
+        AppLog.i("WakeDetect: launching UI on screen on")
+        launchMainActivityOnBoot()
+
+        val settings = App.provide(this).settings
+        if (settings.autoStartOnUsb) {
+            AppLog.i("WakeDetect: checking USB devices on screen on")
+            checkAlreadyConnectedUsb(force = true)
+        }
+    }
+
     override fun onBind(intent: Intent): IBinder? = null
 
     // -------------------------------------------------------------------------
@@ -213,6 +423,35 @@ class AapService : Service(), UsbReceiver.Listener {
         initWifiMode()
         checkAlreadyConnectedUsb()
         registerNetworkMonitor()
+
+        // Grab permanent AUDIOFOCUS_GAIN at service start (like HUR).
+        // This ensures the headunit owns system audio focus before any AA connection,
+        // preventing other apps from stealing it and causing AA to keep audio on the phone.
+        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val attrs = android.media.AudioAttributes.Builder()
+                .setUsage(android.media.AudioAttributes.USAGE_MEDIA)
+                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+            permanentFocusRequest = android.media.AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                .setAudioAttributes(attrs)
+                .setWillPauseWhenDucked(false)
+                .setOnAudioFocusChangeListener(AudioManager.OnAudioFocusChangeListener { focusChange ->
+                    AppLog.d("Permanent audio focus changed: $focusChange")
+                })
+                .build()
+            audioManager.requestAudioFocus(permanentFocusRequest!!)
+        } else {
+            @Suppress("DEPRECATION")
+            audioManager.requestAudioFocus(
+                AudioManager.OnAudioFocusChangeListener { focusChange ->
+                    AppLog.d("Permanent audio focus changed: $focusChange")
+                },
+                AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN
+            )
+        }
+        AppLog.i("Grabbed permanent AUDIOFOCUS_GAIN at service start")
     }
 
     /** Enables Android Automotive UI mode so the system uses car-optimised layouts. */
@@ -492,6 +731,42 @@ class AapService : Service(), UsbReceiver.Listener {
             ContextCompat.RECEIVER_EXPORTED
         )
         AppLog.i("Registered runtime MEDIA_BUTTON receiver")
+
+        // Wake detection receiver: catches SCREEN_ON, SCREEN_OFF, POWER_CONNECTED,
+        // and all known OEM boot/ACC intents. Enables hibernate wake detection on
+        // Quick Boot head units where BOOT_COMPLETED never fires.
+        val wakeFilter = IntentFilter().apply {
+            // Screen events (only receivable by dynamic receivers on Android 8+)
+            addAction(Intent.ACTION_SCREEN_ON)
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_USER_PRESENT)
+            // Power events
+            addAction(Intent.ACTION_POWER_CONNECTED)
+            addAction(Intent.ACTION_POWER_DISCONNECTED)
+            addAction(Intent.ACTION_SHUTDOWN)
+            // Standard boot (dynamic duplicate — BootCompleteReceiver handles manifest side)
+            addAction(Intent.ACTION_BOOT_COMPLETED)
+            addAction(Intent.ACTION_LOCKED_BOOT_COMPLETED)
+            // Quick boot variants
+            addAction("android.intent.action.QUICKBOOT_POWERON")
+            addAction("com.htc.intent.action.QUICKBOOT_POWERON")
+            // MediaTek IPO (Instant Power On)
+            addAction("com.mediatek.intent.action.QUICKBOOT_POWERON")
+            addAction("com.mediatek.intent.action.BOOT_IPO")
+            // FYT / GLSX head units (ACC ignition wake)
+            addAction("com.fyt.boot.ACCON")
+            addAction("com.glsx.boot.ACCON")
+            addAction("android.intent.action.ACTION_MT_COMMAND_SLEEP_OUT")
+            // Microntek / MTCD / PX3 head units (ACC wake)
+            addAction("com.cayboy.action.ACC_ON")
+            addAction("com.carboy.action.ACC_ON")
+        }
+        ContextCompat.registerReceiver(
+            this, wakeDetectReceiver,
+            wakeFilter,
+            ContextCompat.RECEIVER_EXPORTED
+        )
+        AppLog.i("Registered wake detection receiver (${wakeFilter.countActions()} actions)")
     }
 
     private fun registerNetworkMonitor() {
@@ -527,11 +802,19 @@ class AapService : Service(), UsbReceiver.Listener {
     private fun initWifiMode() {
         if (App.provide(this).settings.wifiConnectionMode == 2) {
             startWirelessServer()
-            val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
-            if (wifiManager.isWifiEnabled) {
-                wifiDirectManager?.makeVisible()
+            if (App.provide(this).settings.autoEnableHotspot) {
+                // Run on background thread since hotspot enable may sleep briefly
+                Thread {
+                    AppLog.i("AapService: Auto-enabling hotspot...")
+                    HotspotManager.setHotspotEnabled(this, true)
+                }.start()
             } else {
-                AppLog.i("AapService: WiFi is disabled, skipping Wi-Fi Direct visibility.")
+                val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
+                if (wifiManager.isWifiEnabled) {
+                    wifiDirectManager?.makeVisible()
+                } else {
+                    AppLog.i("AapService: WiFi is disabled, skipping Wi-Fi Direct visibility.")
+                }
             }
         }
     }
@@ -554,9 +837,58 @@ class AapService : Service(), UsbReceiver.Listener {
         }
     }
 
+    /**
+     * Acquires a partial wake lock to resist MediaTek/Reglink background power
+     * saving that force-stops third-party apps when ACC is off.
+     * The wake lock has a 10-minute timeout as a safety net.
+     */
+    private fun acquireBootWakeLock() {
+        if (bootWakeLock?.isHeld == true) return
+        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+        bootWakeLock = pm.newWakeLock(
+            PowerManager.PARTIAL_WAKE_LOCK,
+            "HeadunitRevived::BootAutoStart"
+        ).apply {
+            acquire(10 * 60 * 1000L) // 10 minute timeout
+        }
+        AppLog.i("Boot WakeLock acquired (10min timeout)")
+
+        // Log battery optimization status for diagnostics
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val exempt = pm.isIgnoringBatteryOptimizations(packageName)
+            AppLog.i("Battery optimization exempt: $exempt")
+        }
+    }
+
+    private fun releaseBootWakeLock() {
+        if (bootWakeLock?.isHeld == true) {
+            bootWakeLock?.release()
+            AppLog.i("Boot WakeLock released")
+        }
+        bootWakeLock = null
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        AppLog.i("AapService: onTaskRemoved — attempting restart")
+        try {
+            val restartIntent = Intent(this, AapService::class.java)
+            ContextCompat.startForegroundService(this, restartIntent)
+        } catch (e: Exception) {
+            AppLog.e("AapService: failed to restart after task removal: ${e.message}")
+        }
+        super.onTaskRemoved(rootIntent)
+    }
+
     override fun onDestroy() {
-        AppLog.i("AapService destroying...")
+        AppLog.i("AapService destroying... (wakeLock held=${bootWakeLock?.isHeld == true})")
         isDestroying = true
+        releaseBootWakeLock()
+
+        if (App.provide(this).settings.autoEnableHotspot) {
+            AppLog.i("AapService: Auto-disabling hotspot...")
+            com.andrerinas.headunitrevived.utils.HotspotManager.setHotspotEnabled(this, false)
+        }
+
         releaseWifiLock()
         unregisterNetworkMonitor()
         stopForeground(true)
@@ -570,6 +902,7 @@ class AapService : Service(), UsbReceiver.Listener {
         try { unregisterReceiver(nightModeUpdateReceiver) } catch (_: Exception) {}
         try { unregisterReceiver(usbReceiver) } catch (_: Exception) {}
         try { unregisterReceiver(mediaButtonReceiver) } catch (_: Exception) {}
+        try { unregisterReceiver(wakeDetectReceiver) } catch (_: Exception) {}
         uiModeManager.disableCarMode(0)
         serviceScope.cancel()
         LogExporter.stopCapture()
@@ -606,7 +939,17 @@ class AapService : Service(), UsbReceiver.Listener {
         // zero-size overlay gives the app a "visible" context that bypasses OEM
         // background activity start restrictions. Falls back to full-screen
         // intent notification if overlay permission is not granted.
+        // Acquire a partial wake lock on any boot/screen-on start to resist
+        // aggressive power saving on MediaTek/Reglink head units that force-stop
+        // third-party apps when ACC is off after a Quick Boot reboot.
+        if (intent?.getBooleanExtra(BootCompleteReceiver.EXTRA_BOOT_START, false) == true ||
+            intent?.action == ACTION_CHECK_USB) {
+            acquireBootWakeLock()
+        }
+
         if (intent?.getBooleanExtra(BootCompleteReceiver.EXTRA_BOOT_START, false) == true) {
+            // Mark wake as handled so the dynamic wakeDetectReceiver doesn't double-trigger
+            lastWakeHandledTimestamp = SystemClock.elapsedRealtime()
             launchMainActivityOnBoot()
         }
 
@@ -992,6 +1335,7 @@ class AapService : Service(), UsbReceiver.Listener {
         wirelessServer?.stopServer()
         wirelessServer = null
         scanningState.value = false
+        startService(Intent(this, DummyVpnService::class.java).apply { action = DummyVpnService.ACTION_STOP_VPN })
     }
 
     // -------------------------------------------------------------------------
@@ -1187,45 +1531,57 @@ class AapService : Service(), UsbReceiver.Listener {
         selfMode = true
         startWirelessServer()
 
-        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            connectivityManager.activeNetwork else null
-        val networkToUse = activeNetwork ?: createFakeNetwork(0)
-        val fakeWifiInfo = createFakeWifiInfo()
-
-        val magicalIntent = Intent().apply {
-            setClassName(
-                "com.google.android.projection.gearhead",
-                "com.google.android.apps.auto.wireless.setup.service.impl.WirelessStartupActivity"
-            )
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            putExtra("PARAM_HOST_ADDRESS", "127.0.0.1")
-            putExtra("PARAM_SERVICE_PORT", 5288)
-            networkToUse?.let { putExtra("PARAM_SERVICE_WIFI_NETWORK", it) }
-            fakeWifiInfo?.let { putExtra("wifi_info", it) }
-        }
-
-        try {
-            AppLog.i("Launching AA Wireless Startup via Activity...")
-            startActivity(magicalIntent)
-        } catch (e: Exception) {
-            AppLog.w("Activity launch failed (${e.message}). Attempting Broadcast fallback...")
-            try {
-                val receiverIntent = Intent().apply {
-                    setClassName(
-                        "com.google.android.projection.gearhead",
-                        "com.google.android.apps.auto.wireless.setup.receiver.WirelessStartupReceiver"
-                    )
-                    action = "com.google.android.apps.auto.wireless.setup.receiver.wirelessstartup.START"
-                    putExtra("ip_address", "127.0.0.1")
-                    putExtra("projection_port", 5288)
-                    addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
+        serviceScope.launch(kotlinx.coroutines.Dispatchers.Main) {
+            val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && connectivityManager.activeNetwork == null) {
+                // Wait up to 1 second for the Dummy VPN to become the active network
+                for (i in 1..10) {
+                    if (connectivityManager.activeNetwork != null) break
+                    kotlinx.coroutines.delay(100)
                 }
-                sendBroadcast(receiverIntent)
-                AppLog.i("Broadcast fallback sent successfully.")
-            } catch (e2: Exception) {
-                AppLog.e("Both Activity and Broadcast triggers failed", e2)
-                Toast.makeText(this, getString(R.string.failed_start_android_auto), Toast.LENGTH_SHORT).show()
+            }
+
+            val activeNetwork = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                connectivityManager.activeNetwork else null
+            val networkToUse = activeNetwork ?: createFakeNetwork(0)
+            val fakeWifiInfo = createFakeWifiInfo()
+
+            val magicalIntent = Intent().apply {
+                setClassName(
+                    "com.google.android.projection.gearhead",
+                    "com.google.android.apps.auto.wireless.setup.service.impl.WirelessStartupActivity"
+                )
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                putExtra("PARAM_HOST_ADDRESS", "127.0.0.1")
+                putExtra("PARAM_SERVICE_PORT", 5288)
+                networkToUse?.let { putExtra("PARAM_SERVICE_WIFI_NETWORK", it) }
+                fakeWifiInfo?.let { putExtra("wifi_info", it) }
+            }
+
+            try {
+                AppLog.i("Launching AA Wireless Startup via Activity...")
+                startActivity(magicalIntent)
+            } catch (e: Exception) {
+                AppLog.w("Activity launch failed (${e.message}). Attempting Broadcast fallback...")
+                try {
+                    val receiverIntent = Intent().apply {
+                        setClassName(
+                            "com.google.android.projection.gearhead",
+                            "com.google.android.apps.auto.wireless.setup.receiver.WirelessStartupReceiver"
+                        )
+                        action = "com.google.android.apps.auto.wireless.setup.receiver.wirelessstartup.START"
+                        putExtra("ip_address", "127.0.0.1")
+                        putExtra("projection_port", 5288)
+                        networkToUse?.let { putExtra("PARAM_SERVICE_WIFI_NETWORK", it) }
+                        fakeWifiInfo?.let { putExtra("wifi_info", it) }
+                        addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
+                    }
+                    sendBroadcast(receiverIntent)
+                    AppLog.i("Broadcast fallback sent successfully.")
+                } catch (e2: Exception) {
+                    AppLog.e("Both Activity and Broadcast triggers failed", e2)
+                    Toast.makeText(this@AapService, getString(R.string.failed_start_android_auto), Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -1407,5 +1763,9 @@ class AapService : Service(), UsbReceiver.Listener {
         /** Delay before AapService tries to handle a normal-mode USB attach as a fallback
          *  when UsbAttachedActivity doesn't fire (common on Chinese MediaTek headunits). */
         private const val USB_ATTACH_FALLBACK_DELAY_MS = 2000L
+
+        /** Screen-off duration (ms) above which SCREEN_ON is treated as a hibernate wake.
+         *  60 seconds filters out normal screen timeouts while catching any hibernate/quick boot. */
+        private const val HIBERNATE_WAKE_THRESHOLD_MS = 60_000L
     }
 }

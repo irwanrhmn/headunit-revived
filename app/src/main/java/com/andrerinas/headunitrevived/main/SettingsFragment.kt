@@ -43,7 +43,6 @@ class SettingsFragment : Fragment() {
     private var pendingFullscreenMode: Settings.FullscreenMode? = null
     private var pendingViewMode: Settings.ViewMode? = null
     private var pendingForceSoftware: Boolean? = null
-    private var pendingRightHandDrive: Boolean? = null
     private var pendingWifiConnectionMode: Int? = null
     private var pendingVideoCodec: String? = null
     private var pendingFpsLimit: Int? = null
@@ -61,6 +60,7 @@ class SettingsFragment : Fragment() {
     private var pendingStretchToFill: Boolean? = null
 
     private var pendingKillOnDisconnect: Boolean? = null
+    private var pendingAutoEnableHotspot: Boolean? = null
     
     // Custom Insets
     private var pendingInsetLeft: Int? = null
@@ -94,7 +94,6 @@ class SettingsFragment : Fragment() {
         pendingFullscreenMode = settings.fullscreenMode
         pendingViewMode = settings.viewMode
         pendingForceSoftware = settings.forceSoftwareDecoding
-        pendingRightHandDrive = settings.rightHandDrive
         pendingWifiConnectionMode = settings.wifiConnectionMode
         pendingVideoCodec = settings.videoCodec
         pendingFpsLimit = settings.fpsLimit
@@ -112,6 +111,7 @@ class SettingsFragment : Fragment() {
         pendingStretchToFill = settings.stretchToFill
 
         pendingKillOnDisconnect = settings.killOnDisconnect
+        pendingAutoEnableHotspot = settings.autoEnableHotspot
         
         pendingInsetLeft = settings.insetLeft
         pendingInsetTop = settings.insetTop
@@ -213,7 +213,6 @@ class SettingsFragment : Fragment() {
         pendingFullscreenMode?.let { settings.fullscreenMode = it }
         pendingViewMode?.let { settings.viewMode = it }
         pendingForceSoftware?.let { settings.forceSoftwareDecoding = it }
-        pendingRightHandDrive?.let { settings.rightHandDrive = it }
         pendingVideoCodec?.let { settings.videoCodec = it }
         pendingFpsLimit?.let { settings.fpsLimit = it }
         pendingBluetoothAddress?.let { settings.bluetoothAddress = it }
@@ -235,6 +234,7 @@ class SettingsFragment : Fragment() {
         pendingStretchToFill?.let { settings.stretchToFill = it }
 
         pendingKillOnDisconnect?.let { settings.killOnDisconnect = it }
+        pendingAutoEnableHotspot?.let { settings.autoEnableHotspot = it }
         
         pendingInsetLeft?.let { settings.insetLeft = it }
         pendingInsetTop?.let { settings.insetTop = it }
@@ -281,7 +281,6 @@ class SettingsFragment : Fragment() {
                         pendingFullscreenMode != settings.fullscreenMode ||
                         pendingViewMode != settings.viewMode ||
                         pendingForceSoftware != settings.forceSoftwareDecoding ||
-                        pendingRightHandDrive != settings.rightHandDrive ||
                         pendingWifiConnectionMode != settings.wifiConnectionMode ||
                         pendingVideoCodec != settings.videoCodec ||
                         pendingFpsLimit != settings.fpsLimit ||
@@ -302,7 +301,8 @@ class SettingsFragment : Fragment() {
                         pendingMediaVolumeOffset != settings.mediaVolumeOffset ||
                         pendingAssistantVolumeOffset != settings.assistantVolumeOffset ||
                         pendingNavigationVolumeOffset != settings.navigationVolumeOffset ||
-                        pendingKillOnDisconnect != settings.killOnDisconnect
+                        pendingKillOnDisconnect != settings.killOnDisconnect ||
+                        pendingAutoEnableHotspot != settings.autoEnableHotspot
 
         hasChanges = anyChange
 
@@ -312,7 +312,6 @@ class SettingsFragment : Fragment() {
                           pendingFpsLimit != settings.fpsLimit ||
                           pendingDpi != settings.dpiPixelDensity ||
                           pendingForceSoftware != settings.forceSoftwareDecoding ||
-                          pendingRightHandDrive != settings.rightHandDrive ||
                           pendingEnableRotary != settings.enableRotary ||
                           pendingEnableAudioSink != settings.enableAudioSink ||
                           pendingUseAacAudio != settings.useAacAudio ||
@@ -399,6 +398,94 @@ class SettingsFragment : Fragment() {
             }
         ))
 
+        // Auto-Enable Hotspot Toggle (only visible if not in Manual Mode)
+        if (pendingWifiConnectionMode != 0) {
+            items.add(SettingItem.ToggleSettingEntry(
+                stableId = "autoEnableHotspot",
+                nameResId = R.string.auto_enable_hotspot,
+                descriptionResId = R.string.auto_enable_hotspot_description,
+                isChecked = pendingAutoEnableHotspot ?: false,
+                onCheckedChanged = { isChecked ->
+                    if (isChecked) {
+                        // Check WRITE_SETTINGS permission (required for hotspot on API 23+)
+                        if (android.os.Build.VERSION.SDK_INT >= 23 &&
+                            !android.provider.Settings.System.canWrite(requireContext())) {
+                            pendingAutoEnableHotspot = true // Mark intent so onResume can finalize
+                            checkChanges()
+                            updateSettingsList()
+                            MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+                                .setTitle(R.string.hotspot_permission_title)
+                                .setMessage(R.string.hotspot_permission_message)
+                                .setPositiveButton(R.string.open_settings) { dialog, _ ->
+                                    val intent = Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS).apply {
+                                        data = android.net.Uri.parse("package:${requireContext().packageName}")
+                                    }
+                                    startActivity(intent)
+                                    dialog.dismiss()
+                                }
+                                .setNegativeButton(android.R.string.cancel) { _, _ ->
+                                    pendingAutoEnableHotspot = false
+                                    checkChanges()
+                                    updateSettingsList()
+                                }
+                                .show()
+                        } else {
+                            // Permission granted or not needed — show experimental warning
+                            MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+                                .setTitle(R.string.hotspot_warning_title)
+                                .setMessage(R.string.hotspot_warning_message)
+                                .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                                    pendingAutoEnableHotspot = true
+                                    checkChanges()
+                                    updateSettingsList()
+                                    dialog.dismiss()
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .show()
+                        }
+                    } else {
+                        pendingAutoEnableHotspot = false
+                        checkChanges()
+                        updateSettingsList()
+                    }
+                }
+            ))
+        }
+
+        items.add(SettingItem.SettingEntry(
+            stableId = "vehicleInfoSettings",
+            nameResId = R.string.vehicle_info_settings,
+            value = getString(R.string.vehicle_info_settings_description),
+            onClick = {
+                try {
+                    findNavController().navigate(R.id.action_settingsFragment_to_vehicleInfoFragment)
+                } catch (e: Exception) { }
+            }
+        ))
+
+        // --- Dark Mode ---
+        items.add(SettingItem.CategoryHeader("darkMode", R.string.category_dark_mode))
+
+        val appThemeTitles = resources.getStringArray(R.array.app_theme)
+        val nightModeTitles = resources.getStringArray(R.array.night_mode)
+        val darkModeValue = "${getString(R.string.app_theme_short)}: ${appThemeTitles[settings.appTheme.value]} · " +
+                "${getString(R.string.night_mode_short)}: ${nightModeTitles[settings.nightMode.value]}"
+        items.add(SettingItem.SettingEntry(
+            stableId = "darkModeSettings",
+            nameResId = R.string.dark_mode_settings,
+            value = darkModeValue,
+            onClick = {
+                try {
+                    findNavController().navigate(R.id.action_settingsFragment_to_darkModeFragment)
+                } catch (e: Exception) {
+                    // Failover
+                }
+            }
+        ))
+
+        // --- Automation ---
+        items.add(SettingItem.CategoryHeader("automation", R.string.category_automation))
+
         items.add(SettingItem.SettingEntry(
             stableId = "autoStartSettings",
             nameResId = R.string.auto_start_settings,
@@ -417,9 +504,7 @@ class SettingsFragment : Fragment() {
             onClick = {
                 try {
                     findNavController().navigate(R.id.action_settingsFragment_to_autoConnectFragment)
-                } catch (e: Exception) {
-                    // Failover
-                }
+                } catch (e: Exception) { }
             }
         ))
 
@@ -431,12 +516,12 @@ class SettingsFragment : Fragment() {
             onCheckedChanged = { isChecked ->
                 if (isChecked) {
                     val conflicts = getKillOnDisconnectConflicts()
-                    if (conflicts.isNotEmpty()) {
-                        // Sync data model to true so DiffUtil can detect the
-                        // change back to false when the dialog is canceled
+                    val hasAutoStartOnBoot = settings.autoStartOnBoot
+                    val hasAutoStartOnScreenOn = settings.autoStartOnScreenOn
+                    if (conflicts.isNotEmpty() || hasAutoStartOnBoot || hasAutoStartOnScreenOn) {
                         pendingKillOnDisconnect = true
                         updateSettingsList()
-                        showKillOnDisconnectWarning(conflicts)
+                        showKillOnDisconnectWarning(conflicts, hasAutoStartOnBoot, hasAutoStartOnScreenOn)
                     } else {
                         pendingKillOnDisconnect = true
                         checkChanges()
@@ -446,23 +531,6 @@ class SettingsFragment : Fragment() {
                     pendingKillOnDisconnect = false
                     checkChanges()
                     updateSettingsList()
-                }
-            }
-        ))
-
-        // --- Dark Mode ---
-        items.add(SettingItem.CategoryHeader("darkMode", R.string.category_dark_mode))
-
-        val appThemeTitles = resources.getStringArray(R.array.app_theme)
-        items.add(SettingItem.SettingEntry(
-            stableId = "darkModeSettings",
-            nameResId = R.string.dark_mode_settings,
-            value = appThemeTitles[settings.appTheme.value],
-            onClick = {
-                try {
-                    findNavController().navigate(R.id.action_settingsFragment_to_darkModeFragment)
-                } catch (e: Exception) {
-                    // Failover
                 }
             }
         ))
@@ -489,18 +557,6 @@ class SettingsFragment : Fragment() {
             isChecked = pendingShowNavigationNotifications!!,
             onCheckedChanged = { isChecked ->
                 pendingShowNavigationNotifications = isChecked
-                checkChanges()
-                updateSettingsList()
-            }
-        ))
-
-        items.add(SettingItem.ToggleSettingEntry(
-            stableId = "rightHandDrive",
-            nameResId = R.string.right_hand_drive,
-            descriptionResId = R.string.right_hand_drive_description,
-            isChecked = pendingRightHandDrive!!,
-            onCheckedChanged = { isChecked ->
-                pendingRightHandDrive = isChecked
                 checkChanges()
                 updateSettingsList()
             }
@@ -1098,6 +1154,16 @@ class SettingsFragment : Fragment() {
         // Refresh settings list when returning from sub-screens (e.g. AutoConnectFragment, DarkModeFragment)
         if (::settingsAdapter.isInitialized) {
             settings = App.provide(requireContext()).settings
+
+            // Re-check WRITE_SETTINGS after returning from system settings
+            if (pendingAutoEnableHotspot == true &&
+                android.os.Build.VERSION.SDK_INT >= 23 &&
+                !android.provider.Settings.System.canWrite(requireContext())) {
+                // Permission still not granted — revert toggle
+                pendingAutoEnableHotspot = false
+                checkChanges()
+            }
+
             updateSettingsList()
         }
     }
@@ -1117,22 +1183,43 @@ class SettingsFragment : Fragment() {
         return conflicts
     }
 
-    private fun showKillOnDisconnectWarning(conflicts: List<String>) {
-        val conflictList = conflicts.joinToString("\n") { "• $it" }
-        val message = getString(R.string.kill_on_disconnect_warning, conflictList)
+    private fun showKillOnDisconnectWarning(conflicts: List<String>, hasAutoStartOnBoot: Boolean, hasAutoStartOnScreenOn: Boolean = false) {
+        val message = buildString {
+            if (conflicts.isNotEmpty()) {
+                val conflictList = conflicts.joinToString("\n") { "• $it" }
+                append(getString(R.string.kill_on_disconnect_warning, conflictList))
+            }
+            if (hasAutoStartOnBoot) {
+                if (conflicts.isNotEmpty()) append("\n\n")
+                append(getString(R.string.kill_on_disconnect_boot_warning))
+            }
+            if (hasAutoStartOnScreenOn) {
+                if (conflicts.isNotEmpty() || hasAutoStartOnBoot) append("\n\n")
+                append(getString(R.string.kill_on_disconnect_screen_on_warning))
+            }
+        }
 
         var confirmed = false
+
+        val hasDisableableConflicts = conflicts.isNotEmpty()
+        val positiveTextRes = if (hasDisableableConflicts) {
+            R.string.kill_on_disconnect_disable_and_enable
+        } else {
+            R.string.kill_on_disconnect_enable_anyway
+        }
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.kill_on_disconnect_warning_title)
             .setMessage(message)
-            .setPositiveButton(R.string.kill_on_disconnect_disable_and_enable) { _, _ ->
+            .setPositiveButton(positiveTextRes) { _, _ ->
                 confirmed = true
-                disableKillOnDisconnectConflicts()
+                if (hasDisableableConflicts) {
+                    disableKillOnDisconnectConflicts()
+                    Toast.makeText(context, getString(R.string.kill_on_disconnect_conflicts_disabled), Toast.LENGTH_LONG).show()
+                }
                 pendingKillOnDisconnect = true
                 checkChanges()
                 updateSettingsList()
-                Toast.makeText(context, getString(R.string.kill_on_disconnect_conflicts_disabled), Toast.LENGTH_LONG).show()
             }
             .setNegativeButton(android.R.string.cancel, null)
             .create()
@@ -1143,7 +1230,7 @@ class SettingsFragment : Fragment() {
         val positiveButton = dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE)
         positiveButton.isEnabled = false
         positiveButton.alpha = 0.4f
-        val baseText = getString(R.string.kill_on_disconnect_disable_and_enable)
+        val baseText = getString(positiveTextRes)
         val handler = android.os.Handler(android.os.Looper.getMainLooper())
         var remaining = 4
 

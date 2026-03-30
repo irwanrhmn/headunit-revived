@@ -42,7 +42,10 @@
     <string name="use_gradient_background_description_on_auto">Az alkalmazás saját hátteret rajzol a középre igazított színátmenetes körrel. Nem vonatkozik az Extrém sötét módra</string>
     <string name="use_gradient_background_description_off_auto">Az alkalmazás klasszikus háttere van használatban. Nem vonatkozik az Extrém sötét módra</string>
     <string name="category_dark_mode">Sötét mód</string>
+    <string name="category_automation">Automatizálás</string>
     <string name="dark_mode_settings">Sötét mód beállítások</string>
+    <string name="app_theme_short">App</string>
+    <string name="night_mode_short">Android Auto</string>
     <string name="aa_monochrome">Android Auto monokróm megjelenítés</string>
     <string name="aa_monochrome_description">Csökkenti az Android Auto színeit az éjszakai vezetéshez. GLES megjelenítési mód szükséges. Csak bekapcsolt sötét módban lép érvénybe</string>
     <string name="aa_desaturation">Színtelenítés</string>
@@ -145,9 +148,11 @@
     <string name="auto_start_usb_description">Az alkalmazás automatikus megnyitása és csatlakozási kísérlet USB-eszköz csatlakoztatásakor</string>
     <string name="auto_start_settings">Automatikus indítás beállításai</string>
     <string name="auto_start_settings_description">Adja meg, mikor induljon el az alkalmazás automatikusan</string>
-    <string name="auto_start_oem_warning">Egyes eszközökön (Xiaomi, Huawei, Samsung, OPPO, Vivo) az automatikus indítást manuálisan kell engedélyezni az eszköz akkumulátor- vagy indítási beállításaiban.</string>
+    <string name="auto_start_oem_warning">Ez az eszköz megkövetelheti az automatikus indítás engedélyezését és az akkumulátor-optimalizálás vagy háttérkorlátozások eltávolítását ehhez az alkalmazáshoz.\n\nA Quick Boot (gyorsindítás) funkcióval rendelkező fejegységeken az automatikus indítás nem feltétlenül működik. Keresse a \"DuraSpeed\" opciót a rendszerbeállításokban és engedélyezze ott ezt az alkalmazást. Egyes fejegységeken a DuraSpeed rejtett, és szükség lehet egy olyan alkalmazásra, mint a \"Hidden Settings\" a megtalálásához. Ha nincs DuraSpeed, próbálja meg kikapcsolni a Quick Boot funkciót.</string>
     <string name="auto_start_on_boot_label">Indítás rendszerindításkor</string>
     <string name="auto_start_on_boot_description">Az alkalmazás automatikus megnyitása az eszköz indításakor. Android 10+-on szükséges a \'Megjelenítés más alkalmazások felett\' engedély</string>
+    <string name="auto_start_screen_on_label">Indítás képernyő bekapcsolásakor</string>
+    <string name="auto_start_screen_on_description">Az alkalmazás megnyitása minden alkalommal, amikor a képernyő bekapcsol. Ideális olyan autórádiókhoz, amelyek soha nem kapcsolnak ki teljesen, vagy gyorsindítási módot használnak, ahol a többi automatikus indítási lehetőség nem működik. Telefonokhoz és táblagépekhez nem ajánlott.</string>
     <string name="select_bt_device">Bluetooth eszköz kiválasztása</string>
     <string name="bt_device_not_set">Nincs beállítva</string>
     <string name="bt_permission_denied_title">Bluetooth-engedély szükséges</string>
@@ -311,15 +316,15 @@
     <string name="setup_widescreen_detected">Szélesvásznú kijelző észlelve.</string>
     <string name="auto_optimize">Beállítások automatikus optimalizálása</string>
     <string name="auto_optimize_desc">Rendszerellenőrzés futtatása az eszközhöz legjobban illő beállítások megtalálásához.</string>
-    <string name="fullscreen_none">Normal (All bars visible)</string>
-    <string name="fullscreen_immersive">Immersive (All bars hidden)</string>
-    <string name="fullscreen_status_only">Hide status bar only</string>
-    <string name="log_level">Log Level</string>
-    <string name="log_level_description">Choose the detail level of log output for debugging.</string>
-    <string name="start_log_capture">Start log capture</string>
-    <string name="start_log_capture_description">Begins recording system logs to a file.</string>
-    <string name="stop_log_capture">Stop log capture</string>
-    <string name="stop_log_capture_description">Stops recording and saves the log file.</string>
+    <string name="fullscreen_none">Normál (Minden sáv látható)</string>
+    <string name="fullscreen_immersive">Teljes képernyő (Minden sáv rejtett)</string>
+    <string name="fullscreen_status_only">Csak az állapotsor elrejtése</string>
+    <string name="log_level">Naplózási szint</string>
+    <string name="log_level_description">A hibaelhárításhoz szükséges részletesség beállítása.</string>
+    <string name="start_log_capture">Naplózás indítása</string>
+    <string name="start_log_capture_description">Rögzíti a rendszernaplókat egy helyi fájlba a hibaelhárításhoz.</string>
+    <string name="stop_log_capture">Naplózás leállítása</string>
+    <string name="stop_log_capture_description">Leállítja a naplózást és menti a fájlt.</string>
 
     <!-- Navigation notifications -->
     <string name="show_navigation_notifications">Navigációs értesítések</string>
@@ -364,8 +369,41 @@
     <string name="kill_on_disconnect">Alkalmazás bezárása leválasztáskor</string>
     <string name="kill_on_disconnect_description">Az alkalmazás automatikus bezárása, amikor az Android Auto leválik</string>
     <string name="kill_on_disconnect_warning_title">Figyelmeztetés</string>
-    <string name="kill_on_disconnect_warning">A következő újracsatlakozási beállítások ütköznek az alkalmazás leválasztáskor történő bezárásával:\n\n%1$s\n\nA kezdeti csatlakozási beállításaid (automatikus csatlakozás, automatikus indítás) továbbra is működni fognak, amikor az autórádió bekapcsol. Az első leválasztás után azonban az alkalmazás azonnal bezáródik az újracsatlakozási kísérlet helyett.\n\nSzeretnéd letiltani a fent felsorolt újracsatlakozási beállításokat?</string>
+    <string name="kill_on_disconnect_warning">A következő újracsatlakozási beállítások ütköznek az alkalmazás leállításával leválasztáskor:\n\n%1$s\n\nA kezdeti csatlakozási beállítások (automatikus csatlakozás, automatikus indítás) továbbra is működnek a fejegység bekapcsolásakor. Az első leválasztás után azonban az alkalmazás azonnal bezárul az újracsatlakozás megkísérlése helyett.\n\nMegjegyzés: Egyes utólagos fejegységek soha nem kapcsolnak ki teljesen — ehelyett hibernálnak, hasonlóan egy telefonhoz, amely lezárja a képernyőjét, de soha nem kapcsol ki ténylegesen. Ezzel az opcióval az alkalmazás az első leválasztás után bezárul, és a következő indítási ciklusban nem biztos, hogy automatikusan újranyílik.\n\nSzeretné letiltani a fent felsorolt újracsatlakozási beállításokat?</string>
     <string name="kill_on_disconnect_disable_and_enable">Letiltás és engedélyezés</string>
+    <string name="kill_on_disconnect_enable_anyway">Engedélyezés mindenképp</string>
+    <string name="kill_on_disconnect_boot_warning">A \"Indítás rendszerindításkor\" be van kapcsolva. Ha az alkalmazás bezárul lecsatlakozáskor és ez az eszköz hibernálódik kikapcsolás helyett, az alkalmazás nem feltétlenül nyílik meg automatikusan a következő indításkor, mert nem jön létre rendszerindítási esemény — az eszköz egyszerűen felébred az alvó módból.</string>
+    <string name="kill_on_disconnect_screen_on_warning">A \"Bekapcsolás a képernyő bekapcsolásakor\" funkció aktív. Ez a beállítás minden alkalommal megnyitja az alkalmazást, amikor a képernyő bekapcsol. A lekapcsoláskor történő bezárással kombinálva az alkalmazás lekapcsolás után bezárul, de azonnal újranyílik, amikor a képernyő ismét bekapcsol, ami újraindítási hurkot eredményez.</string>
     <string name="kill_on_disconnect_conflicts_disabled">Az ütköző beállítások letiltásra kerültek</string>
     <string name="wifi_disabled_info">Infó: A Wi-Fi ki van kapcsolva.</string>
+
+    <!-- Vehicle Info Settings -->
+    <string name="vehicle_info_settings">Járműinformáció</string>
+    <string name="vehicle_info_settings_description">Testreszabhatja, hogyan jelenik meg járműve a telefonján</string>
+    <string name="category_vehicle">Jármű</string>
+    <string name="category_head_unit">Fejegység</string>
+    <string name="vehicle_display_name_label">Megjelenítési név</string>
+    <string name="vehicle_display_name_description">A telefonján megjelenő név ehhez a járműhöz</string>
+    <string name="vehicle_make_label">Gyártó</string>
+    <string name="vehicle_make_description">Jármű gyártója (pl. Honda, Toyota)</string>
+    <string name="vehicle_model_label">Modell</string>
+    <string name="vehicle_model_description">Jármű modellje (pl. Civic, Corolla)</string>
+    <string name="vehicle_year_label">Évjárat</string>
+    <string name="vehicle_year_description">Jármű évjárata</string>
+    <string name="vehicle_id_label">Jármű-azonosító</string>
+    <string name="vehicle_id_description">Csak belső azonosító. Megváltoztatása azt eredményezi, hogy telefonja ezt más járműként érzékeli, visszaállítva az Android Auto beállításait ehhez az autóhoz.</string>
+    <string name="head_unit_make_label">Gyártó</string>
+    <string name="head_unit_make_description">Fejegység gyártója</string>
+    <string name="head_unit_make_hint">A telefonja ezt a nevet jeleníti meg az Android Auto beállításaiban.</string>
+    <string name="head_unit_model_label">Modell</string>
+    <string name="head_unit_model_description">Fejegység modellje</string>
+    <string name="vehicle_year_error_invalid">Adjon meg egy érvényes évet</string>
+    <string name="vehicle_year_error_max">Az év nem lehet későbbi, mint %1$d</string>
+    <string name="vehicle_info_restart_note">Ezek az adatok minden csatlakozáskor elküldésre kerülnek az Android Auto-nak.</string>
+    <string name="auto_enable_hotspot">Hotspot automatikus bekapcsolása</string>
+    <string name="auto_enable_hotspot_description">Automatikusan bekapcsolja a Wi-Fi hotspotot ezen az eszközön. (Nem minden eszközön fog működni)</string>
+    <string name="hotspot_warning_title">Kísérleti funkció</string>
+    <string name="hotspot_warning_message">Ez a funkció reflexiót használ, és nem minden eszközön működik. Szükség lehet a \"Rendszerbeállítások módosítása\" engedély manuális megadására.</string>
+    <string name="hotspot_permission_title">Engedély szükséges</string>
+    <string name="hotspot_permission_message">A hotspot funkció a \"Rendszerbeállítások módosítása\" engedélyt igényli. Kérjük, engedélyezze a következő képernyőn.</string>
 </resources>

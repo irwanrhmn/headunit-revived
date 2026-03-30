@@ -12,6 +12,10 @@ import android.widget.TextView
 import android.graphics.Color
 import android.content.res.ColorStateList
 import android.widget.Toast
+import android.net.VpnService
+import androidx.activity.result.contract.ActivityResultContracts
+import android.net.ConnectivityManager
+import android.os.Build
 import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -32,6 +36,17 @@ import com.andrerinas.headunitrevived.utils.Settings
 class HomeFragment : Fragment() {
 
     private val commManager get() = App.provide(requireContext()).commManager
+
+    private val vpnPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
+            AppLog.i("VPN permission granted. Starting DummyVpnService and Self Mode.")
+            requireContext().startService(Intent(requireContext(), com.andrerinas.headunitrevived.aap.DummyVpnService::class.java))
+            startSelfModeInternal()
+        } else {
+            AppLog.w("VPN permission denied. Offline Self Mode might fail.")
+            Toast.makeText(requireContext(), getString(R.string.failed_start_android_auto), Toast.LENGTH_LONG).show()
+        }
+    }
 
     private lateinit var self_mode_button: Button
     private lateinit var usb: Button
@@ -85,6 +100,16 @@ class HomeFragment : Fragment() {
 
         val appSettings = App.provide(requireContext()).settings
 
+        // Ensure the foreground service is running when wake-detection settings
+        // are enabled. The service must be alive to catch SCREEN_ON broadcasts
+        // (which can only be received by dynamically registered receivers).
+        // Without this, turning off the car and back on won't auto-start the app
+        // because no one is listening for SCREEN_ON.
+        if (appSettings.autoStartOnScreenOn || appSettings.autoStartOnBoot) {
+            ContextCompat.startForegroundService(requireContext(),
+                Intent(requireContext(), AapService::class.java))
+        }
+
         // Execute auto-connect methods in user-defined priority order
         for (methodId in appSettings.autoConnectPriorityOrder) {
             if (commManager.isConnected) break
@@ -111,13 +136,32 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun startSelfMode() {
+    private fun startSelfModeInternal() {
         AapService.selfMode = true
         val intent = Intent(requireContext(), AapService::class.java)
         intent.action = AapService.ACTION_START_SELF_MODE
         ContextCompat.startForegroundService(requireContext(), intent)
         AppLog.i("Auto start selfmode")
-        //Toast.makeText(requireContext(), "Starting Self Mode...", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun startSelfMode() {
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            connectivityManager.activeNetwork
+        } else null
+
+        if (activeNetwork == null) {
+            AppLog.i("Device is offline. Preparing Dummy VPN for Self Mode.")
+            val vpnIntent = VpnService.prepare(requireContext())
+            if (vpnIntent != null) {
+                vpnPermissionLauncher.launch(vpnIntent)
+                return
+            } else {
+                AppLog.i("VPN permission already granted. Starting DummyVpnService.")
+                requireContext().startService(Intent(requireContext(), com.andrerinas.headunitrevived.aap.DummyVpnService::class.java))
+            }
+        }
+        startSelfModeInternal()
     }
 
     private fun attemptAutoConnect() {
@@ -226,8 +270,14 @@ class HomeFragment : Fragment() {
     private fun setupListeners() {
         exitButton.setOnClickListener {
             val appSettings = App.provide(requireContext()).settings
-            if (appSettings.autoStartOnUsb && appSettings.reopenOnReconnection) {
-                // Keep the service alive so the runtime UsbReceiver can detect reconnections
+            // Keep the service alive when auto-start is enabled:
+            // - autoStartOnBoot: service must survive hibernate to detect SCREEN_ON wake
+            // - autoStartOnScreenOn: service catches every SCREEN_ON for always-on head units
+            // - autoStartOnUsb + reopenOnReconnection: service detects USB reconnections
+            val keepServiceAlive = appSettings.autoStartOnBoot ||
+                appSettings.autoStartOnScreenOn ||
+                (appSettings.autoStartOnUsb && appSettings.reopenOnReconnection)
+            if (keepServiceAlive) {
                 val disconnectIntent = Intent(requireContext(), AapService::class.java).apply {
                     action = AapService.ACTION_DISCONNECT
                 }
@@ -331,27 +381,26 @@ class HomeFragment : Fragment() {
         val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         val isLightMode = nightModeFlags != Configuration.UI_MODE_NIGHT_YES
 
+        val labelViews = listOf(self_mode_text, wifi_text_view,
+            view?.findViewById<TextView>(R.id.usb_text),
+            view?.findViewById<TextView>(R.id.settings_text))
+
         if (appSettings.useGradientBackground && isLightMode) {
             val darkColor = Color.parseColor("#1a1a1a")
-            val textViews = listOf(self_mode_text, wifi_text_view,
-                view?.findViewById<TextView>(R.id.usb_text),
-                view?.findViewById<TextView>(R.id.settings_text),
-                exitButton)
-            textViews.filterNotNull().forEach { tv ->
+            labelViews.filterNotNull().forEach { tv ->
                 tv.setTextColor(darkColor)
                 tv.setShadowLayer(2f, 0f, 0f, Color.WHITE)
             }
         } else {
             val lightColor = Color.parseColor("#f7f7f7")
-            val textViews = listOf(self_mode_text, wifi_text_view,
-                view?.findViewById<TextView>(R.id.usb_text),
-                view?.findViewById<TextView>(R.id.settings_text),
-                exitButton)
-            textViews.filterNotNull().forEach { tv ->
+            labelViews.filterNotNull().forEach { tv ->
                 tv.setTextColor(lightColor)
                 tv.setShadowLayer(0f, 0f, 0f, Color.TRANSPARENT)
             }
         }
+
+        // Exit button always has a dark background, so text must always be white
+        exitButton.setTextColor(Color.WHITE)
     }
 
     companion object {
