@@ -58,6 +58,12 @@ adb shell am start -a android.intent.action.VIEW -d "headunit://connect?ip=192.1
 - **Wireless Connection Drops:** If the connection drops frequently, disable **"WiFi Assistant"** or **"Switch between networks"** in your phone's WiFi settings to prevent it from killing the connection due to "no internet."
 
 ## Changelog
+### v.2.2.0-beta1
+- Bringing back Native AA. Warning! This will only work on a limited amount of headunits! Most Android devices do not support connecting 2 Android devices via Bluetooth which is essential for this to work.
+- Try to fix connection problems on WiFi
+- Adding intent and routine for starting the app directly to self mode
+- More to come...
+
 ### v.2.1.1
 - Fixed: Layout crash on Android 4.2
 - Added: Enable Hotspot option. Note: This will not work on every device. Especially after Android 13!

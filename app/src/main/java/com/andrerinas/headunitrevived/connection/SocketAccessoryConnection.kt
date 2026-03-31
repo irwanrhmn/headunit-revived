@@ -56,15 +56,10 @@ class SocketAccessoryConnection(private val ip: String, private val port: Int, p
                 inp.read(buf, 0, length)
             }
         } catch (e: SocketTimeoutException) {
-            if (readFully) {
-                // FATAL: readFully may have consumed partial bytes before the timeout.
-                // The stream is now desynchronized and cannot be recovered.
-                AppLog.e("Socket readFully timeout after ${timeout}ms — stream desynchronized, disconnecting")
-                -1
-            } else {
-                // Non-readFully timeout is harmless — no partial state in the stream.
-                0
-            }
+            // With raw DataInputStream (no BufferedInputStream), timeout during
+            // small reads (4-byte header) virtually never causes partial consumption.
+            // Let the caller decide if this is fatal based on context.
+            0
         } catch (e: IOException) {
             -1
         }
@@ -119,12 +114,12 @@ class SocketAccessoryConnection(private val ip: String, private val port: Int, p
                     if (errorMessage.contains("com.mediatek.cta.CtaHttp") || errorMessage.contains("CtaHttp")) {
                         AppLog.e("HUR_DEBUG: MediaTek crash intercepted.")
                     } else {
-                        throw java.io.IOException(e)
+                        throw IOException(e)
                     }
                 }
                 // Chinese Headunit Mediatek Correction
             }
-            // HUR 7.2 uses 10s timeout. WiFi needs tolerance for retransmissions,
+            // WiFi needs tolerance for retransmissions,
             // power-save wakes, and bufferbloat. 1s was causing readFully to timeout
             // mid-header, desynchronizing the stream ("Failed to read full header").
             transport.soTimeout = 10000
@@ -132,7 +127,7 @@ class SocketAccessoryConnection(private val ip: String, private val port: Int, p
             transport.keepAlive = true
             transport.reuseAddress = true
             transport.trafficClass = 16 // IPTOS_LOWDELAY
-            // Raw DataInputStream like HUR — no BufferedInputStream wrapper.
+            // Raw DataInputStream — no BufferedInputStream wrapper.
             // BufferedInputStream + readFully + timeout = internal buffer state corruption.
             input = DataInputStream(transport.getInputStream())
             output = transport.getOutputStream()

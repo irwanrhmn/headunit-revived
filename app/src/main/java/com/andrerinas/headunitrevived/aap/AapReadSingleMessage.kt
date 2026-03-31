@@ -12,19 +12,21 @@ internal class AapReadSingleMessage(connection: AccessoryConnection, ssl: AapSsl
 
     override fun doRead(connection: AccessoryConnection): Int {
         try {
-            // Step 1: Read the encrypted header (uses socket's 10s timeout via readFully)
-            val headerSize = connection.recvBlocking(recvHeader.buf, recvHeader.buf.size, 10000, true) 
+            // Step 1: Read the encrypted header.
+            // No timeout limit (0 = infinite) because this waits for the
+            // NEXT message — the phone can be idle for minutes and that's normal.
+            // TCP keepAlive will detect a truly dead connection.
+            val headerSize = connection.recvBlocking(recvHeader.buf, recvHeader.buf.size, 0, true) 
             if (headerSize != AapMessageIncoming.EncryptedHeader.SIZE) {
                 if (headerSize == -1) {
-                    AppLog.i("AapRead: Connection closed or stream desynchronized. Disconnecting.")
+                    AppLog.i("AapRead: Connection closed (EOF). Disconnecting.")
                     return -1
                 } else if (headerSize == 0) {
-                    // Should not happen with readFully=true (timeout returns -1 now),
-                    // but keep as safety fallback.
+                    // Timeout (shouldn't happen with timeout=0, but safety fallback)
                     return 0
                 } else {
-                    AppLog.e("AapRead: Partial header read. Expected ${AapMessageIncoming.EncryptedHeader.SIZE}, got $headerSize. Stream corrupt.")
-                    return -1
+                    AppLog.e("AapRead: Partial header read. Expected ${AapMessageIncoming.EncryptedHeader.SIZE}, got $headerSize. Skipping.")
+                    return 0
                 }
             }
 
@@ -38,14 +40,16 @@ internal class AapReadSingleMessage(connection: AccessoryConnection, ssl: AapSsl
             }
 
             if (recvHeader.flags == 0x09) {
+                // Once header arrived, data should be flowing — 10s timeout is valid here
                 val readSize = connection.recvBlocking(fragmentSizeBuffer, 4, 10000, true)
                 if(readSize != 4) {
-                    AppLog.e("AapRead: Failed to read fragment total size. Stream corrupt.")
-                    return -1
+                    AppLog.e("AapRead: Failed to read fragment total size. Skipping.")
+                    return 0
                 }
             }
 
             // Step 2: Read the encrypted message body
+            // Header arrived so body should follow quickly — 10s timeout
             if (recvHeader.enc_len > msgBuffer.size || recvHeader.enc_len < 0) {
                 AppLog.e("AapRead: Invalid message size (${recvHeader.enc_len} bytes). Skipping.")
                 return 0
@@ -57,8 +61,8 @@ internal class AapReadSingleMessage(connection: AccessoryConnection, ssl: AapSsl
                     AppLog.i("AapRead: Connection closed during body read.")
                     return -1
                 }
-                AppLog.e("AapRead: Failed to read full message body. Expected ${recvHeader.enc_len}, got $msgSize. Stream corrupt.")
-                return -1
+                AppLog.e("AapRead: Failed to read full message body. Expected ${recvHeader.enc_len}, got $msgSize. Skipping.")
+                return 0
             }
 
             // Step 3: Decrypt the message

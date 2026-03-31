@@ -31,7 +31,7 @@ internal class AapMessageHandlerType(
         if (message.channel == Channel.ID_VID) {
              if (aapVideo.process(message)) {
                  videoPacketCount++
-                 // Send ACK AFTER processing (Like HUR)
+                 // Send ACK AFTER processing
                  if (msgType == 0 || msgType == 1) {
                      transport.sendMediaAck(message.channel)
                  }
@@ -42,7 +42,7 @@ internal class AapMessageHandlerType(
         // 2. Try processing as Audio stream (Speech, System, Media)
         if (message.isAudio) {
             if (aapAudio.process(message)) {
-                // Send ACK AFTER processing (Like HUR)
+                // Send ACK AFTER processing
                 if (msgType == 0 || msgType == 1) {
                     transport.sendMediaAck(message.channel)
                 }

@@ -434,7 +434,7 @@ class AapService : Service(), UsbReceiver.Listener {
         checkAlreadyConnectedUsb()
         registerNetworkMonitor()
 
-        // Grab permanent AUDIOFOCUS_GAIN at service start (like HUR).
+        // Grab permanent AUDIOFOCUS_GAIN at service start.
         // This ensures the headunit owns system audio focus before any AA connection,
         // preventing other apps from stealing it and causing AA to keep audio on the phone.
         val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -643,7 +643,7 @@ class AapService : Service(), UsbReceiver.Listener {
         // Keep MediaSession alive across disconnect/reconnect cycles.
         // Only deactivate it — do NOT release it. A released session can no longer
         // receive media button events, which means the keymap stops working until
-        // the next connection. HUR keeps its session alive the entire service lifetime.
+        // the next connection. HURev keeps its session alive the entire service lifetime.
         mediaSession?.isActive = false
         updateMediaSessionState(false)
         serviceScope.launch(Dispatchers.IO) {
