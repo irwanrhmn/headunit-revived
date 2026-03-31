@@ -91,10 +91,37 @@ class WirelessConnectionFragment : Fragment(R.layout.fragment_wireless_connectio
                 MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
                     .setTitle(R.string.wireless_mode)
                     .setSingleChoiceItems(wifiModes, pendingWifiConnectionMode!!) { dialog, which ->
-                        pendingWifiConnectionMode = which
-                        checkChanges()
                         dialog.dismiss()
-                        updateSettingsList()
+                        
+                        if (which == 3) {
+                            // Run the compatibility check for Native AA Mode
+                            if (com.andrerinas.headunitrevived.connection.NativeAaHandshakeManager.checkCompatibility()) {
+                                MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+                                    .setTitle(R.string.supported_nativeaa)
+                                    .setMessage(R.string.supported_nativeaa_desc)
+                                    .setPositiveButton(android.R.string.ok) { dialog2, _ ->
+                                        pendingWifiConnectionMode = which
+                                        checkChanges()
+                                        updateSettingsList()
+                                        dialog2.dismiss()
+                                    }
+                                    .setNegativeButton(android.R.string.cancel, null)
+                                    .show()
+                            } else {
+                                MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+                                    .setTitle(R.string.not_supported_nativeaa)
+                                    .setMessage(R.string.not_supported_nativeaa_desc)
+                                    .setPositiveButton(android.R.string.ok, null)
+                                    .show()
+                                    
+                                // Do not change the pending mode
+                                updateSettingsList()
+                            }
+                        } else {
+                            pendingWifiConnectionMode = which
+                            checkChanges()
+                            updateSettingsList()
+                        }
                     }
                     .show()
             }

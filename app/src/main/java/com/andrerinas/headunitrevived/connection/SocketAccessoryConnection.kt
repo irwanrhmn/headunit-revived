@@ -46,17 +46,25 @@ class SocketAccessoryConnection(private val ip: String, private val port: Int, p
     override fun recvBlocking(buf: ByteArray, length: Int, timeout: Int, readFully: Boolean): Int {
         val inp = input ?: return -1
         return try {
+            // Dynamically apply the caller's timeout so handshake (short timeouts)
+            // and streaming (long timeouts) both work correctly on the same socket.
+            try { transport.soTimeout = timeout } catch (_: Exception) {}
             if (readFully) {
-                inp.readFully(buf,0, length)
+                inp.readFully(buf, 0, length)
                 length
             } else {
                 inp.read(buf, 0, length)
             }
         } catch (e: SocketTimeoutException) {
-            // Timeout is NOT a fatal error — the connection is still alive.
-            // Return 0 so the read loop retries instead of killing the transport.
-            AppLog.d("Socket read timeout (${timeout}ms) — connection still alive, retrying")
-            0
+            if (readFully) {
+                // FATAL: readFully may have consumed partial bytes before the timeout.
+                // The stream is now desynchronized and cannot be recovered.
+                AppLog.e("Socket readFully timeout after ${timeout}ms — stream desynchronized, disconnecting")
+                -1
+            } else {
+                // Non-readFully timeout is harmless — no partial state in the stream.
+                0
+            }
         } catch (e: IOException) {
             -1
         }
@@ -116,15 +124,18 @@ class SocketAccessoryConnection(private val ip: String, private val port: Int, p
                 }
                 // Chinese Headunit Mediatek Correction
             }
-            // Applied unconditionally so both outbound and WirelessServer-accepted sockets
-            // detect a dead phone within 3 s instead of blocking forever.
-            transport.soTimeout = 3000
+            // HUR 7.2 uses 10s timeout. WiFi needs tolerance for retransmissions,
+            // power-save wakes, and bufferbloat. 1s was causing readFully to timeout
+            // mid-header, desynchronizing the stream ("Failed to read full header").
+            transport.soTimeout = 10000
             transport.tcpNoDelay = true
             transport.keepAlive = true
             transport.reuseAddress = true
             transport.trafficClass = 16 // IPTOS_LOWDELAY
-            input = DataInputStream(transport.getInputStream().buffered(65536))
-            output = transport.getOutputStream().buffered(65536)
+            // Raw DataInputStream like HUR — no BufferedInputStream wrapper.
+            // BufferedInputStream + readFully + timeout = internal buffer state corruption.
+            input = DataInputStream(transport.getInputStream())
+            output = transport.getOutputStream()
             return@withContext true
         } catch (e: IOException) {
             AppLog.e(e)

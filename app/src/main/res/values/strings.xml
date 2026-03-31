@@ -307,7 +307,9 @@
     <string name="notification_service_running">Headunit Revived is running</string>
     <string name="notification_projection_active">Android Auto is projected</string>
     <string name="shortcut_connect_title">Connect</string>
-    <string name="shortcut_connect_desc">Connect to last known device</string>
+    <string name="shortcut_connect_desc">Auto-connect to last phone</string>
+    <string name="shortcut_selfmode_title">Self Mode</string>
+    <string name="shortcut_selfmode_desc">Start Android Auto on this device</string>
     <string name="shortcut_disconnect_title">Disconnect</string>
     <string name="shortcut_disconnect_desc">End current session</string>
     <string name="shortcut_exit_title">Exit App</string>
@@ -418,4 +420,9 @@
     <string name="hotspot_warning_message">This feature uses reflection and might not work on all devices. It may also require the "Modify system settings" permission to be granted manually.</string>
     <string name="hotspot_permission_title">Permission Required</string>
     <string name="hotspot_permission_message">The hotspot feature requires the \"Modify system settings\" permission. Please enable it in the next screen.</string>
+    
+    <string name="supported_nativeaa">Enhanced Wireless Support</string>
+    <string name="supported_nativeaa_desc">Great news! Your device supports \"Native Wireless\" mode, which provides a more seamless Android Auto experience. \n\nTo enable this, we need to refresh your Bluetooth cache. Please: \n1. Remove the existing pairing on your phone \n2. Click OK to restart Bluetooth \n3. Re-pair your phone \n\nWould you like to switch to Native AA mode now?</string>
+    <string name="not_supported_nativeaa">Native Wireless not supported</string>
+    <string name="not_supported_nativeaa_desc">Your device\'s Bluetooth stack does not support the required service registration for native Android Auto Wireless. Please use the \"Wireless Helper\" app or \"Auto (Headunit Server)\" mode instead.</string>
 </resources>

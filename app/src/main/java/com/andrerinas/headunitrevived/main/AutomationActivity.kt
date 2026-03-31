@@ -90,6 +90,12 @@ class AutomationActivity : AppCompatActivity() {
                 }
                 ContextCompat.startForegroundService(this, stopIntent)
             }
+            "com.andrerinas.headunitrevived.ACTION_START_SELF_MODE" -> {
+                val selfIntent = Intent(this, AapService::class.java).apply {
+                    this.action = AapService.ACTION_START_SELF_MODE
+                }
+                ContextCompat.startForegroundService(this, selfIntent)
+            }
             "com.andrerinas.headunitrevived.ACTION_STOP_SERVICE" -> {
                 val exitIntent = Intent(this, AapService::class.java).apply {
                     this.action = AapService.ACTION_STOP_SERVICE

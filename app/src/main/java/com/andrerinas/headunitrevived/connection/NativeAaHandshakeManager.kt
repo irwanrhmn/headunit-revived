@@ -196,16 +196,21 @@ class NativeAaHandshakeManager(
             val input = DataInputStream(socket.inputStream)
             val output = socket.outputStream
 
-            AppLog.i("NativeAA: Waiting for WiFi credentials to be ready...")
-            // Wait up to 30 seconds for credentials
+            AppLog.i("NativeAA: Phone connected. Current credentials state: SSID=${currentSsid ?: "<null>"}, IP=${currentIp ?: "<null>"}")
+            AppLog.i("NativeAA: Waiting for WiFi credentials to be ready (Max 60s)...")
+            
+            // Wait up to 60 seconds for credentials (P2P group creation can be slow)
             var attempts = 0
-            while ((currentSsid == null || currentIp == null) && attempts < 60) {
+            while ((currentSsid == null || currentIp == null) && attempts < 120 && isRunning && isActive) {
+                if (attempts % 10 == 0 && attempts > 0) {
+                    AppLog.d("NativeAA: Still waiting... SSID=${currentSsid != null}, IP=${currentIp != null} (Attempt $attempts/120)")
+                }
                 delay(500)
                 attempts++
             }
 
             if (currentSsid == null || currentIp == null) {
-                AppLog.e("NativeAA: Handshake failed - No WiFi credentials available")
+                AppLog.e("NativeAA: Handshake failed - No WiFi credentials available after 60s wait. Missing: ${if(currentSsid == null) "SSID " else ""}${if(currentIp == null) "IP" else ""}")
                 return@withContext
             }
 
@@ -304,5 +309,6 @@ class NativeAaHandshakeManager(
         currentSsid = null
         currentIp = null
         currentPsk = null
+        currentBssid = null
     }
 }

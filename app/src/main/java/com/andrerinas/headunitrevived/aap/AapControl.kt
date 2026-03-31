@@ -75,12 +75,8 @@ internal class AapControlMedia(
 
         val configResponse = Media.Config.newBuilder().apply {
             status = Media.Config.ConfigStatus.HEADUNIT
-            // Use higher maxUnacked for audio to prevent stuttering/drops
-            maxUnacked = if (Channel.isAudio(channel)) {
-                3
-            } else {
-                1
-            }
+            // Use 16 for maxUnacked (very safe value for WiFi to avoid buffer bloat/stalls)
+            maxUnacked = 16
             
             addConfigurationIndices(0)
         }.build()

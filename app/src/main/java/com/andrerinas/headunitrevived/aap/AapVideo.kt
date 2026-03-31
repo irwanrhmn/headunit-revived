@@ -31,7 +31,7 @@ internal class AapVideo(private val videoDecoder: VideoDecoder, private val sett
                     videoDecoder.decode(buf, 2, len - 2, settings.forceSoftwareDecoding, settings.videoCodec)
                     return true
                 }
-                AppLog.w("AapVideo: Dropped Flag 11 packet. len=$len, buf[10]=${if (len > 10) buf[10] else "?"}")
+                AppLog.w("AapVideo: Dropped Flag 11 packet. len=$len")
             }
             9 -> {
                 // Timestamp Indication (Offset 10)

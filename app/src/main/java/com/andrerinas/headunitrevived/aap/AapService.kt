@@ -421,6 +421,7 @@ class AapService : Service(), UsbReceiver.Listener {
         nativeAaHandshakeManager = com.andrerinas.headunitrevived.connection.NativeAaHandshakeManager(this, serviceScope)
         wifiDirectManager = WifiDirectManager(this)
         wifiDirectManager?.setCredentialsListener { ssid, psk, ip, bssid ->
+            AppLog.i("AapService: Received WiFi credentials from manager (SSID=$ssid, IP=$ip). Updating HandshakeManager.")
             nativeAaHandshakeManager?.updateWifiCredentials(ssid, psk, ip, bssid)
         }
         
@@ -811,6 +812,8 @@ class AapService : Service(), UsbReceiver.Listener {
     private fun initWifiMode() {
         val settings = App.provide(this).settings
         val mode = settings.wifiConnectionMode
+        
+        AppLog.i("AapService: Initializing WiFi Mode: $mode")
         
         // Mode 1: Auto (Headunit Server), Mode 2: Helper (Wireless Launcher), Mode 3: Native AA
         if (mode == 1 || mode == 2 || mode == 3) {

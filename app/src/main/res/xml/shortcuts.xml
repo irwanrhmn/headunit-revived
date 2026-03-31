@@ -12,6 +12,18 @@
             android:targetClass="com.andrerinas.headunitrevived.main.AutomationActivity" />
     </shortcut>
     <shortcut
+        android:shortcutId="self_mode"
+        android:enabled="true"
+        android:icon="@drawable/ic_stat_aa"
+        android:shortcutShortLabel="@string/shortcut_selfmode_title"
+        android:shortcutLongLabel="@string/shortcut_selfmode_desc">
+        <intent
+            android:action="com.andrerinas.headunitrevived.ACTION_START_SELF_MODE"
+            android:targetPackage="com.andrerinas.headunitrevived"
+            android:targetClass="com.andrerinas.headunitrevived.main.AutomationActivity" />
+    </shortcut>
+
+    <shortcut
         android:shortcutId="disconnect"
         android:enabled="true"
         android:icon="@drawable/ic_exit_to_app_white_24dp"
