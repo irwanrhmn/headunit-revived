@@ -72,5 +72,13 @@ class ProjectionView @JvmOverloads constructor(
     override fun setVideoScale(scaleX: Float, scaleY: Float) {
         this.scaleX = scaleX
         this.scaleY = scaleY
+
+        if (com.andrerinas.headunitrevived.utils.HeadUnitScreenConfig.forcedScale) {
+            this.translationX = -(this.width - (this.width * scaleX)) / 2.0f
+            this.translationY = -(this.height - (this.height * scaleY)) / 2.0f
+        } else {
+            this.translationX = 0f
+            this.translationY = 0f
+        }
     }
 }

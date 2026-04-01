@@ -58,6 +58,7 @@ class SettingsFragment : Fragment() {
     
     // Flag to determine if the projection should stretch to fill the screen
     private var pendingStretchToFill: Boolean? = null
+    private var pendingForcedScale: Boolean? = null
 
     private var pendingKillOnDisconnect: Boolean? = null
     private var pendingAutoEnableHotspot: Boolean? = null
@@ -109,6 +110,7 @@ class SettingsFragment : Fragment() {
         
         // Initialize local state for stretch to fill
         pendingStretchToFill = settings.stretchToFill
+        pendingForcedScale = settings.forcedScale
 
         pendingKillOnDisconnect = settings.killOnDisconnect
         pendingAutoEnableHotspot = settings.autoEnableHotspot
@@ -232,6 +234,7 @@ class SettingsFragment : Fragment() {
 
         // Save the stretch to fill preference
         pendingStretchToFill?.let { settings.stretchToFill = it }
+        pendingForcedScale?.let { settings.forcedScale = it }
 
         pendingKillOnDisconnect?.let { settings.killOnDisconnect = it }
         pendingAutoEnableHotspot?.let { settings.autoEnableHotspot = it }
@@ -294,6 +297,7 @@ class SettingsFragment : Fragment() {
                         pendingScreenOrientation != settings.screenOrientation ||
                         pendingAppLanguage != settings.appLanguage ||
                         pendingStretchToFill != settings.stretchToFill ||
+                        pendingForcedScale != settings.forcedScale ||
                         pendingInsetLeft != settings.insetLeft ||
                         pendingInsetTop != settings.insetTop ||
                         pendingInsetRight != settings.insetRight ||
@@ -702,6 +706,21 @@ class SettingsFragment : Fragment() {
                 updateSettingsList()
             }
         ))
+
+        if (pendingViewMode == Settings.ViewMode.SURFACE) {
+            items.add(SettingItem.ToggleSettingEntry(
+                stableId = "forcedScale",
+                nameResId = R.string.forced_scale,
+                descriptionResId = R.string.forced_scale_description,
+                isChecked = pendingForcedScale!!,
+                onCheckedChanged = { isChecked ->
+                    pendingForcedScale = isChecked
+                    requiresRestart = true
+                    checkChanges()
+                    updateSettingsList()
+                }
+            ))
+        }
 
         // --- Video Settings ---
         items.add(SettingItem.CategoryHeader("video", R.string.category_video))

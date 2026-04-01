@@ -59,6 +59,11 @@ class Settings(context: Context) {
         get() = prefs.getBoolean("stretch_to_fill", true)
         set(value) { prefs.edit().putBoolean("stretch_to_fill", value).apply() }
 
+    // Forced scale for older devices (SurfaceView fix)
+    var forcedScale: Boolean
+        get() = prefs.getBoolean("forced_scale", false)
+        set(value) { prefs.edit().putBoolean("forced_scale", value).apply() }
+
     var micSampleRate: Int
         get() = prefs.getInt("mic-sample-rate", 16000)
         set(sampleRate) {

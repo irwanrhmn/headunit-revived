@@ -217,6 +217,8 @@
     <string name="enable">Enable</string>
     <string name="pref_stretch_screen_title">Stretch to fill screen</string>
     <string name="pref_stretch_screen_summary">Ignores aspect ratio to fill the entire display (removes black bars)</string>
+    <string name="forced_scale">Forced Scale (Legacy Fix)</string>
+    <string name="forced_scale_description">Corrects scaling issues on some older devices using SurfaceView. Only use if the image looks distorted or shifted.</string>
 
 
     <!-- Audio Settings -->

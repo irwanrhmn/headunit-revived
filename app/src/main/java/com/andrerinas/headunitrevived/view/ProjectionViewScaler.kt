@@ -19,12 +19,18 @@ object ProjectionViewScaler {
 
         HeadUnitScreenConfig.init(view.context, displayMetrics, App.provide(view.context).settings)
 
-        // The dimensions of the content area we want to display
+        // Calculate final scale factors
         val finalScaleX = HeadUnitScreenConfig.getScaleX()
         val finalScaleY = HeadUnitScreenConfig.getScaleY()
 
-        view.scaleX = finalScaleX
-        view.scaleY = finalScaleY
+        // If the view implements IProjectionView, use its specific scaling logic (which handles translation)
+        if (view is IProjectionView) {
+            view.setVideoScale(finalScaleX, finalScaleY)
+        } else {
+            view.scaleX = finalScaleX
+            view.scaleY = finalScaleY
+        }
+
         AppLog.i("ProjectionViewScaler: Dimensions: Video: ${videoWidth}x$videoHeight, Content: ${contentWidth}x$contentHeight, View: ${view.width}x${view.height}")
         AppLog.i("ProjectionViewScaler: Scale updated for view ${view.javaClass.simpleName}. scaleX: $finalScaleX, scaleY: $finalScaleY")
     }
