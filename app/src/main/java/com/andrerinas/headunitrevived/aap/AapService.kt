@@ -25,6 +25,7 @@ import android.os.PowerManager
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.IntentCompat
 import com.andrerinas.headunitrevived.App
 import com.andrerinas.headunitrevived.app.BootCompleteReceiver
 import com.andrerinas.headunitrevived.main.MainActivity
@@ -548,12 +549,17 @@ class AapService : Service(), UsbReceiver.Listener {
         silentAudioPlayer?.start()
 
         // Register the comprehensive steering wheel key receiver
-        val filter = android.content.IntentFilter().apply {
+        val filter = IntentFilter().apply {
             priority = 1000
             CarKeyReceiver.ACTIONS.forEach { addAction(it) }
         }
         try {
-            registerReceiver(carKeyReceiver, filter)
+            ContextCompat.registerReceiver(
+                this, 
+                carKeyReceiver, 
+                filter, 
+                ContextCompat.RECEIVER_EXPORTED
+            )
         } catch (e: Exception) {
             AppLog.e("AapService: Failed to register CarKeyReceiver", e)
         }
@@ -578,12 +584,7 @@ class AapService : Service(), UsbReceiver.Listener {
         mediaSession = MediaSessionCompat(this, "HeadunitRevived").apply {
             setCallback(object : MediaSessionCompat.Callback() {
                 override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
-                    val keyEvent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        mediaButtonEvent?.getParcelableExtra(Intent.EXTRA_KEY_EVENT, android.view.KeyEvent::class.java)
-                    } else {
-                        @Suppress("DEPRECATION")
-                        mediaButtonEvent?.getParcelableExtra(Intent.EXTRA_KEY_EVENT)
-                    }
+                    val keyEvent = IntentCompat.getParcelableExtra(mediaButtonEvent, Intent.EXTRA_KEY_EVENT, android.view.KeyEvent::class.java)
 
                     if (keyEvent != null) {
                         val actionStr = if (keyEvent.action == android.view.KeyEvent.ACTION_DOWN) "DOWN" else "UP"
@@ -666,7 +667,7 @@ class AapService : Service(), UsbReceiver.Listener {
         // Cleanup steering wheel and audio focus hacks
         silentAudioPlayer?.stop()
         try {
-            unregisterReceiver(carKeyReceiver)
+            carKeyReceiver?.let { unregisterReceiver(it) }
         } catch (e: Exception) {}
 
         if (!isDestroying) updateNotification()

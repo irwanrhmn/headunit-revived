@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.view.KeyEvent
+import androidx.core.content.IntentCompat
 import com.andrerinas.headunitrevived.App
 import com.andrerinas.headunitrevived.utils.AppLog
 
@@ -52,7 +53,7 @@ class CarKeyReceiver : BroadcastReceiver() {
 
         // 1. Standard Media Button extraction
         if (action == "android.intent.action.MEDIA_BUTTON" || action == "hy.intent.action.MEDIA_BUTTON") {
-            val event = intent.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT)
+            val event = IntentCompat.getParcelableExtra(intent, Intent.EXTRA_KEY_EVENT, KeyEvent::class.java)
             if (event != null) {
                 keyCode = event.keyCode
                 isLongPress = event.repeatCount > 0
@@ -82,21 +83,13 @@ class CarKeyReceiver : BroadcastReceiver() {
             "com.nwd.action.ACTION_KEY_VALUE" -> {
                 keyCode = intent.getByteExtra("extra_key_value", 0).toInt()
                 handleNwdKey(keyCode, commManager)
-            }
             "com.winca.service.Setting.KEY_ACTION" -> {
                 keyCode = intent.getIntExtra("com.winca.service.Setting.KEY_ACTION_EXTRA", -1)
-                if (keyCode != -1) {
-                    // Winca usually only sends down, so we simulate a full click
-                    commManager.send(keyCode, true)
-                    commManager.send(keyCode, false)
-                }
+                if (keyCode != -1) handleGenericKey(keyCode, commManager)
             }
             "IKeyClick.KEY_CLICK" -> {
                 keyCode = intent.getIntExtra("CLICK_KEY", -1)
-                if (keyCode != -1) {
-                    commManager.send(keyCode, true)
-                    commManager.send(keyCode, false)
-                }
+                if (keyCode != -1) handleGenericKey(keyCode, commManager)
             }
             "com.eryanet.music.prev" -> sendFullClick(KeyEvent.KEYCODE_MEDIA_PREVIOUS, commManager)
             "com.eryanet.music.next" -> sendFullClick(KeyEvent.KEYCODE_MEDIA_NEXT, commManager)
