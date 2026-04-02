@@ -654,7 +654,7 @@ class AapService : Service(), UsbReceiver.Listener {
         // Cleanup steering wheel and audio focus hacks
         silentAudioPlayer?.stop()
         try {
-            unregisterReceiver(carKeyReceiver)
+            carKeyReceiver?.let { unregisterReceiver(it) }
         } catch (e: Exception) {}
 
         if (!isDestroying) updateNotification()
