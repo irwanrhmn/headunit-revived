@@ -146,24 +146,29 @@ class VideoDecoder(private val settings: Settings) {
     fun decode(buffer: ByteArray, offset: Int, size: Int, forceSoftware: Boolean, codecName: String) {
         synchronized(this) {
             // Buffer management for backward compatibility
-            val frameData = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            // Modern devices (API 21+) use the original buffer with offset/size to avoid GC pressure.
+            val frameData: ByteArray
+            val frameOffset: Int
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 if (legacyFrameBuffer == null || legacyFrameBuffer!!.size < size) {
                     legacyFrameBuffer = ByteArray(size + 1024)
                 }
                 System.arraycopy(buffer, offset, legacyFrameBuffer!!, 0, size)
-                legacyFrameBuffer!!
+                frameData = legacyFrameBuffer!!
+                frameOffset = 0
             } else {
-                if (offset == 0 && size == buffer.size) buffer else buffer.copyOfRange(offset, offset + size)
+                frameData = buffer
+                frameOffset = offset
             }
             
             // Initialization phase: detect codec and configuration (SPS/PPS)
             if (codec == null) {
-                val detectedType = detectCodecType(frameData, 0, size)
+                val detectedType = detectCodecType(frameData, frameOffset, size)
                 val typeToUse = detectedType ?: if (codecName.contains("265")) CodecType.H265 else CodecType.H264
                 currentCodecType = typeToUse
 
                 if (!codecConfigured) {
-                    scanAndApplyConfig(frameData, 0, size, typeToUse)
+                    scanAndApplyConfig(frameData, frameOffset, size, typeToUse)
                     
                     if (mWidth == 0) {
                          // Fallback dimensions if SPS/PPS parsing fails or is missing
@@ -187,7 +192,7 @@ class VideoDecoder(private val settings: Settings) {
             if (codec == null) return
 
             // Feed frame data into MediaCodec input buffers
-            val buf = ByteBuffer.wrap(frameData, 0, size)
+            val buf = ByteBuffer.wrap(frameData, frameOffset, size)
             while (buf.hasRemaining()) {
                 if (!feedInputBuffer(buf)) {
                     return
@@ -270,7 +275,8 @@ class VideoDecoder(private val settings: Settings) {
                     sps = nalData
                     codecConfigured = true
                     try {
-                        SpsParser.parse(sps!!)?.let {
+                        val offsetInNal = if (sps!![2].toInt() == 1) 3 else 4
+                        SpsParser.parse(sps!!, offsetInNal, sps!!.size - offsetInNal)?.let {
                             if (mWidth != it.width || mHeight != it.height) {
                                 AppLog.i("H.264 SPS parsed: ${it.width}x${it.height}")
                                 mWidth = it.width; mHeight = it.height
@@ -494,15 +500,25 @@ class VideoDecoder(private val settings: Settings) {
 /**
  * Helper to parse Bitstreams for SPS data.
  */
-private class BitReader(private val buffer: ByteArray) {
-    private var bitPosition = 0
-    fun readBit(): Int = (buffer[bitPosition / 8].toInt() shr (7 - (bitPosition++ % 8))) and 1
-    fun readBits(count: Int): Int {
-        var res = 0; repeat(count) { res = (res shl 1) or readBit() }; return res
+private class BitReader(private val buffer: ByteArray, private val offset: Int, private val size: Int) {
+    private var bitPosition = offset * 8
+    private val bitLimit = (offset + size) * 8
+
+    fun readBit(): Int {
+        if (bitPosition >= bitLimit) return 0
+        return (buffer[bitPosition / 8].toInt() shr (7 - (bitPosition++ % 8))) and 1
     }
+
+    fun readBits(count: Int): Int {
+        var res = 0
+        repeat(count) { res = (res shl 1) or readBit() }
+        return res
+    }
+
     fun readUE(): Int {
-        var zeros = 0; while (readBit() == 0) zeros++
-        return if (zeros == 0) 0 else (2.0.pow(zeros.toDouble()) - 1 + readBits(zeros)).toInt()
+        var zeros = 0
+        while (readBit() == 0 && bitPosition < bitLimit) zeros++
+        return if (zeros == 0) 0 else (1 shl zeros) - 1 + readBits(zeros)
     }
 }
 
@@ -512,10 +528,9 @@ data class SpsData(val width: Int, val height: Int)
  * Parses AVC/H.264 Sequence Parameter Sets to extract video dimensions.
  */
 private object SpsParser {
-    fun parse(sps: ByteArray): SpsData? {
+    fun parse(sps: ByteArray, offset: Int, size: Int): SpsData? {
         try {
-            val offset = if (sps[2].toInt() == 1) 3 else 4
-            val reader = BitReader(sps.copyOfRange(offset, sps.size))
+            val reader = BitReader(sps, offset, size)
             reader.readBits(8)
             val profileIdc = reader.readBits(8)
             reader.readBits(16)

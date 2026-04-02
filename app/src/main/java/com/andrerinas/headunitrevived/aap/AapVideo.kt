@@ -11,6 +11,7 @@ internal class AapVideo(private val videoDecoder: VideoDecoder, private val sett
 
     private val messageBuffer = ByteBuffer.allocate(Messages.DEF_BUFFER_LENGTH * 32) // ~4MB for H.265 support
     private var legacyAssembledBuffer: ByteArray? = null
+    private var isFrameCorrupt = false
 
     fun process(message: AapMessage): Boolean {
 
@@ -20,7 +21,8 @@ internal class AapVideo(private val videoDecoder: VideoDecoder, private val sett
 
         when (flags) {
             11 -> {
-                // If the video frame is small enough to fit in a single message (Flags 11)
+                // Single fragment frame - corruption only affects this frame
+                isFrameCorrupt = false
                 messageBuffer.clear()
                 // Timestamp Indication (Offset 10)
                 if (len > 14 && buf[10].toInt() == 0 && buf[11].toInt() == 0 && buf[12].toInt() == 0 && buf[13].toInt() == 1) {
@@ -35,9 +37,8 @@ internal class AapVideo(private val videoDecoder: VideoDecoder, private val sett
                 AppLog.w("AapVideo: Dropped Flag 11 packet. len=$len")
             }
             9 -> {
-                // First fragment of a large video frame (Flag 9)
-                // IMPORTANT: Always clear buffer on first fragment.
-                // This prevents cross-frame corruption if the previous frame was partial.
+                // First fragment - reset corruption state for the new frame
+                isFrameCorrupt = false
                 messageBuffer.clear()
 
                 // Timestamp Indication (Offset 10)
@@ -52,30 +53,41 @@ internal class AapVideo(private val videoDecoder: VideoDecoder, private val sett
                 }
             }
             8 -> {
-                // Middle fragment of a large video frame (Flag 8)
+                if (isFrameCorrupt) return true // Skip fragments of an already corrupt frame
+
+                // Middle fragment - append to buffer with overflow detection
                 if (messageBuffer.remaining() >= message.size) {
                     messageBuffer.put(message.data, 0, message.size)
+                } else {
+                    AppLog.e("AapVideo: Fragment overflow (Flag 8)! Size ${message.size} exceeds remaining ${messageBuffer.remaining()}. Invalidating frame.")
+                    isFrameCorrupt = true
+                    messageBuffer.clear()
                 }
                 return true
             }
             10 -> {
-                // Last fragment of a large video frame (Flag 10)
+                if (isFrameCorrupt) return true // Skip fragments of an already corrupt frame
+
+                // Last fragment - append, assemble, and decode
                 if (messageBuffer.remaining() >= message.size) {
                     messageBuffer.put(message.data, 0, message.size)
+                } else {
+                    AppLog.e("AapVideo: Final fragment overflow (Flag 10)! Invalidating frame.")
+                    isFrameCorrupt = true
+                    messageBuffer.clear()
+                    return true
                 }
-                messageBuffer.flip()
                 
+                messageBuffer.flip()
                 val assembledSize = messageBuffer.limit()
                 
                 if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    // For legacy devices, use recycled buffer if possible to avoid GC pressure
                     if (legacyAssembledBuffer == null || legacyAssembledBuffer!!.size < assembledSize) {
                         legacyAssembledBuffer = ByteArray(assembledSize + 1024)
                     }
                     messageBuffer.get(legacyAssembledBuffer!!, 0, assembledSize)
                     videoDecoder.decode(legacyAssembledBuffer!!, 0, assembledSize, settings.forceSoftwareDecoding, settings.videoCodec)
                 } else {
-                    // Modern devices handle buffer.array() well if allocated via allocate()
                     videoDecoder.decode(messageBuffer.array(), 0, assembledSize, settings.forceSoftwareDecoding, settings.videoCodec)
                 }
                 
