@@ -840,7 +840,7 @@ class AapService : Service(), UsbReceiver.Listener {
         val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 AppLog.i("WifiWait: WiFi connected (network=$network)")
-                serviceScope.launch(Dispatchers.Main) {
+                serviceScope.launch {
                     completeWifiWait("WiFi connected")
                 }
             }
