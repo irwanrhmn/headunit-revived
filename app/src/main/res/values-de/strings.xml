@@ -294,6 +294,8 @@
     <string name="notification_projection_active">Android Auto wird projiziert</string>
     <string name="shortcut_connect_title">Verbinden</string>
     <string name="shortcut_connect_desc">Mit letztem Gerät verbinden</string>
+    <string name="shortcut_selfmode_title">Self Mode</string>
+    <string name="shortcut_selfmode_desc">Android Auto auf diesem Gerät starten</string>
     <string name="shortcut_disconnect_title">Trennen</string>
     <string name="shortcut_disconnect_desc">Aktuelle Sitzung beenden</string>
     <string name="shortcut_exit_title">App beenden</string>
@@ -412,4 +414,6 @@
     <string name="hotspot_warning_message">Diese Funktion nutzt Reflection und funktioniert möglicherweise nicht auf allen Geräten. Eventuell muss die Berechtigung \"Systemeinstellungen ändern\" manuell erteilt werden.</string>
     <string name="hotspot_permission_title">Berechtigung erforderlich</string>
     <string name="hotspot_permission_message">Die Hotspot-Funktion benötigt die Berechtigung \"Systemeinstellungen ändern\". Bitte aktivieren Sie diese im nächsten Bildschirm.</string>
+    <string name="not_supported_nativeaa">Natives WLAN scheint nicht unterstützt zu werden</string>
+    <string name="not_supported_nativeaa_desc">Ihr Gerät unterstützt möglicherweise nicht die erforderlichen Bluetooth- oder WLAN-Funktionen für natives WLAN. Sie können es trotzdem versuchen, aber wenn es fehlschlägt, verwenden Sie bitte stattdessen den „Wireless Helper“ oder den Modus „Auto (Headunit Server)“.</string>
 </resources>

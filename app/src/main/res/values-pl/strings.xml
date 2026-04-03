@@ -410,4 +410,9 @@
     <string name="hotspot_warning_message">Ta funkcja korzysta z refleksji i może nie działać na wszystkich urządzeniach. Może być konieczne ręczne przyznanie uprawnienia \"Modyfikacja ustawień systemowych\".</string>
     <string name="hotspot_permission_title">Wymagane uprawnienie</string>
     <string name="hotspot_permission_message">Funkcja hotspot wymaga uprawnienia \"Modyfikacja ustawień systemowych\". Proszę włączyć je na następnym ekranie.</string>
+
+    <string name="not_supported_nativeaa">Natywna łączność bezprzewodowa wydaje się nieobsługiwana</string>
+    <string name="not_supported_nativeaa_desc">Twoje urządzenie może nie obsługiwać wymaganych funkcji Bluetooth lub Wi-Fi dla natywnej łączności bezprzewodowej. Możesz spróbować mimo to, ale jeśli się nie uda, użyj trybu „Wireless Helper” lub „Auto (Headunit Server)”.</string>
+    <string name="shortcut_selfmode_title">Tryb własny (Self Mode)</string>
+    <string name="shortcut_selfmode_desc">Uruchom Android Auto na tym urządzeniu</string>
 </resources>

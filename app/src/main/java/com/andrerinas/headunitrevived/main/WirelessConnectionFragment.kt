@@ -20,6 +20,7 @@ import com.andrerinas.headunitrevived.main.settings.SettingsAdapter
 import com.andrerinas.headunitrevived.utils.Settings
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.andrerinas.headunitrevived.connection.NativeAaHandshakeManager
 
 class WirelessConnectionFragment : Fragment(R.layout.fragment_wireless_connection) {
 
@@ -95,7 +96,7 @@ class WirelessConnectionFragment : Fragment(R.layout.fragment_wireless_connectio
                         
                         if (which == 3) {
                             // Run the compatibility check for Native AA Mode
-                            if (com.andrerinas.headunitrevived.connection.NativeAaHandshakeManager.checkCompatibility()) {
+                            if (NativeAaHandshakeManager.checkCompatibility()) {
                                 MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
                                     .setTitle(R.string.supported_nativeaa)
                                     .setMessage(R.string.supported_nativeaa_desc)
@@ -111,11 +112,14 @@ class WirelessConnectionFragment : Fragment(R.layout.fragment_wireless_connectio
                                 MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
                                     .setTitle(R.string.not_supported_nativeaa)
                                     .setMessage(R.string.not_supported_nativeaa_desc)
-                                    .setPositiveButton(android.R.string.ok, null)
+                                    .setPositiveButton(android.R.string.ok) { dialog2, _ ->
+                                        pendingWifiConnectionMode = which
+                                        checkChanges()
+                                        updateSettingsList()
+                                        dialog2.dismiss()
+                                    }
+                                    .setNegativeButton(android.R.string.cancel, null)
                                     .show()
-                                    
-                                // Do not change the pending mode
-                                updateSettingsList()
                             }
                         } else {
                             pendingWifiConnectionMode = which

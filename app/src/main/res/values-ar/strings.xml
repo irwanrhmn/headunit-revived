@@ -291,6 +291,8 @@
     <string name="notification_projection_active">Android Auto قيد الإسقاط</string>
     <string name="shortcut_connect_title">اتصال</string>
     <string name="shortcut_connect_desc">الاتصال بآخر جهاز معروف</string>
+    <string name="shortcut_selfmode_title">الوضع الذاتي</string>
+    <string name="shortcut_selfmode_desc">ابدأ Android Auto على هذا الجهاز</string>
     <string name="shortcut_disconnect_title">قطع الاتصال</string>
     <string name="shortcut_disconnect_desc">إنهاء الجلسة الحالية</string>
     <string name="shortcut_exit_title">إغلاق التطبيق</string>
@@ -410,4 +412,6 @@
     <string name="hotspot_warning_message">تستخدم هذه الميزة الانعكاس وقد لا تعمل على جميع الأجهزة. قد تحتاج إلى منح إذن \"تعديل إعدادات النظام\" يدوياً.</string>
     <string name="hotspot_permission_title">إذن مطلوب</string>
     <string name="hotspot_permission_message">تتطلب ميزة نقطة الاتصال إذن \"تعديل إعدادات النظام\". يرجى تفعيله في الشاشة التالية.</string>
+    <string name="not_supported_nativeaa">يبدو أن الاتصال اللاسلكي الأصلي غير مدعوم</string>
+    <string name="not_supported_nativeaa_desc">قد لا يدعم جهازك ميزات Bluetooth أو Wi-Fi المطلوبة للاتصال اللاسلكي الأصلي. يمكنك تجربته على أي حال، ولكن إذا فشل، يرجى استخدام وضع \"Wireless Helper\" أو \"تلقائي (خادم وحدة الرأس)\" بدلاً من ذلك.</string>
 </resources>

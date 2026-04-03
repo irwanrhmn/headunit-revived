@@ -290,6 +290,8 @@
     <string name="notification_projection_active">Android Auto kivetítve</string>
     <string name="shortcut_connect_title">Kapcsolódás</string>
     <string name="shortcut_connect_desc">Kapcsolódás az utolsó ismert eszközhöz</string>
+    <string name="shortcut_selfmode_title">Saját mód</string>
+    <string name="shortcut_selfmode_desc">Android Auto indítása ezen az eszközön</string>
     <string name="shortcut_disconnect_title">Leválasztás</string>
     <string name="shortcut_disconnect_desc">Az aktuális munkamenet befejezése</string>
     <string name="shortcut_exit_title">Kilépés az alkalmazásból</string>
@@ -409,4 +411,6 @@
     <string name="hotspot_warning_message">Ez a funkció reflexiót használ, és nem minden eszközön működik. Szükség lehet a \"Rendszerbeállítások módosítása\" engedély manuális megadására.</string>
     <string name="hotspot_permission_title">Engedély szükséges</string>
     <string name="hotspot_permission_message">A hotspot funkció a \"Rendszerbeállítások módosítása\" engedélyt igényli. Kérjük, engedélyezze a következő képernyőn.</string>
+    <string name="not_supported_nativeaa">A natív vezeték nélküli mód úgy tűnik, nem támogatott</string>
+    <string name="not_supported_nativeaa_desc">Lehet, hogy eszköze nem támogatja a natív vezeték nélküli módhoz szükséges Bluetooth vagy Wi-Fi funkciókat. Ennek ellenére megpróbálhatja, de ha nem sikerül, kérjük, használja helyette a „Wireless Helper” vagy az „Auto (Headunit Server)” módot.</string>
 </resources>
