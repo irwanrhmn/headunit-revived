@@ -423,6 +423,6 @@
     
     <string name="supported_nativeaa">Enhanced Wireless Support</string>
     <string name="supported_nativeaa_desc">Great news! Your device supports \"Native Wireless\" mode, which provides a more seamless Android Auto experience. \n\nTo enable this, we need to refresh your Bluetooth cache. Please: \n1. Remove the existing pairing on your phone \n2. Click OK to restart Bluetooth \n3. Re-pair your phone \n\nWould you like to switch to Native AA mode now?</string>
-    <string name="not_supported_nativeaa">Native Wireless not supported</string>
-    <string name="not_supported_nativeaa_desc">Your device\'s Bluetooth stack does not support the required service registration for native Android Auto Wireless. Please use the \"Wireless Helper\" app or \"Auto (Headunit Server)\" mode instead.</string>
+    <string name="not_supported_nativeaa">Native Wireless seems not supported</string>
+    <string name="not_supported_nativeaa_desc">Your device might not support the required Bluetooth or Wi-Fi features for Native Wireless. You can try it anyway, but if it fails, please use the \"Wireless Helper\" or \"Auto (Headunit Server)\" mode instead.</string>
 </resources>
