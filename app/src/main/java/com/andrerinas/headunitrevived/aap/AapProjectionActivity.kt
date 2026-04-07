@@ -492,8 +492,15 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
         val action = TouchEvent.motionEventToAction(event) ?: return
         val ts = SystemClock.elapsedRealtime()
 
-        val horizontalCorrection = HeadUnitScreenConfig.getHorizontalCorrection()
-        val verticalCorrection = HeadUnitScreenConfig.getVerticalCorrection()
+        val containerView = findViewById<View>(R.id.container)
+        val viewWidth = containerView?.width?.takeIf { it > 0 } ?: HeadUnitScreenConfig.getUsableWidth()
+        val viewHeight = containerView?.height?.takeIf { it > 0 } ?: HeadUnitScreenConfig.getUsableHeight()
+
+        val aaWidth = HeadUnitScreenConfig.getNegotiatedWidth() - HeadUnitScreenConfig.getWidthMargin()
+        val aaHeight = HeadUnitScreenConfig.getNegotiatedHeight() - HeadUnitScreenConfig.getHeightMargin()
+
+        val horizontalCorrection = if (viewWidth > 0) aaWidth.toFloat() / viewWidth.toFloat() else 0f
+        val verticalCorrection = if (viewHeight > 0) aaHeight.toFloat() / viewHeight.toFloat() else 0f
 
         if (horizontalCorrection <= 0 || verticalCorrection <= 0) {
             AppLog.w("sendTouchEvent: Ignoring touch, screen config not ready yet.")
