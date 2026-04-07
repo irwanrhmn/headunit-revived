@@ -680,7 +680,7 @@ class Settings(context: Context) {
     var appTheme: AppTheme
         get() {
             val value = prefs.getInt("app-theme", 0)
-            return AppTheme.fromInt(value)
+            return AppTheme.fromInt(value) ?: AppTheme.AUTOMATIC
         }
         set(theme) {
             prefs.edit().putInt("app-theme", theme.value).apply()

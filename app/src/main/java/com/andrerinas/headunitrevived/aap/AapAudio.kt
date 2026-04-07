@@ -4,8 +4,6 @@ import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.os.Build
-import android.os.SystemClock
-
 import com.andrerinas.headunitrevived.aap.protocol.AudioConfigs
 import com.andrerinas.headunitrevived.aap.protocol.Channel
 import com.andrerinas.headunitrevived.aap.protocol.proto.Control

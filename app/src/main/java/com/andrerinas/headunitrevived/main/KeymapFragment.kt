@@ -135,16 +135,23 @@ class KeymapFragment : Fragment(), MainActivity.KeyListener {
     private val keyCodeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == "com.andrerinas.headunitrevived.DEBUG_KEY") {
-                val action = intent.getStringExtra("action") ?: "unknown"
-                val command = intent.getStringExtra("command") ?: intent.getStringExtra("action_command") ?: ""
-                val extras = intent.extras?.keySet()?.joinToString { "$it=${intent.extras?.get(it)}" } ?: ""
+                val action = (intent.getStringExtra("action") ?: "unknown").replace("com.andrerinas.headunitrevived.", "")
                 
-                val displayText = if (command.isNotEmpty()) {
-                    "Intent: $action\nCommand: $command"
-                } else {
-                    "Intent: $action\nExtras: $extras"
-                }
+                // Try to find a keycode in various common extras
+                val extractedCode = intent.getIntExtra("keyCode", -1).takeIf { it != -1 }
+                    ?: intent.getByteExtra("extra_key_value", 0).toInt().takeIf { it != 0 }
+                    ?: intent.getIntExtra("CLICK_KEY", -1).takeIf { it != -1 }
+                    ?: intent.getIntExtra("com.winca.service.Setting.KEY_ACTION_EXTRA", -1).takeIf { it != -1 }
+
+                val extras = intent.extras?.keySet()
+                    ?.filter { it != "action" && it != "keyCode" && it != "extra_key_value" }
+                    ?.joinToString { "$it=${intent.extras?.get(it)}" } ?: ""
+                
+                val codeText = if (extractedCode != null) "CODE: $extractedCode" else "NO CODE"
+                val displayText = "Action: $action\n$codeText\n$extras"
+                
                 keypressDebuggerTextView.text = displayText
+                keypressDebuggerTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.brand_teal))
                 return
             }
 
