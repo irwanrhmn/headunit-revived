@@ -407,4 +407,7 @@
     <string name="hotspot_warning_message">Esta función utiliza reflexión y es posible que no funcione en todos los dispositivos. También puede requerir que se otorgue manualmente el permiso \"Modificar ajustes del sistema\".</string>
     <string name="hotspot_permission_title">Permiso requerido</string>
     <string name="hotspot_permission_message">La función de punto de acceso requiere el permiso \"Modificar ajustes del sistema\". Por favor, actívelo en la siguiente pantalla.</string>
+    <string name="wait_for_wifi">Esperar WiFi antes de WiFi Direct</string>
+    <string name="wait_for_wifi_description">Al arrancar, espera a que el WiFi se conecte antes de iniciar WiFi Direct. Útil si tu dispositivo móvil tarda unos segundos en conectarse al WiFi después de encenderse.</string>
+    <string name="wait_for_wifi_timeout">Tiempo de espera WiFi</string>
 </resources>

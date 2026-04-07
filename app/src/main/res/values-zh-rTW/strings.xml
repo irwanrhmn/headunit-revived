@@ -406,4 +406,7 @@
     <string name="hotspot_warning_message">此功能使用反射機制，可能無法在所有裝置上正常運作。可能需要手動授予「修改系統設定」權限。</string>
     <string name="hotspot_permission_title">需要權限</string>
     <string name="hotspot_permission_message">熱點功能需要「修改系統設定」權限。請在下一個畫面中啟用。</string>
+    <string name="wait_for_wifi">啟動 WiFi Direct 前等待 WiFi</string>
+    <string name="wait_for_wifi_description">開機時，在啟動 WiFi Direct 之前等待 WiFi 連接。適用於主機開機後需要幾秒才能連上 WiFi 的情況。</string>
+    <string name="wait_for_wifi_timeout">WiFi 等待逾時</string>
 </resources>

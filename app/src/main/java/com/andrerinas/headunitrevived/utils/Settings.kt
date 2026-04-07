@@ -688,4 +688,12 @@ class Settings(context: Context) {
         get() = prefs.getBoolean("auto-enable-hotspot", false)
         set(value) { prefs.edit().putBoolean("auto-enable-hotspot", value).apply() }
 
+    var waitForWifiBeforeWifiDirect: Boolean
+        get() = prefs.getBoolean("wait-for-wifi-before-wifi-direct", false)
+        set(value) { prefs.edit().putBoolean("wait-for-wifi-before-wifi-direct", value).apply() }
+
+    var waitForWifiTimeout: Int
+        get() = prefs.getInt("wait-for-wifi-timeout", 10)
+        set(value) { prefs.edit().putInt("wait-for-wifi-timeout", value).apply() }
+
 }

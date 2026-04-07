@@ -407,4 +407,7 @@
     <string name="hotspot_warning_message">Este recurso usa reflexão e pode não funcionar em todos os dispositivos. Pode ser necessário conceder manualmente a permissão \"Modificar configurações do sistema\".</string>
     <string name="hotspot_permission_title">Permissão necessária</string>
     <string name="hotspot_permission_message">O recurso de ponto de acesso requer a permissão \"Modificar configurações do sistema\". Por favor, ative-a na próxima tela.</string>
+    <string name="wait_for_wifi">Aguardar WiFi antes do WiFi Direct</string>
+    <string name="wait_for_wifi_description">Ao iniciar, aguarda a conexão WiFi antes de iniciar o WiFi Direct. Útil se seu headunit demora alguns segundos para conectar ao WiFi após ligar.</string>
+    <string name="wait_for_wifi_timeout">Tempo limite de espera WiFi</string>
 </resources>

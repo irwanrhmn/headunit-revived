@@ -407,4 +407,7 @@
     <string name="hotspot_warning_message">تستخدم هذه الميزة الانعكاس وقد لا تعمل على جميع الأجهزة. قد تحتاج إلى منح إذن \"تعديل إعدادات النظام\" يدوياً.</string>
     <string name="hotspot_permission_title">إذن مطلوب</string>
     <string name="hotspot_permission_message">تتطلب ميزة نقطة الاتصال إذن \"تعديل إعدادات النظام\". يرجى تفعيله في الشاشة التالية.</string>
+    <string name="wait_for_wifi">انتظار WiFi قبل WiFi Direct</string>
+    <string name="wait_for_wifi_description">عند بدء التشغيل، انتظر اتصال WiFi قبل بدء WiFi Direct. مفيد إذا كان جهازك يحتاج بضع ثوانٍ للاتصال بشبكة WiFi بعد التشغيل.</string>
+    <string name="wait_for_wifi_timeout">مهلة انتظار WiFi</string>
 </resources>

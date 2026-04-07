@@ -406,4 +406,7 @@
     <string name="hotspot_warning_message">Ez a funkció reflexiót használ, és nem minden eszközön működik. Szükség lehet a \"Rendszerbeállítások módosítása\" engedély manuális megadására.</string>
     <string name="hotspot_permission_title">Engedély szükséges</string>
     <string name="hotspot_permission_message">A hotspot funkció a \"Rendszerbeállítások módosítása\" engedélyt igényli. Kérjük, engedélyezze a következő képernyőn.</string>
+    <string name="wait_for_wifi">Várakozás WiFi-re a WiFi Direct előtt</string>
+    <string name="wait_for_wifi_description">Indításkor megvárja a WiFi csatlakozást a WiFi Direct elindítása előtt. Hasznos, ha a fejegység néhány másodpercet vesz igénybe a WiFi csatlakozáshoz bekapcsolás után.</string>
+    <string name="wait_for_wifi_timeout">WiFi várakozási időkorlát</string>
 </resources>

@@ -407,4 +407,7 @@
     <string name="hotspot_warning_message">Această funcție folosește reflexie și este posibil să nu funcționeze pe toate dispozitivele. Este posibil să fie nevoie să acordați manual permisiunea \"Modificare setări de sistem\".</string>
     <string name="hotspot_permission_title">Permisiune necesară</string>
     <string name="hotspot_permission_message">Funcția de hotspot necesită permisiunea \"Modificare setări de sistem\". Vă rugăm să o activați pe ecranul următor.</string>
+    <string name="wait_for_wifi">Așteaptă WiFi înainte de WiFi Direct</string>
+    <string name="wait_for_wifi_description">La pornire, așteaptă conectarea WiFi înainte de a porni WiFi Direct. Util dacă headunit-ul tău are nevoie de câteva secunde pentru a se conecta la WiFi după pornire.</string>
+    <string name="wait_for_wifi_timeout">Limita de așteptare WiFi</string>
 </resources>

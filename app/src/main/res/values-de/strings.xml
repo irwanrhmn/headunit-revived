@@ -407,4 +407,7 @@
     <string name="hotspot_warning_message">Diese Funktion nutzt Reflection und funktioniert möglicherweise nicht auf allen Geräten. Eventuell muss die Berechtigung \"Systemeinstellungen ändern\" manuell erteilt werden.</string>
     <string name="hotspot_permission_title">Berechtigung erforderlich</string>
     <string name="hotspot_permission_message">Die Hotspot-Funktion benötigt die Berechtigung \"Systemeinstellungen ändern\". Bitte aktivieren Sie diese im nächsten Bildschirm.</string>
+    <string name="wait_for_wifi">Auf WLAN warten vor WiFi Direct</string>
+    <string name="wait_for_wifi_description">Beim Starten auf WLAN-Verbindung warten, bevor WiFi Direct gestartet wird. Nützlich, wenn Ihr Headunit nach dem Einschalten einige Sekunden braucht, um sich mit dem WLAN zu verbinden.</string>
+    <string name="wait_for_wifi_timeout">WLAN-Wartezeit</string>
 </resources>

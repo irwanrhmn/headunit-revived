@@ -414,4 +414,8 @@
     <string name="hotspot_warning_message">This feature uses reflection and might not work on all devices. It may also require the "Modify system settings" permission to be granted manually.</string>
     <string name="hotspot_permission_title">Permission Required</string>
     <string name="hotspot_permission_message">The hotspot feature requires the \"Modify system settings\" permission. Please enable it in the next screen.</string>
+
+    <string name="wait_for_wifi">Wait for WiFi before WiFi Direct</string>
+    <string name="wait_for_wifi_description">On boot, wait for WiFi to connect before starting WiFi Direct. Enable this if your head unit needs a few seconds to connect to WiFi after power on.</string>
+    <string name="wait_for_wifi_timeout">WiFi wait timeout</string>
 </resources>

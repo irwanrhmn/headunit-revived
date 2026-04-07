@@ -406,4 +406,7 @@
     <string name="hotspot_warning_message">Deze functie gebruikt reflectie en werkt mogelijk niet op alle apparaten. Mogelijk moet u handmatig de toestemming \"Systeeminstellingen wijzigen\" verlenen.</string>
     <string name="hotspot_permission_title">Toestemming vereist</string>
     <string name="hotspot_permission_message">De hotspotfunctie vereist de toestemming \"Systeeminstellingen wijzigen\". Schakel deze in op het volgende scherm.</string>
+    <string name="wait_for_wifi">Wacht op WiFi voor WiFi Direct</string>
+    <string name="wait_for_wifi_description">Wacht bij het opstarten tot WiFi verbonden is voordat WiFi Direct wordt gestart. Handig als uw headunit een paar seconden nodig heeft om verbinding te maken met WiFi na het opstarten.</string>
+    <string name="wait_for_wifi_timeout">WiFi wachttijd</string>
 </resources>

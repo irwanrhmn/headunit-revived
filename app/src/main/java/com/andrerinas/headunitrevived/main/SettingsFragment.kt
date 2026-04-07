@@ -61,6 +61,8 @@ class SettingsFragment : Fragment() {
 
     private var pendingKillOnDisconnect: Boolean? = null
     private var pendingAutoEnableHotspot: Boolean? = null
+    private var pendingWaitForWifi: Boolean? = null
+    private var pendingWaitForWifiTimeout: Int? = null
     
     // Custom Insets
     private var pendingInsetLeft: Int? = null
@@ -112,6 +114,8 @@ class SettingsFragment : Fragment() {
 
         pendingKillOnDisconnect = settings.killOnDisconnect
         pendingAutoEnableHotspot = settings.autoEnableHotspot
+        pendingWaitForWifi = settings.waitForWifiBeforeWifiDirect
+        pendingWaitForWifiTimeout = settings.waitForWifiTimeout
         
         pendingInsetLeft = settings.insetLeft
         pendingInsetTop = settings.insetTop
@@ -235,6 +239,8 @@ class SettingsFragment : Fragment() {
 
         pendingKillOnDisconnect?.let { settings.killOnDisconnect = it }
         pendingAutoEnableHotspot?.let { settings.autoEnableHotspot = it }
+        pendingWaitForWifi?.let { settings.waitForWifiBeforeWifiDirect = it }
+        pendingWaitForWifiTimeout?.let { settings.waitForWifiTimeout = it }
         
         pendingInsetLeft?.let { settings.insetLeft = it }
         pendingInsetTop?.let { settings.insetTop = it }
@@ -302,7 +308,9 @@ class SettingsFragment : Fragment() {
                         pendingAssistantVolumeOffset != settings.assistantVolumeOffset ||
                         pendingNavigationVolumeOffset != settings.navigationVolumeOffset ||
                         pendingKillOnDisconnect != settings.killOnDisconnect ||
-                        pendingAutoEnableHotspot != settings.autoEnableHotspot
+                        pendingAutoEnableHotspot != settings.autoEnableHotspot ||
+                        pendingWaitForWifi != settings.waitForWifiBeforeWifiDirect ||
+                        pendingWaitForWifiTimeout != settings.waitForWifiTimeout
 
         hasChanges = anyChange
 
@@ -450,6 +458,37 @@ class SettingsFragment : Fragment() {
                     }
                 }
             ))
+        }
+
+        if (pendingWifiConnectionMode == 2) {
+            items.add(SettingItem.ToggleSettingEntry(
+                stableId = "waitForWifi",
+                nameResId = R.string.wait_for_wifi,
+                descriptionResId = R.string.wait_for_wifi_description,
+                isChecked = pendingWaitForWifi ?: false,
+                onCheckedChanged = { isChecked ->
+                    pendingWaitForWifi = isChecked
+                    checkChanges()
+                    updateSettingsList()
+                }
+            ))
+
+            if (pendingWaitForWifi == true) {
+                items.add(SettingItem.SliderSettingEntry(
+                    stableId = "waitForWifiTimeout",
+                    nameResId = R.string.wait_for_wifi_timeout,
+                    value = "${pendingWaitForWifiTimeout}s",
+                    sliderValue = (pendingWaitForWifiTimeout ?: 10).toFloat(),
+                    valueFrom = 5f,
+                    valueTo = 30f,
+                    stepSize = 1f,
+                    onValueChanged = { value ->
+                        pendingWaitForWifiTimeout = value.toInt()
+                        checkChanges()
+                        updateSettingsList()
+                    }
+                ))
+            }
         }
 
         items.add(SettingItem.SettingEntry(
