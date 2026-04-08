@@ -86,6 +86,12 @@ class WirelessConnectionFragment : Fragment(R.layout.fragment_wireless_connectio
         val items = mutableListOf<SettingItem>()
         val wifiModes = resources.getStringArray(R.array.wireless_connection_modes)
 
+        // Add 2.4GHz Warning Banner at the top
+        items.add(SettingItem.InfoBanner(
+            stableId = "wireless24ghzWarning",
+            textResId = R.string.wireless_24ghz_warning
+        ))
+
         items.add(SettingItem.CategoryHeader("wireless_mode", R.string.wireless_mode))
         
         items.add(SettingItem.SettingEntry(

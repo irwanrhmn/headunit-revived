@@ -132,7 +132,23 @@ class WifiDirectManager(private val context: Context) : WifiP2pManager.Connectio
             val bssid = getWifiDirectMac(group.`interface`)
             val isOwner = group.isGroupOwner
             
-            AppLog.i("WifiDirectManager: onGroupInfoAvailable: SSID: $ssid, BSSID: $bssid, GO: $isOwner")
+            // Try to get frequency via reflection (hidden field in WifiP2pGroup)
+            var frequency = 0
+            try {
+                // Try several common field names used by different OEMs
+                val fieldNames = arrayOf("frequency", "mFrequency")
+                for (name in fieldNames) {
+                    try {
+                        val field = group.javaClass.getDeclaredField(name)
+                        field.isAccessible = true
+                        frequency = field.getInt(group)
+                        if (frequency > 0) break
+                    } catch (e: Exception) {}
+                }
+            } catch (e: Exception) {}
+            
+            val band = if (frequency > 4000) "5GHz" else if (frequency > 0) "2.4GHz" else "unknown"
+            AppLog.i("WifiDirectManager: onGroupInfoAvailable: SSID: $ssid, BSSID: $bssid, GO: $isOwner, Freq: $frequency MHz ($band)")
             
             if (ssid.isNotEmpty()) {
                 // Wait for the IP address to be assigned to the interface
@@ -375,28 +391,79 @@ class WifiDirectManager(private val context: Context) : WifiP2pManager.Connectio
         val ch = channel ?: return
         
         AppLog.i("WifiDirectManager: Attempting createGroup for Native AA (Attempt $retryCount)...")
+
+        // 5GHz Hack: Try to force 5GHz band using reflection
+        try {
+            val configClass = Class.forName("android.net.wifi.p2p.WifiP2pConfig")
+            val config = configClass.newInstance()
+            
+            val groupOwnerIntentField = configClass.getDeclaredField("groupOwnerIntent")
+            groupOwnerIntentField.isAccessible = true
+            groupOwnerIntentField.set(config, 15)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val setGroupOperatingBandMethod = configClass.getMethod("setGroupOperatingBand", Int::class.javaPrimitiveType)
+                setGroupOperatingBandMethod.invoke(config, 2) // 2 = 5GHz band
+            }
+
+            // The hidden method signature is createGroup(Channel, WifiP2pConfig, ActionListener)
+            val createGroupMethod = mgr.javaClass.getMethod("createGroup", 
+                WifiP2pManager.Channel::class.java, 
+                configClass, 
+                WifiP2pManager.ActionListener::class.java)
+                
+            createGroupMethod.invoke(mgr, ch, config, object : WifiP2pManager.ActionListener {
+                override fun onSuccess() {
+                    AppLog.i("WifiDirectManager: 5GHz Forced createGroup SUCCESS!")
+                    isGroupOwner = true
+                    handler.postDelayed({
+                        mgr.requestConnectionInfo(ch, this@WifiDirectManager)
+                        mgr.requestGroupInfo(ch, this@WifiDirectManager)
+                    }, 1000L)
+                }
+                override fun onFailure(reason: Int) {
+                    val reasonStr = getP2pErrorString(reason)
+                    AppLog.w("WifiDirectManager: 5GHz Forced createGroup failed ($reasonStr), falling back to standard...")
+                    standardCreateGroup(mgr, ch, retryCount)
+                }
+            })
+            return
+        } catch (e: Exception) {
+            AppLog.w("WifiDirectManager: 5GHz Hack failed: ${e.message}. Using standard createGroup.")
+        }
+
+        standardCreateGroup(mgr, ch, retryCount)
+    }
+
+    private fun getP2pErrorString(reason: Int): String {
+        return when(reason) {
+            0 -> "ERROR (Internal Error)"
+            1 -> "P2P_UNSUPPORTED"
+            2 -> "BUSY (System is busy, retry needed)"
+            else -> "UNKNOWN ($reason)"
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun standardCreateGroup(mgr: WifiP2pManager, ch: WifiP2pManager.Channel, retryCount: Int) {
         mgr.createGroup(ch, object : WifiP2pManager.ActionListener {
             override fun onSuccess() {
-                AppLog.i("WifiDirectManager: createGroup SUCCESS! Waiting for info to stabilize...")
+                AppLog.i("WifiDirectManager: Standard createGroup SUCCESS!")
                 isGroupOwner = true
-                // We need to wait a tiny bit before requesting group info to ensure the system is ready
                 handler.postDelayed({
-                    AppLog.d("WifiDirectManager: Requesting connection/group info after successful create...")
                     mgr.requestConnectionInfo(ch, this@WifiDirectManager)
                     mgr.requestGroupInfo(ch, this@WifiDirectManager)
                 }, 1000L)
             }
             override fun onFailure(reason: Int) {
+                val reasonStr = getP2pErrorString(reason)
                 if (reason == 2 && retryCount < 3) {
-                    AppLog.w("WifiDirectManager: createGroup failed (BUSY), retrying in 2s...")
-                    handler.postDelayed({ createQuietGroup(retryCount + 1) }, 2000L)
+                    AppLog.w("WifiDirectManager: createGroup failed ($reasonStr), removing group and retrying in 2s...")
+                    mgr.removeGroup(ch, object : WifiP2pManager.ActionListener {
+                        override fun onSuccess() { delayedCreateQuietGroup(retryCount + 1) }
+                        override fun onFailure(r: Int) { delayedCreateQuietGroup(retryCount + 1) }
+                    })
                 } else {
-                    val reasonStr = when(reason) {
-                        0 -> "ERROR"
-                        1 -> "P2P_UNSUPPORTED"
-                        2 -> "BUSY"
-                        else -> "UNKNOWN ($reason)"
-                    }
                     AppLog.e("WifiDirectManager: createQuietGroup failed completely! Reason: $reasonStr")
                 }
             }

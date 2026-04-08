@@ -417,4 +417,5 @@
     <string name="wait_for_wifi">啟動 WiFi Direct 前等待 WiFi</string>
     <string name="wait_for_wifi_description">開機時，在啟動 WiFi Direct 之前等待 WiFi 連接。適用於主機開機後需要幾秒才能連上 WiFi 的情況。</string>
     <string name="wait_for_wifi_timeout">WiFi 等待逾時</string>
+    <string name="wireless_24ghz_warning">注意：在 2.4GHz 設備上使用無線 Android Auto 可能會導致延遲、卡頓和斷開連接。如果您遇到問題，請透過 USB 進行測試，以確認是否為網絡限制。</string>
 </resources>

@@ -417,4 +417,5 @@
     <string name="wait_for_wifi">Esperar WiFi antes de WiFi Direct</string>
     <string name="wait_for_wifi_description">Al arrancar, espera a que el WiFi se conecte antes de iniciar WiFi Direct. Útil si tu dispositivo móvil tarda unos segundos en conectarse al WiFi después de encenderse.</string>
     <string name="wait_for_wifi_timeout">Tiempo de espera WiFi</string>
+    <string name="wireless_24ghz_warning">Nota: Android Auto inalámbrico en dispositivos de 2.4GHz puede causar lag, tirones y desconexiones. Si tiene problemas, pruebe a través de USB para confirmar si es una limitación de la red.</string>
 </resources>

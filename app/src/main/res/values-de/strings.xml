@@ -419,4 +419,5 @@
     <string name="wait_for_wifi">Auf WLAN warten vor WiFi Direct</string>
     <string name="wait_for_wifi_description">Beim Starten auf WLAN-Verbindung warten, bevor WiFi Direct gestartet wird. Nützlich, wenn Ihr Headunit nach dem Einschalten einige Sekunden braucht, um sich mit dem WLAN zu verbinden.</string>
     <string name="wait_for_wifi_timeout">WLAN-Wartezeit</string>
+    <string name="wireless_24ghz_warning">Hinweis: Kabelloses Android Auto auf 2,4-GHz-Geräten kann zu Verzögerungen, Rucklern und Verbindungsabbrüchen führen. Bei Problemen testen Sie bitte die USB-Verbindung, um festzustellen, ob es sich um eine Netzwerkbeschränkung handelt.</string>
 </resources>

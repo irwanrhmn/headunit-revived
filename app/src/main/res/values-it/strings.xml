@@ -433,4 +433,5 @@
     <string name="wait_for_wifi">Attendi WiFi prima di WiFi Direct</string>
     <string name="wait_for_wifi_description">All\'avvio, attendi la connessione WiFi prima di avviare il WiFi Direct. Abilita se la tua head unit ha bisogno di qualche secondo per connettersi al WiFi dopo l\'accensione.</string>
     <string name="wait_for_wifi_timeout">Timeout attesa WiFi</string>
+    <string name="wireless_24ghz_warning">Nota: Android Auto wireless su dispositivi a 2.4GHz può causare lag, scatti e disconnessioni. Se riscontri problemi, prova via USB per confermare se si tratta di un limite della rete.</string>
 </resources>

@@ -418,4 +418,5 @@
     <string name="wait_for_wifi">Wi-Fi Directを使用する前に、Wi-Fiが有効になるまでお待ちください。</string>
     <string name="wait_for_wifi_description">起動時に、Wi-Fi接続が完了するまで待ってからWi-Fi Directを開始します。ヘッドユニットの電源投入後、Wi-Fi接続に数秒かかる場合は、この設定を有効にしてください。</string>
     <string name="wait_for_wifi_timeout">WiFi待機タイムアウト</string>
+    <string name="wireless_24ghz_warning">注意：2.4GHzデバイスでのワイヤレスAndroid Autoは、ラグ、カクつき、切断の原因となる場合があります。問題が発生した場合は、USB接続でテストし、ネットワークの制限かどうかを確認してください。</string>
 </resources>

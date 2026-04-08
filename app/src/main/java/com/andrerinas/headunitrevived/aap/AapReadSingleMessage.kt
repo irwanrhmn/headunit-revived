@@ -7,8 +7,13 @@ internal class AapReadSingleMessage(connection: AccessoryConnection, ssl: AapSsl
     : AapRead.Base(connection, ssl, handler) {
 
     private val recvHeader = AapMessageIncoming.EncryptedHeader()
-    private val msgBuffer = ByteArray(65535) // unsigned short max
+    // Increase to 2MB to handle large 1080p/4K I-frames
+    private val msgBuffer = ByteArray(2 * 1024 * 1024) 
     private val fragmentSizeBuffer = ByteArray(4)
+
+    // Throughput monitoring
+    private var lastLogTime = 0L
+    private var bytesInLastSecond = 0L
 
     override fun doRead(connection: AccessoryConnection): Int {
         try {
@@ -30,6 +35,7 @@ internal class AapReadSingleMessage(connection: AccessoryConnection, ssl: AapSsl
                 }
             }
 
+            bytesInLastSecond += headerSize
             recvHeader.decode()
 
             // Immediate check for Magic Garbage in the header bytes.
@@ -46,6 +52,7 @@ internal class AapReadSingleMessage(connection: AccessoryConnection, ssl: AapSsl
                     AppLog.e("AapRead: Failed to read fragment total size. Skipping.")
                     return 0
                 }
+                bytesInLastSecond += readSize
             }
 
             // Step 2: Read the encrypted message body
@@ -63,6 +70,15 @@ internal class AapReadSingleMessage(connection: AccessoryConnection, ssl: AapSsl
                 }
                 AppLog.e("AapRead: Failed to read full message body. Expected ${recvHeader.enc_len}, got $msgSize. Skipping.")
                 return 0
+            }
+
+            bytesInLastSecond += msgSize
+            val now = System.currentTimeMillis()
+            if (now - lastLogTime >= 1000) {
+                val mbit = (bytesInLastSecond * 8.0) / (1024.0 * 1024.0)
+                AppLog.i(">>> THROUGHPUT: %.2f Mbit/s (%d KB/s) <<<".format(mbit, bytesInLastSecond / 1024))
+                bytesInLastSecond = 0
+                lastLogTime = now
             }
 
             // Step 3: Decrypt the message

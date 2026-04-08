@@ -416,5 +416,6 @@
     <string name="not_supported_nativeaa_desc">Es posible que su dispositivo no sea compatible con las funciones de Bluetooth o Wi-Fi necesarias para el modo inalámbrico nativo. Puede intentarlo de todos modos, pero si falla, use el modo \"Wireless Helper\" o \"Automático (Headunit Server)\" en su lugar.</string>
     <string name="wait_for_wifi">Esperar WiFi antes de WiFi Direct</string>
     <string name="wait_for_wifi_description">Al iniciar, espera a que el WiFi se conecte antes de iniciar WiFi Direct. Útil si tu radio tarda unos segundos en conectarse al WiFi después de encender.</string>
-    <string name="wait_for_wifi_timeout">Tiempo de espera WiFi</string>
-</resources>
+    <string name="wait_for_wifi_timeout">Tiempo de espera de WiFi</string>
+    <string name="wireless_24ghz_warning">Nota: Android Auto inalámbrico en dispositivos de 2.4GHz puede causar lag, tirones y desconexiones. Si tiene problemas, pruebe a través de USB para confirmar si es una limitación de la red.</string>
+    </resources>

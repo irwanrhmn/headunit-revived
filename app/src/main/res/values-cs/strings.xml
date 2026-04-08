@@ -417,4 +417,5 @@
     <string name="wait_for_wifi">Počkat na WiFi před WiFi Direct</string>
     <string name="wait_for_wifi_description">Při startu počká na připojení WiFi před spuštěním WiFi Direct. Užitečné, pokud vaše headunit potřebuje několik sekund na připojení k WiFi po zapnutí.</string>
     <string name="wait_for_wifi_timeout">Časový limit čekání na WiFi</string>
+    <string name="wireless_24ghz_warning">Poznámka: Bezdrátové Android Auto na 2,4GHz zařízeních může vést k lagům, sekání a odpojování. Pokud máte problémy, otestujte připojení přes USB, abyste potvrdili, zda se jedná o omezení sítě.</string>
 </resources>

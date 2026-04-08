@@ -13,22 +13,38 @@ internal class AapReadMultipleMessages(
         handler: AapMessageHandler)
     : AapRead.Base(connection, ssl, handler) {
 
-    private val fifo = ByteBuffer.allocate(Messages.DEF_BUFFER_LENGTH * 4) // Increased buffer size
+    // Increase buffers to 2MB to handle large 1080p/4K I-frames
+    private val fifo = ByteBuffer.allocate(2 * 1024 * 1024) 
     private val recvBuffer = ByteArray(Messages.DEF_BUFFER_LENGTH)
     private val recvHeader = AapMessageIncoming.EncryptedHeader()
-    private val msgBuffer = ByteArray(65535) // unsigned short max
+    private val msgBuffer = ByteArray(2 * 1024 * 1024) 
     private val skipBuffer = ByteArray(4)
+
+    // Throughput monitoring
+    private var lastLogTime = 0L
+    private var bytesInLastSecond = 0L
 
     override fun doRead(connection: AccessoryConnection): Int {
         val size = try {
             connection.recvBlocking(recvBuffer, recvBuffer.size, 150, false)
         } catch (e: Exception) {
-            AppLog.e("AapRead: Fatal USB read error: ${e.message}")
+            AppLog.e("AapRead: Fatal read error: ${e.message}")
             return -1
         }
 
+        if (size > 0) {
+            bytesInLastSecond += size
+            val now = System.currentTimeMillis()
+            if (now - lastLogTime >= 1000) {
+                val mbit = (bytesInLastSecond * 8.0) / (1024.0 * 1024.0)
+                AppLog.i(">>> THROUGHPUT: %.2f Mbit/s (%d KB/s) <<<".format(mbit, bytesInLastSecond / 1024))
+                bytesInLastSecond = 0
+                lastLogTime = now
+            }
+        }
+
         if (size < 0) {
-            // USB read failure — discard any partial data accumulated in the FIFO
+            // read failure — discard any partial data accumulated in the FIFO
             // so the parser re-syncs cleanly on the next successful read.
             fifo.clear()
             // If the connection is dead (e.g. resetInterface failed to re-claim),
@@ -43,7 +59,7 @@ internal class AapReadMultipleMessages(
 
         try {
             if (fifo.remaining() < size) {
-                AppLog.w("AapRead: FIFO overflow risk. Clearing buffer to recover. Lost ${fifo.position()} bytes.")
+                AppLog.w("AapRead: FIFO overflow! Size: $size, Remaining: ${fifo.remaining()}. Clearing buffer.")
                 fifo.clear()
             }
             fifo.put(recvBuffer, 0, size)
