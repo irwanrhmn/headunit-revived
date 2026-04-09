@@ -945,6 +945,10 @@ class AapService : Service(), UsbReceiver.Listener {
 
         AppLog.i("AapService: Initializing WiFi Mode: $mode")
 
+        // 0. Clean up existing wireless state before re-initializing
+        stopWirelessServer()
+        networkDiscovery?.stop()
+
         // Mode 1: Auto (Headunit Server), Mode 2: Helper (Wireless Launcher), Mode 3: Native AA
         if (mode == 1 || mode == 2 || mode == 3) {
             startWirelessServer()
@@ -1118,7 +1122,7 @@ class AapService : Service(), UsbReceiver.Listener {
 
         when (intent?.action) {
             ACTION_START_SELF_MODE       -> startSelfMode()
-            ACTION_START_WIRELESS        -> startWirelessServer()
+            ACTION_START_WIRELESS        -> initWifiMode()
             ACTION_START_WIRELESS_SCAN   -> {
                 val mode = App.provide(this).settings.wifiConnectionMode
                 if (mode != 3) {

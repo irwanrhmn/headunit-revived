@@ -133,7 +133,6 @@ class VideoDecoder(private val settings: Settings) {
             vps = null
             sps = null
             pps = null
-            onFirstFrameListener = null
             lastFrameRenderedMs = 0L
             AppLog.i("Decoder stopped: $reason")
         }

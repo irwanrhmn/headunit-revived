@@ -61,9 +61,17 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
         override fun run() {
             val loadingOverlay = findViewById<View>(R.id.loading_overlay)
             if (loadingOverlay?.visibility == View.VISIBLE && commManager.isConnected) {
-                AppLog.w("Watchdog: No video received. Requesting Keyframe (Unsolicited Focus)...")
+                // If the decoder already rendered something, hide the overlay immediately
+                if (videoDecoder.lastFrameRenderedMs > 0) {
+                    AppLog.i("Watchdog: Decoder is already rendering frames. Hiding overlay.")
+                    loadingOverlay.visibility = View.GONE
+                    overlayState = OverlayState.HIDDEN
+                    return
+                }
+
+                AppLog.w("Watchdog: No video received yet. Requesting Keyframe (Unsolicited Focus)...")
                 commManager.send(VideoFocusEvent(gain = true, unsolicited = true))
-                watchdogHandler.postDelayed(this, 3000)
+                watchdogHandler.postDelayed(this, 1500)
             }
         }
     }
@@ -225,10 +233,22 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
                         is CommManager.ConnectionState.Disconnected -> {
                             watchdogHandler.removeCallbacksAndMessages(null)
                             if (!state.isClean && !state.isUserExit) {
+                                AppLog.w("AapProjectionActivity: Disconnected unexpectedly.")
                                 Toast.makeText(this@AapProjectionActivity, getString(R.string.wifi_disconnect_toast), Toast.LENGTH_LONG).show()
                             }
-                            hideReconnectingOverlay()
-                            finish()
+                            // Only finish immediately if the user explicitly exited or it was a clean close.
+                            if (state.isUserExit || state.isClean) {
+                                hideReconnectingOverlay()
+                                finish()
+                            } else {
+                                // For unexpected disconnects (especially Wireless), wait a tiny bit to see if service restarts it
+                                watchdogHandler.postDelayed({
+                                    if (commManager.connectionState.value is CommManager.ConnectionState.Disconnected) {
+                                        hideReconnectingOverlay()
+                                        finish()
+                                    }
+                                }, 2000)
+                            }
                         }
                         is CommManager.ConnectionState.HandshakeComplete -> {
                             // Handshake done. If the surface is already ready (e.g. reconnect
