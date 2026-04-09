@@ -1,5 +1,5 @@
 # Changelog
-### v.2.2.0
+### v.2.2.0-beta3
 - Added: Native AA. 🎉  Warning! This will only work on a limited amount of headunits! Most Android devices do not support connecting 2 Android devices via Bluetooth which is essential for this to work.
 - Try to fix connection problems on WiFi
 - Added: Intent and routine for starting the app directly to self mode
@@ -12,6 +12,7 @@
 - Added: Pip-Support
 - Added: Google Nearby Support
 - Added: 4K in select
+- New App-Icon without text for better visibility
 
 ### v.2.1.1
 - Fixed: Layout crash on Android 4.2

@@ -17,6 +17,7 @@ internal class AapAudio(
         private val settings: Settings) {
 
     private var audioFocusRequest: AudioFocusRequest? = null
+    private var legacyFocusListener: AudioManager.OnAudioFocusChangeListener? = null
 
     fun requestFocusChange(stream: Int, focusRequest: Int, callback: AudioManager.OnAudioFocusChangeListener): Int {
         AppLog.i("Audio Focus Request: stream=$stream, type=$focusRequest")
@@ -55,16 +56,39 @@ internal class AapAudio(
             result = when (focusRequest) {
                 Control.AudioFocusRequestNotification.AudioFocusRequestType.RELEASE_VALUE -> {
                     audioManager.abandonAudioFocus(callback)
+                    legacyFocusListener?.let { audioManager.abandonAudioFocus(it) }
+                    legacyFocusListener = null
                     AudioManager.AUDIOFOCUS_REQUEST_GRANTED
                 }
-                Control.AudioFocusRequestNotification.AudioFocusRequestType.GAIN_VALUE -> audioManager.requestAudioFocus(callback, stream, AudioManager.AUDIOFOCUS_GAIN)
-                Control.AudioFocusRequestNotification.AudioFocusRequestType.GAIN_TRANSIENT_VALUE -> audioManager.requestAudioFocus(callback, stream, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
-                Control.AudioFocusRequestNotification.AudioFocusRequestType.GAIN_TRANSIENT_MAY_DUCK_VALUE -> audioManager.requestAudioFocus(callback, stream, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
+                Control.AudioFocusRequestNotification.AudioFocusRequestType.GAIN_VALUE -> {
+                    legacyFocusListener = callback
+                    audioManager.requestAudioFocus(callback, stream, AudioManager.AUDIOFOCUS_GAIN)
+                }
+                Control.AudioFocusRequestNotification.AudioFocusRequestType.GAIN_TRANSIENT_VALUE -> {
+                    legacyFocusListener = callback
+                    audioManager.requestAudioFocus(callback, stream, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+                }
+                Control.AudioFocusRequestNotification.AudioFocusRequestType.GAIN_TRANSIENT_MAY_DUCK_VALUE -> {
+                    legacyFocusListener = callback
+                    audioManager.requestAudioFocus(callback, stream, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
+                }
                 else -> AudioManager.AUDIOFOCUS_REQUEST_FAILED
             }
             AppLog.i("Audio focus request result (legacy): ${if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) "GRANTED" else "FAILED"}")
         }
         return result
+    }
+
+    fun releaseAllFocus() {
+        AppLog.i("AapAudio: Releasing all audio focus.")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            audioFocusRequest?.let { audioManager.abandonAudioFocusRequest(it) }
+            audioFocusRequest = null
+        } else {
+            @Suppress("DEPRECATION")
+            legacyFocusListener?.let { audioManager.abandonAudioFocus(it) }
+            legacyFocusListener = null
+        }
     }
 
     /**

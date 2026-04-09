@@ -191,9 +191,9 @@ class AapTransport(
         micRecorder.listener = null
         pollThread?.quit()
         sendThread?.quit()
-        
-        try {
-            // Don't join the poll thread from within itself — it would block for the full
+        aapAudio.releaseAllFocus()
+
+        try {            // Don't join the poll thread from within itself — it would block for the full
             // timeout since the thread can't finish while it's waiting for itself to finish.
             if (Thread.currentThread() != pollThread) pollThread?.join(1000)
             sendThread?.join(1000)
