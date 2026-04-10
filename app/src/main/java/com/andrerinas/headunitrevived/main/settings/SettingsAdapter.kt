@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
 import android.widget.TextView
+import android.os.Build
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -54,6 +55,14 @@ sealed class SettingItem {
         val isEnabled: Boolean = true,
         val onClick: () -> Unit
     ) : SettingItem()
+
+    data class SegmentedButtonSettingEntry(
+        override val stableId: String,
+        @StringRes val nameResId: Int,
+        val options: List<String>, // Exactly 3 options for now as per layout
+        var selectedIndex: Int,
+        val onOptionSelected: (Int) -> Unit
+    ) : SettingItem()
 }
 
 class SettingsAdapter : ListAdapter<SettingItem, RecyclerView.ViewHolder>(SettingsDiffCallback()) { // Inherit from ListAdapter
@@ -66,6 +75,7 @@ class SettingsAdapter : ListAdapter<SettingItem, RecyclerView.ViewHolder>(Settin
         private const val VIEW_TYPE_SLIDER = 4
         private const val VIEW_TYPE_INFO_BANNER = 5
         private const val VIEW_TYPE_ACTION_BUTTON = 6
+        private const val VIEW_TYPE_SEGMENTED = 7
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -76,6 +86,7 @@ class SettingsAdapter : ListAdapter<SettingItem, RecyclerView.ViewHolder>(Settin
             is SettingItem.SliderSettingEntry -> VIEW_TYPE_SLIDER
             is SettingItem.InfoBanner -> VIEW_TYPE_INFO_BANNER
             is SettingItem.ActionButton -> VIEW_TYPE_ACTION_BUTTON
+            is SettingItem.SegmentedButtonSettingEntry -> VIEW_TYPE_SEGMENTED
         }
     }
 
@@ -88,6 +99,7 @@ class SettingsAdapter : ListAdapter<SettingItem, RecyclerView.ViewHolder>(Settin
             VIEW_TYPE_SLIDER -> SliderSettingViewHolder(inflater.inflate(R.layout.layout_setting_item_slider, parent, false))
             VIEW_TYPE_INFO_BANNER -> InfoBannerViewHolder(inflater.inflate(R.layout.layout_setting_info_banner, parent, false))
             VIEW_TYPE_ACTION_BUTTON -> ActionButtonViewHolder(inflater.inflate(R.layout.layout_setting_action_button, parent, false))
+            VIEW_TYPE_SEGMENTED -> SegmentedButtonViewHolder(inflater.inflate(R.layout.layout_setting_item_segmented, parent, false))
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
@@ -95,7 +107,7 @@ class SettingsAdapter : ListAdapter<SettingItem, RecyclerView.ViewHolder>(Settin
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
 
-        if (holder is SettingViewHolder || holder is ToggleSettingViewHolder || holder is SliderSettingViewHolder || holder is ActionButtonViewHolder) {
+        if (holder is SettingViewHolder || holder is ToggleSettingViewHolder || holder is SliderSettingViewHolder || holder is ActionButtonViewHolder || holder is SegmentedButtonViewHolder) {
             updateItemVisuals(holder.itemView, position)
         }
 
@@ -106,6 +118,7 @@ class SettingsAdapter : ListAdapter<SettingItem, RecyclerView.ViewHolder>(Settin
             is SettingItem.SliderSettingEntry -> (holder as SliderSettingViewHolder).bind(item)
             is SettingItem.InfoBanner -> (holder as InfoBannerViewHolder).bind(item)
             is SettingItem.ActionButton -> (holder as ActionButtonViewHolder).bind(item)
+            is SettingItem.SegmentedButtonSettingEntry -> (holder as SegmentedButtonViewHolder).bind(item)
         }
     }
 
@@ -205,6 +218,76 @@ class SettingsAdapter : ListAdapter<SettingItem, RecyclerView.ViewHolder>(Settin
         }
     }
 
+    class SegmentedButtonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val settingName: TextView = itemView.findViewById(R.id.settingName)
+        private val btn1: com.google.android.material.button.MaterialButton = itemView.findViewById(R.id.btnOption1)
+        private val btn2: com.google.android.material.button.MaterialButton = itemView.findViewById(R.id.btnOption2)
+        private val btn3: com.google.android.material.button.MaterialButton = itemView.findViewById(R.id.btnOption3)
+
+        fun bind(setting: SettingItem.SegmentedButtonSettingEntry) {
+            settingName.setText(setting.nameResId)
+            
+            val buttons = listOf(btn1, btn2, btn3)
+            val visibleButtons = buttons.filterIndexed { index, _ -> index < setting.options.size }
+            
+            buttons.forEachIndexed { index, button ->
+                if (index < setting.options.size) {
+                    button.text = setting.options[index]
+                    button.visibility = View.VISIBLE
+                } else {
+                    button.visibility = View.GONE
+                }
+            }
+
+            // Fixed 16dp radius like cards/save button
+            val radius = 16f * itemView.resources.displayMetrics.density
+            
+            visibleButtons.forEachIndexed { index, button ->
+                val shapeModel = when (index) {
+                    0 -> com.google.android.material.shape.ShapeAppearanceModel.builder()
+                        .setTopLeftCornerSize(radius).setBottomLeftCornerSize(radius)
+                        .setTopRightCornerSize(0f).setBottomRightCornerSize(0f)
+                        .build()
+                    visibleButtons.size - 1 -> com.google.android.material.shape.ShapeAppearanceModel.builder()
+                        .setTopRightCornerSize(radius).setBottomRightCornerSize(radius)
+                        .setTopLeftCornerSize(0f).setBottomLeftCornerSize(0f)
+                        .build()
+                    else -> com.google.android.material.shape.ShapeAppearanceModel.builder()
+                        .setAllCornerSizes(0f)
+                        .build()
+                }
+                button.shapeAppearanceModel = shapeModel
+                
+                // Manual selection state handling
+                val isSelected = index == setting.selectedIndex
+                button.isChecked = isSelected
+                
+                // Bring active button to front so its 2dp border wins the overlap
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    button.elevation = if (isSelected) 2f else 0f
+                    button.stateListAnimator = null // Disable default elevation animations
+                }
+                
+                // Ensure stroke is 2dp and themed
+                button.strokeWidth = (2 * itemView.resources.displayMetrics.density).toInt()
+                
+                button.setOnClickListener {
+                    if (index != setting.selectedIndex) {
+                        // Instant UI feedback: uncheck all, check this one
+                        visibleButtons.forEach { 
+                            it.isChecked = false 
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) it.elevation = 0f
+                        }
+                        button.isChecked = true
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) button.elevation = 2f
+                        
+                        setting.onOptionSelected(index)
+                    }
+                }
+            }
+        }
+    }
+
     // DiffUtil.ItemCallback implementation
     private class SettingsDiffCallback : DiffUtil.ItemCallback<SettingItem>() {
         override fun areItemsTheSame(oldItem: SettingItem, newItem: SettingItem): Boolean {
@@ -225,6 +308,8 @@ class SettingsAdapter : ListAdapter<SettingItem, RecyclerView.ViewHolder>(Settin
                     oldItem.textResId == newItem.textResId
                 oldItem is SettingItem.ActionButton && newItem is SettingItem.ActionButton ->
                     oldItem.textResId == newItem.textResId && oldItem.isEnabled == newItem.isEnabled
+                oldItem is SettingItem.SegmentedButtonSettingEntry && newItem is SettingItem.SegmentedButtonSettingEntry ->
+                    oldItem.nameResId == newItem.nameResId && oldItem.options == newItem.options && oldItem.selectedIndex == newItem.selectedIndex
                 else -> false
             }
         }

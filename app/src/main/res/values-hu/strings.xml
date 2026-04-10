@@ -417,4 +417,32 @@
     <string name="wait_for_wifi_description">Indításkor megvárja a WiFi csatlakozást a WiFi Direct elindítása előtt. Hasznos, ha a fejegység néhány másodpercet vesz igénybe a WiFi csatlakozáshoz bekapcsolás után.</string>
     <string name="wait_for_wifi_timeout">WiFi várakozási időkorlát</string>
     <string name="wireless_24ghz_warning">Megjegyzés: A vezeték nélküli Android Auto 2,4 GHz-es eszközökön akadozáshoz, szaggatáshoz és leálláshoz vezethet. Ha problémákat tapasztal, kérjük, tesztelje USB-n keresztül, hogy megerősítse, hálózati korlátozásról van-e szó.</string>
+    <string name="supported_nativeaa">Speciális vezeték nélküli támogatás</string>
+    <string name="supported_nativeaa_desc">Jó hírek! Eszköze támogatja a „Native Wireless” módot, amely zökkenőmentesebb Android Auto élményt nyújt. \n\nA bekapcsoláshoz frissítenünk kell a Bluetooth-gyorsítótárat. Kérjük: \n1. Távolítsa el a meglévő párosítást a telefonjáról \n2. Kattintson az OK gombra a Bluetooth újraindításához \n3. Párosítsa újra a telefont \n\nSzeretne jetzt átváltani a Native AA módra?</string>
+    <string name="fake_speed_title">Videózár letiltása (Fake Speed)</string>
+    <string name="fake_speed_description">Folyamatos alacsony sebességet (0,5 m/s) jelent a telefonnak, hogy megakadályozza a videótartalmak blokkolását vezetés közben. Óvatosan használja.</string>
+    <string name="wireless_mode_helper">Wireless Helper</string>
+    <string name="wireless_mode_native">Native</string>
+    <string name="wireless_mode_server">Headunit Server</string>
+    <string name="server_mode_label">Szerver mód</string>
+    <string name="server_mode_manual">Kézi</string>
+    <string name="server_mode_auto">Automatikus</string>
+
+    <string name="helper_strategy_label">Segédcsatlakozási stratégia</string>
+    <string-array name="helper_strategies">
+        <item>Közös Wifi (NSD)</item>
+        <item>WiFi Direct (P2P)</item>
+        <item>Közeli eszközök (Beta)</item>
+        <item>Telefon hotspot (Host)</item>
+        <item>Fejegység hotspot (Passzív)</item>
+    </string-array>
+
+    <string name="select_nearby_device">Válasszon közeli eszközt</string>
+    <string name="connecting_to_nearby">Csatlakozás: %s…</string>
+
+    <string name="exit_dialog_title">Kilépés az Android Auto-ból</string>
+    <string name="exit_dialog_stop">Kapcsolat leállítása</string>
+    <string name="exit_dialog_pip">Kép a képben (PiP)</string>
+    <string name="exit_dialog_background">Áthelyezés a háttérbe</string>
+    <string name="gesture_hint">Tipp: Legyintsen 2 ujjal a bal szélről a kilépés menü megnyitásához.</string>
 </resources>

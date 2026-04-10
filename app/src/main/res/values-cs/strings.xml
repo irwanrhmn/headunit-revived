@@ -418,4 +418,32 @@
     <string name="wait_for_wifi_description">Při startu počká na připojení WiFi před spuštěním WiFi Direct. Užitečné, pokud vaše headunit potřebuje několik sekund na připojení k WiFi po zapnutí.</string>
     <string name="wait_for_wifi_timeout">Časový limit čekání na WiFi</string>
     <string name="wireless_24ghz_warning">Poznámka: Bezdrátové Android Auto na 2,4GHz zařízeních může vést k lagům, sekání a odpojování. Pokud máte problémy, otestujte připojení přes USB, abyste potvrdili, zda se jedná o omezení sítě.</string>
+    <string name="supported_nativeaa">Vylepšená bezdrátová podpora</string>
+    <string name="supported_nativeaa_desc">Skvělá zpráva! Vaše zařízení podporuje režim „Native Wireless“, který poskytuje plynulejší zážitek z Android Auto. \n\nPro aktivaci potřebujeme obnovit vaši Bluetooth mezipaměť. Prosím: \n1. Odstraňte stávající spárování v telefonu \n2. Klikněte na OK pro restart Bluetooth \n3. Znovu spárujte telefon \n\nChcete nyní přepnout do režimu Native AA?"</string>
+    <string name="fake_speed_title">Zakázat blokování videa (Fake Speed)</string>
+    <string name="fake_speed_description">Hlásí telefonu konstantní nízkou rychlost (0,5 m/s), aby se zabránilo blokování video obsahu během jízdy. Používejte opatrně.</string>
+    <string name="wireless_mode_helper">Wireless Helper</string>
+    <string name="wireless_mode_native">Nativní</string>
+    <string name="wireless_mode_server">Headunit Server</string>
+    <string name="server_mode_label">Režim serveru</string>
+    <string name="server_mode_manual">Ruční</string>
+    <string name="server_mode_auto">Automaticky</string>
+
+    <string name="helper_strategy_label">Metoda připojení pomocníka</string>
+    <string-array name="helper_strategies">
+        <item>Společná WiFi (NSD)</item>
+        <item>WiFi Direct (P2P)</item>
+        <item>Zařízení v okolí (Beta)</item>
+        <item>Hotspot telefonu (Host)</item>
+        <item>Hotspot autorádia (Pasivní)</item>
+    </string-array>
+
+    <string name="select_nearby_device">Vybrat zařízení v okolí</string>
+    <string name="connecting_to_nearby">Připojování k %s…</string>
+
+    <string name="exit_dialog_title">Ukončit Android Auto</string>
+    <string name="exit_dialog_stop">Zastavit připojení</string>
+    <string name="exit_dialog_pip">Obraz v obraze (PiP)</string>
+    <string name="exit_dialog_background">Přesunout na pozadí</string>
+    <string name="gesture_hint">Tip: Přejetím 2 prsty od levého okraje otevřete nabídku ukončení.</string>
 </resources>

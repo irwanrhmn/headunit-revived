@@ -712,4 +712,9 @@ class Settings(context: Context) {
         get() = prefs.getInt("wait-for-wifi-timeout", 10)
         set(value) { prefs.edit().putInt("wait-for-wifi-timeout", value).apply() }
 
+    // 0 = Common Wifi (NSD), 1 = Wifi Direct P2P, 2 = Nearby Devices, 3 = Phone Hotspot (Host), 4 = Headunit Hotspot (Passive)
+    var helperConnectionStrategy: Int
+        get() = prefs.getInt("helper-connection-strategy", 0)
+        set(value) = prefs.edit().putInt("helper-connection-strategy", value).apply()
+
 }

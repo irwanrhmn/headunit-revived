@@ -220,10 +220,18 @@ class MainActivity : BaseActivity() {
     private fun requestPermissions() {
         val requiredPermissions = mutableListOf(
             Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
         )
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            requiredPermissions.add(Manifest.permission.BLUETOOTH_ADVERTISE)
+            requiredPermissions.add(Manifest.permission.BLUETOOTH_CONNECT)
+            requiredPermissions.add(Manifest.permission.BLUETOOTH_SCAN)
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requiredPermissions.add(Manifest.permission.NEARBY_WIFI_DEVICES)
             requiredPermissions.add(Manifest.permission.POST_NOTIFICATIONS)
         }
 

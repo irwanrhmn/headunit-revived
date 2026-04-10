@@ -436,6 +436,25 @@
     <string name="wireless_24ghz_warning">Note: Wireless Android Auto on 2.4GHz devices can lead to lag, stutters, and disconnects. If you experience issues, please test via USB to confirm if it\'s a network limitation.</string>
     <string name="fake_speed_title">Disable Video-Lock (Fake Speed)</string>
     <string name="fake_speed_description">Reports a constant low speed (0.5 m/s) to the phone to prevent video content from being blocked while driving. Use with caution.</string>
+    <string name="wireless_mode_helper">Wireless Helper</string>
+    <string name="wireless_mode_native">Native</string>
+    <string name="wireless_mode_server">Headunit Server</string>
+    <string name="server_mode_label">Server Mode</string>
+    <string name="server_mode_manual">Manual</string>
+    <string name="server_mode_auto">Auto</string>
+
+    <string name="helper_strategy_label">Helper Connection Strategy</string>
+    <string-array name="helper_strategies">
+        <item>Common Wifi (NSD)</item>
+        <item>WiFi Direct (P2P)</item>
+        <item>Google Nearby (Beta)</item>
+        <item>Phone Hotspot (Host)</item>
+        <item>Headunit Hotspot (Passive)</item>
+    </string-array>
+
+    <string name="select_nearby_device">Select Nearby Device</string>
+    <string name="connecting_to_nearby">Connecting to %s…</string>
+
     <string name="exit_dialog_title">Exit Android Auto</string>
     <string name="exit_dialog_stop">Stop Connection</string>
     <string name="exit_dialog_pip">Picture-in-Picture</string>

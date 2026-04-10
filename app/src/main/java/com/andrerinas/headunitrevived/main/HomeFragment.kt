@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
 import android.graphics.Color
@@ -26,6 +27,7 @@ import com.andrerinas.headunitrevived.App
 import com.andrerinas.headunitrevived.R
 import com.andrerinas.headunitrevived.aap.AapProjectionActivity
 import com.andrerinas.headunitrevived.aap.AapService
+import com.andrerinas.headunitrevived.connection.NearbyManager
 import com.andrerinas.headunitrevived.connection.UsbDeviceCompat
 import android.content.res.Configuration
 import android.bluetooth.BluetoothAdapter
@@ -33,6 +35,7 @@ import android.bluetooth.BluetoothManager
 import com.andrerinas.headunitrevived.utils.AppLog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 import com.andrerinas.headunitrevived.utils.Settings
@@ -329,14 +332,20 @@ class HomeFragment : Fragment() {
                 2 -> { // Helper (Wireless Launcher)
                     if (commManager.isConnected) {
                         // Already connected
-                    } else if (AapService.scanningState.value) {
-                        Toast.makeText(requireContext(), getString(R.string.already_searching_phone), Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(requireContext(), getString(R.string.searching_phone), Toast.LENGTH_SHORT).show()
-                        val intent = Intent(requireContext(), AapService::class.java).apply {
-                            action = AapService.ACTION_START_WIRELESS_SCAN
+                        val strategy = App.provide(requireContext()).settings.helperConnectionStrategy
+                        if (strategy == 2) {
+                            // Nearby Devices — show live discovery dialog
+                            showNearbyDeviceSelector()
+                        } else if (AapService.scanningState.value) {
+                            Toast.makeText(requireContext(), getString(R.string.already_searching_phone), Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(requireContext(), getString(R.string.searching_phone), Toast.LENGTH_SHORT).show()
+                            val intent = Intent(requireContext(), AapService::class.java).apply {
+                                action = AapService.ACTION_START_WIRELESS_SCAN
+                            }
+                            ContextCompat.startForegroundService(requireContext(), intent)
                         }
-                        ContextCompat.startForegroundService(requireContext(), intent)
                     }
                 }
                 3 -> { // Native AA
@@ -412,6 +421,51 @@ class HomeFragment : Fragment() {
             }
             .setNegativeButton(R.string.cancel, null)
             .show()
+    }
+
+    private fun showNearbyDeviceSelector() {
+        // Ensure NearbyManager discovery is running via AapService
+        ContextCompat.startForegroundService(requireContext(),
+            Intent(requireContext(), AapService::class.java).apply {
+                action = AapService.ACTION_START_WIRELESS_SCAN
+            })
+
+        val listAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1)
+        var collectJob: Job? = null
+
+        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+            .setTitle(getString(R.string.select_nearby_device))
+            .setAdapter(listAdapter) { _, which ->
+                val endpoints = NearbyManager.discoveredEndpoints.value
+                if (which < endpoints.size) {
+                    val endpoint = endpoints[which]
+                    AppLog.i("HomeFragment: Selected Nearby device: ${endpoint.name} (${endpoint.id})")
+                    val intent = Intent(requireContext(), AapService::class.java).apply {
+                        action = AapService.ACTION_NEARBY_CONNECT
+                        putExtra(AapService.EXTRA_ENDPOINT_ID, endpoint.id)
+                    }
+                    ContextCompat.startForegroundService(requireContext(), intent)
+                    Toast.makeText(requireContext(), getString(R.string.connecting_to_nearby, endpoint.name), Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .setOnDismissListener { collectJob?.cancel() }
+            .create()
+
+        dialog.show()
+
+        // Live-update the dialog list as endpoints are discovered
+        collectJob = viewLifecycleOwner.lifecycleScope.launch {
+            NearbyManager.discoveredEndpoints.collect { endpoints ->
+                listAdapter.clear()
+                endpoints.forEach { listAdapter.add(it.name) }
+                listAdapter.notifyDataSetChanged()
+                dialog.setTitle(
+                    if (endpoints.isEmpty()) getString(R.string.searching) + "…"
+                    else getString(R.string.select_nearby_device) + " (${endpoints.size})"
+                )
+            }
+        }
     }
 
     private fun updateTextColors() {

@@ -419,4 +419,32 @@
     <string name="wait_for_wifi_description">При запуске ждать подключения WiFi перед запуском WiFi Direct. Полезно, если вашему головному устройству требуется несколько секунд для подключения к WiFi после включения.</string>
     <string name="wait_for_wifi_timeout">Тайм-аут ожидания WiFi</string>
     <string name="wireless_24ghz_warning">Примечание: Беспроводной Android Auto на устройствах 2,4 ГГц может приводить к задержкам, рывкам и разрывам соединения. Если вы столкнулись с проблемами, проверьте работу через USB, чтобы подтвердить ограничение сети.</string>
+    <string name="supported_nativeaa">Расширенная беспроводная поддержка</string>
+    <string name="supported_nativeaa_desc">Отличные новости! Ваше устройство поддерживает режим «Native Wireless», который обеспечивает более плавную работу Android Auto. \n\nЧтобы включить его, нам нужно обновить кеш Bluetooth. Пожалуйста: \n1. Удалите существующее сопряжение на телефоне \n2. Нажмите ОК, чтобы перезапустить Bluetooth \n3. Снова выполните сопряжение с телефоном \n\nХотите переключиться на режим Native AA сейчас?</string>
+    <string name="fake_speed_title">Отключить блокировку видео (Fake Speed)</string>
+    <string name="fake_speed_description">Сообщает телефону постоянную низкую скорость (0.5 м/с), чтобы предотвратить блокировку видеоконтента во время вождения. Используйте с осторожностью.</string>
+    <string name="wireless_mode_helper">Wireless Helper</string>
+    <string name="wireless_mode_native">Нативный</string>
+    <string name="wireless_mode_server">Headunit Server</string>
+    <string name="server_mode_label">Режим сервера</string>
+    <string name="server_mode_manual">Вручную</string>
+    <string name="server_mode_auto">Авто</string>
+
+    <string name="helper_strategy_label">Метод подключения (Helper)</string>
+    <string-array name="helper_strategies">
+        <item>Общий WiFi (NSD)</item>
+        <item>WiFi Direct (P2P)</item>
+        <item>Устройства рядом (Beta)</item>
+        <item>Точка доступа телефона (Host)</item>
+        <item>Точка доступа магнитолы (Пассивный)</item>
+    </string-array>
+
+    <string name="select_nearby_device">Выберите устройство поблизости</string>
+    <string name="connecting_to_nearby">Подключение к %s…</string>
+
+    <string name="exit_dialog_title">Выйти из Android Auto</string>
+    <string name="exit_dialog_stop">Остановить соединение</string>
+    <string name="exit_dialog_pip">Картинка в картинке (PiP)</string>
+    <string name="exit_dialog_background">В фоновый режим</string>
+    <string name="gesture_hint">Совет: Проведите двумя пальцами от левого края, чтобы открыть меню выхода.</string>
 </resources>

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.view.KeyEvent
 import androidx.core.content.IntentCompat
 import com.andrerinas.headunitrevived.App
+import com.andrerinas.headunitrevived.contract.KeyIntent
 import com.andrerinas.headunitrevived.utils.AppLog
 
 /**
@@ -40,11 +41,10 @@ class CarKeyReceiver : BroadcastReceiver() {
         val action = intent?.action ?: return
         AppLog.d("CarKeyReceiver: Received action: $action")
 
-        // Broadcast for KeymapFragment debugger
+        // Broadcast for KeymapFragment debugger (raw intent data)
         context.sendBroadcast(Intent("com.andrerinas.headunitrevived.DEBUG_KEY").apply {
             setPackage(context.packageName)
             putExtra("action", action)
-            // Copy all extras to the debug intent
             intent.extras?.let { putExtras(it) }
         })
 
@@ -54,81 +54,76 @@ class CarKeyReceiver : BroadcastReceiver() {
         }
 
         val commManager = App.provide(context).commManager
-        if (!commManager.isConnected) return
 
-        var keyCode = -1
-
-        // 1. Standard Media Button extraction
-        if (action == "android.intent.action.MEDIA_BUTTON" || action == "hy.intent.action.MEDIA_BUTTON") {
+        // 1. Standard Media Button extraction (already has KeyEvent with proper DOWN/UP)
+        if (action == "android.intent.action.MEDIA_BUTTON" || action == "hy.intent.action.MEDIA_BUTTON"
+            || action == "com.tencent.qqmusiccar.action.MEDIA_BUTTON_INNER_ONKEY"
+            || action == "cn.kuwo.kwmusicauto.action.MEDIA_BUTTON") {
             val event = IntentCompat.getParcelableExtra(intent, Intent.EXTRA_KEY_EVENT, KeyEvent::class.java)
             if (event != null) {
-                keyCode = event.keyCode
-
-                // If it's just a down event, wait for up or handle immediately
-                if (event.action == KeyEvent.ACTION_DOWN) {
-                    if (event.repeatCount == 0) {
-                        commManager.send(keyCode, true)
-                    }
-                    return
+                if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
+                    handleKey(context, commManager, event.keyCode, true)
                 } else if (event.action == KeyEvent.ACTION_UP) {
-                    commManager.send(keyCode, false)
-                    return
+                    handleKey(context, commManager, event.keyCode, false)
                 }
             }
+            return
         }
 
-        // 2. Proprietary extraction based on Autokit findings
+        // 2. Proprietary extraction — extract keycode, then use unified handlers
         when (action) {
+            // --- Protocols with proper DOWN/UP separation ---
             "com.microntek.irkeyDown", "com.microntek.irkeyUp" -> {
-                keyCode = intent.getIntExtra("keyCode", -1)
-                val isDown = action.endsWith("keyDown")
-                if (keyCode != -1) {
-                    commManager.send(keyCode, isDown)
-                }
+                val keyCode = intent.getIntExtra("keyCode", -1)
+                if (keyCode != -1) handleKey(context, commManager, keyCode, action.endsWith("keyDown"))
             }
+            "android.intent.action.C3_HARDKEY" -> {
+                val keyCode = intent.getIntExtra("c3_hardkey_keycode", -1)
+                val c3Action = intent.getIntExtra("c3_hardkey_action", -1)
+                if (keyCode != -1 && c3Action != -1) handleKey(context, commManager, keyCode, c3Action == 1)
+            }
+
+            // --- Protocols that fire once (no DOWN/UP) → simulate full click ---
             "com.nwd.action.ACTION_KEY_VALUE" -> {
-                keyCode = intent.getByteExtra("extra_key_value", 0).toInt()
-                handleNwdKey(keyCode, commManager)
+                val mapped = when (intent.getByteExtra("extra_key_value", 0).toInt()) {
+                    1 -> KeyEvent.KEYCODE_MEDIA_NEXT
+                    2 -> KeyEvent.KEYCODE_MEDIA_PREVIOUS
+                    3 -> KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
+                    else -> -1
+                }
+                if (mapped > 0) handleClick(context, commManager, mapped)
             }
-            "com.winca.service.Setting.KEY_ACTION" -> {
-                keyCode = intent.getIntExtra("com.winca.service.Setting.KEY_ACTION_EXTRA", -1)
-                if (keyCode != -1) handleGenericKey(keyCode, commManager)
-            }
-            "IKeyClick.KEY_CLICK" -> {
-                keyCode = intent.getIntExtra("CLICK_KEY", -1)
-                if (keyCode != -1) handleGenericKey(keyCode, commManager)
-            }
-            "com.eryanet.music.prev" -> sendFullClick(KeyEvent.KEYCODE_MEDIA_PREVIOUS, commManager)
-            "com.eryanet.music.next" -> sendFullClick(KeyEvent.KEYCODE_MEDIA_NEXT, commManager)
-            "com.eryanet.media.playorpause" -> sendFullClick(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, commManager)
-            "com.bz.action.phone.pickup" -> sendFullClick(KeyEvent.KEYCODE_CALL, commManager)
-            "com.bz.action.phone.hangup" -> sendFullClick(KeyEvent.KEYCODE_ENDCALL, commManager)
+            "com.winca.service.Setting.KEY_ACTION" ->
+                intent.getIntExtra("com.winca.service.Setting.KEY_ACTION_EXTRA", -1)
+                    .takeIf { it != -1 }?.let { handleClick(context, commManager, it) }
+            "IKeyClick.KEY_CLICK" ->
+                intent.getIntExtra("CLICK_KEY", -1)
+                    .takeIf { it != -1 }?.let { handleClick(context, commManager, it) }
+            "com.eryanet.music.prev" -> handleClick(context, commManager, KeyEvent.KEYCODE_MEDIA_PREVIOUS)
+            "com.eryanet.music.next" -> handleClick(context, commManager, KeyEvent.KEYCODE_MEDIA_NEXT)
+            "com.eryanet.media.playorpause", "com.eryanet.media.play", "com.eryanet.media.pause" ->
+                handleClick(context, commManager, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
+            "com.bz.action.phone.pickup" -> handleClick(context, commManager, KeyEvent.KEYCODE_CALL)
+            "com.bz.action.phone.hangup" -> handleClick(context, commManager, KeyEvent.KEYCODE_ENDCALL)
         }
     }
 
-    private fun sendFullClick(keyCode: Int, commManager: CommManager) {
-        commManager.send(keyCode, true)
-        commManager.send(keyCode, false)
+    /** Single key press or release — broadcasts for learning AND sends to AA. */
+    private fun handleKey(context: Context, commManager: CommManager, keyCode: Int, isDown: Boolean) {
+        context.sendBroadcast(Intent(KeyIntent.action).apply {
+            setPackage(context.packageName)
+            putExtra(KeyIntent.extraEvent, KeyEvent(
+                if (isDown) KeyEvent.ACTION_DOWN else KeyEvent.ACTION_UP, keyCode
+            ))
+        })
+        if (commManager.isConnected) commManager.send(keyCode, isDown)
     }
 
-    private fun handleNwdKey(code: Int, commManager: CommManager) {
-        // Mapping based on common NWD values
-        val mappedKey = when (code) {
-            1 -> KeyEvent.KEYCODE_MEDIA_NEXT
-            2 -> KeyEvent.KEYCODE_MEDIA_PREVIOUS
-            3 -> KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
-            else -> -1
-        }
-        if (mappedKey != -1) {
-            sendFullClick(mappedKey, commManager)
-        }
-    }
-
-    private fun handleGenericKey(code: Int, commManager: CommManager) {
-        // Generic handler for unknown Learning-Codes
-        // In the future, this should hook into the Key Learning settings
-        AppLog.i("CarKeyReceiver: Handling generic/learned keycode: $code")
-        commManager.send(code, true)
-        commManager.send(code, false)
+    /** Full click (DOWN + UP) — broadcasts both events for learning AND sends to AA. */
+    private fun handleClick(context: Context, commManager: CommManager, keyCode: Int) {
+        handleKey(context, commManager, keyCode, true)
+        handleKey(context, commManager, keyCode, false)
     }
 }
+
+

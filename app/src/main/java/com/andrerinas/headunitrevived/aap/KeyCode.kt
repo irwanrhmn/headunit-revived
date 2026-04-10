@@ -52,6 +52,8 @@ object KeyCode {
         1, // Appears to be a custom keycode
         2, // Appears to be a custom keycode
         81, // Appears to be a custom keycode or old BOOKMARK (actual BOOKMARK is 137)
+        224, // KEYCODE_WAKEUP → Voice Command
+        264, 265, 267, // STEM_PRIMARY, STEM_1, STEM_3 (steering wheel)
         268, 269, 270, 271, // Rotary controller
         65536, 65537, 65538 // Rotary controller
     ).distinct().sorted()
@@ -108,6 +110,11 @@ object KeyCode {
             KeyEvent.KEYCODE_MEDIA_STOP -> return KeyEvent.KEYCODE_MEDIA_PAUSE
             // Add any custom or rotary codes that should be passed through directly
             1, 2, 81, 268, 269, 270, 271, 65536, 65537, 65538 -> return keyCode
+            // C3 / FlyAudio steering wheel (STEM & WAKEUP keycodes)
+            264 -> return KeyEvent.KEYCODE_MEDIA_PREVIOUS   // STEM_PRIMARY
+            265 -> return KeyEvent.KEYCODE_MEDIA_NEXT        // STEM_1
+            267 -> return KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE  // STEM_3
+            224 -> return KeyEvent.KEYCODE_SEARCH            // WAKEUP → Voice
         }
         return KeyEvent.KEYCODE_UNKNOWN
     }

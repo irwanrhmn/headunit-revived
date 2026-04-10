@@ -36,6 +36,10 @@
     <string name="app_theme">Dunkelmodus (Anwendung)</string>
     <string name="app_theme_description">Aussehen der App steuern</string>
     <string name="change_app_theme">Design ändern</string>
+    <string name="monochrome_icons">Einfarbige Symbole</string>
+    <string name="monochrome_icons_description">Graustufen-Symbole auf dem Startbildschirm im Dunkel- oder Extra-Dunkel-Modus verwenden</string>
+    <string name="use_extreme_dark">Extra Dunkel verwenden</string>
+    <string name="use_extreme_dark_description">Rein schwarzen Hintergrund verwenden, wenn der Dunkelmodus aktiv ist</string>
     <string name="use_gradient_background">Verlaufshintergrund verwenden</string>
     <string name="use_gradient_background_description_on">Die App zeichnet ihren eigenen Hintergrund mit dem zentrierten Verlaufskreis</string>
     <string name="use_gradient_background_description_off">Der klassische Hintergrund der App wird verwendet</string>
@@ -97,12 +101,14 @@
     <string name="fullscreen_none">Normal (Alle Leisten sichtbar)</string>
     <string name="fullscreen_immersive">Vollbild (Alle Leisten ausgeblendet)</string>
     <string name="fullscreen_status_only">Nur Statusleiste ausblenden</string>
+    <string name="fullscreen_immersive_avoid_notch">Vollbild (Notch aussparen)</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">Blendet alle Leisten aus und fügt Abstände hinzu, um zu verhindern, dass die Projektion durch die Notch/Aussparung verdeckt wird.</string>
 
     <string name="usb_status">USB Status: %s</string>
     <string name="projection_status">Projektions-Status: %s</string>
     <string name="connected">Verbunden</string>
     <string name="disconnected">Getrennt</string>
-    <string name="running">Los</string>
+    <string name="running">Läuft</string>
     <string name="not_running">Läuft nicht</string>
     <string name="no_android_auto_device_connected">Kein Android Auto Gerät verbunden. Bitte USB prüfen.</string>
     <string name="no_usb_device_connected">Kein USB Gerät gefunden.</string>
@@ -110,6 +116,12 @@
     <string name="back">Zurück</string>
     <string name="debug_mode">Debug Modus</string>
     <string name="debug_mode_description">Erweitertes Logging aktivieren</string>
+    <string name="log_level">Log-Level</string>
+    <string name="log_level_description">Filtert den Detailgrad beim Log-Export</string>
+    <string name="start_log_capture">Log-Aufzeichnung starten</string>
+    <string name="start_log_capture_description">Startet das Mitschreiben von System-Logs für Debugging</string>
+    <string name="stop_log_capture">Log-Aufzeichnung stoppen</string>
+    <string name="stop_log_capture_description">Aufzeichnung läuft… Zum Stoppen tippen</string>
     <string name="export_logs">Logs exportieren</string>
     <string name="export_logs_description">Logs speichern für Fehleranalyse</string>
     <string name="use_native_ssl">Native SSL nutzen</string>
@@ -167,6 +179,7 @@
     <string name="open_settings">Einstellungen</string>
     <string name="right_hand_drive">Rechtslenker</string>
     <string name="right_hand_drive_description">Benutzeroberfläche für Rechtsverkehr ausrichten</string>
+    <string name="wireless_connection_settings">Kabellose Verbindung</string>
     <string name="category_graphic">Grafik</string>
     <string name="custom_insets">Benutzerdefinierte Ränder</string>
     <string name="inset_top">Oben</string>
@@ -185,7 +198,7 @@
         <item>Manuell (Liste)</item>
         <item>Auto-Suche (Headunit Server)</item>
         <item>Wireless Helper (Warten auf Handy)</item>
-        <item>Native Android Auto</item>
+        <item>Natives Android Auto (Offizieller Handshake)</item>
     </string-array>
     <string name="auto_connect_last_session">Auto-Connect letzte Sitzung</string>
     <string name="auto_connect_last_session_description">Verbindet beim App-Start automatisch mit dem zuletzt genutzten Gerät</string>
@@ -203,12 +216,14 @@
     <string name="video_codec">Video Codec</string>
     <string name="fps_limit">FPS Limit</string>
     <string name="save">Speichern</string>
-    <string name="save_and_restart">Speichern (Neustart nötig)</string>
+    <string name="save_and_restart">Speichern (Neuverbindung nötig)</string>
     <string name="add_new">Hinzufügen</string>
     <string name="cancel">Abbrechen</string>
     <string name="enable">Aktivieren</string>
     <string name="pref_stretch_screen_title">Auf Bildschirmgröße strecken</string>
     <string name="pref_stretch_screen_summary">Ignoriert das Seitenverhältnis, um das gesamte Display auszufüllen (entfernt schwarze Balken)</string>
+    <string name="forced_scale">Erzwungene Skalierung (Legacy Fix)</string>
+    <string name="forced_scale_description">Korrigiert Skalierungsprobleme auf einigen älteren Geräten mit SurfaceView. Nur verwenden, wenn das Bild verzerrt oder verschoben aussieht.</string>
 
     <!-- Audio Settings -->
     <string name="category_audio">Audio</string>
@@ -217,16 +232,16 @@
     <string name="use_aac_audio">AAC-Audio verwenden</string>
     <string name="use_aac_audio_description">Verwendet den AAC-Codec für Audio, um Bandbreite zu sparen (Experimentell).</string>
     <string name="audio_volume_offset">Lautstärke-Offsets</string>
-    <string name="media_volume_offset">Medien</string>
-    <string name="assistant_volume_offset">Assistent</string>
-    <string name="navigation_volume_offset">Navigation</string>
+    <string name="media_volume_offset">Medien-Lautstärke</string>
+    <string name="assistant_volume_offset">Assistenten-Lautstärke</string>
+    <string name="navigation_volume_offset">Navigations-Lautstärke</string>
     <string name="mic_input_source">Mikrofon-Eingangsquelle</string>
     <string name="mic_input_source_description">Wählen Sie die Audioquelle für das Mikrofon.</string>
     <string-array name="mic_input_sources">
-        <item>Standard</item>
-        <item>Mikrofon</item>
-        <item>Spracherkennung</item>
-        <item>Sprachkommunikation</item>
+        <item>Standard (System entscheidet)</item>
+        <item>Eingebautes Mikrofon (Rohsignal)</item>
+        <item>Spracherkennung (Rauschreduziert)</item>
+        <item>Sprachkommunikation (Echo- und Rauschunterdrückung)</item>
         <item>Bluetooth-Headset (SCO)</item>
     </string-array>
 
@@ -290,18 +305,18 @@
     <string name="connection_interrupted">Verbindung verloren</string>
     <string name="connection_interrupted_detail">Erneuter Versuch…</string>
     <string name="wifi_disconnect_toast">Android Auto getrennt: Bei kabellosem AA \"Zwischen Netzwerken wechseln\" oder \"Netzwerkbeschleunigung\" in den WLAN-Einstellungen deaktivieren</string>
+    <string name="reset_usb_option">USB-Verbindung zurücksetzen</string>
+    <string name="reset_usb_timeout">USB-Gerät nicht gefunden. Bitte Verbindung prüfen.</string>
     <string name="notification_service_running">Headunit Revived läuft</string>
     <string name="notification_projection_active">Android Auto wird projiziert</string>
     <string name="shortcut_connect_title">Verbinden</string>
-    <string name="shortcut_connect_desc">Mit letztem Gerät verbinden</string>
+    <string name="shortcut_connect_desc">Mit letztem Handy verbinden</string>
     <string name="shortcut_selfmode_title">Self Mode</string>
     <string name="shortcut_selfmode_desc">Android Auto auf diesem Gerät starten</string>
     <string name="shortcut_disconnect_title">Trennen</string>
     <string name="shortcut_disconnect_desc">Aktuelle Sitzung beenden</string>
     <string name="shortcut_exit_title">App beenden</string>
     <string name="shortcut_exit_desc">Alle Dienste stoppen und App schließen</string>
-    <string name="reset_usb_option">USB-Verbindung zurücksetzen</string>
-    <string name="reset_usb_timeout">USB-Gerät nicht gefunden. Bitte Verbindung prüfen.</string>
     <string name="shortcut_night_mode_auto_title">Modus: Auto</string>
     <string name="shortcut_night_mode_auto_desc">Automatischen Nachtmodus wiederherstellen</string>
     <string name="shortcut_night_mode_day_title">Modus: Tag</string>
@@ -324,12 +339,6 @@
     <string name="setup_widescreen_detected">Widescreen-Display erkannt.</string>
     <string name="auto_optimize">Einstellungen automatisch optimieren</string>
     <string name="auto_optimize_desc">System-Check ausführen, um die besten Werte für dieses Gerät zu finden.</string>
-    <string name="log_level">Log-Level</string>
-    <string name="log_level_description">Wähle den Detailgrad der Log-Ausgaben für Debugging-Zwecke.</string>
-    <string name="start_log_capture">Log-Aufzeichnung starten</string>
-    <string name="start_log_capture_description">Startet das Mitschreiben von System-Logs in eine Datei.</string>
-    <string name="stop_log_capture">Log-Aufzeichnung stoppen</string>
-    <string name="stop_log_capture_description">Stoppt die Aufzeichnung und speichert die Log-Datei.</string>
 
     <!-- Navigation notifications -->
     <string name="show_navigation_notifications">Navigationsbenachrichtigungen</string>
@@ -355,31 +364,30 @@
     <string name="nav_action_ferry">Fähre</string>
     <string name="nav_action_ferry_train">Fähre / Zug</string>
     <string name="nav_action_destination">Ankunft</string>
-    <string name="monochrome_icons">Einfarbige Symbole</string>
-    <string name="monochrome_icons_description">Graustufen-Symbole auf dem Startbildschirm im Dunkel- oder Extra-Dunkel-Modus verwenden</string>
-    <string name="use_extreme_dark">Extra Dunkel verwenden</string>
-    <string name="use_extreme_dark_description">Rein schwarzen Hintergrund verwenden, wenn der Dunkelmodus aktiv ist</string>
     <string name="show_fps_counter">FPS-Zähler anzeigen</string>
     <string name="show_fps_counter_description">Echtzeit-FPS oben links während der Projektion einblenden.</string>
+
+    <string name="reopen_on_reconnection_label">Bei Neuverbindung erneut öffnen</string>
+    <string name="reopen_on_reconnection_description">Wenn Sie die Beenden-Taste drücken, läuft die App im Hintergrund weiter und überwacht USB-Verbindungen. Wenn ein Gerät erneut verbunden wird, öffnet sich die App automatisch.</string>
     <string name="overlay_permission_required">Autostart erfordert die Berechtigung \'Über anderen Apps einblenden\'</string>
     <string name="usb_permission_denied">USB-Berechtigung verweigert. Bitte erlauben Sie den USB-Zugriff für automatische Verbindung.</string>
     <string name="overlay_permission_denied_auto_start_disabled">Overlay-Berechtigung nicht erteilt. Autostart wurde deaktiviert.</string>
-    <string name="use_white_background">Weißes Startbildschirm-Hintergrundbild verwenden</string>
-    <string name="reopen_on_reconnection_label">Bei Neuverbindung erneut öffnen</string>
-    <string name="reopen_on_reconnection_description">Wenn Sie die Beenden-Taste drücken, läuft die App im Hintergrund weiter und überwacht USB-Verbindungen. Wenn ein Gerät erneut verbunden wird, öffnet sich die App automatisch.</string>
 
+    <string name="use_white_background">Weißes Startbildschirm-Hintergrundbild verwenden</string>
     <string name="category_input">Eingabeeinstellungen</string>
     <string name="enable_rotary">Rotary-Controller aktivieren</string>
     <string name="enable_rotary_description">Unterstützung für physische Drehknöpfe und Räder (BMW, Mazda, Audi etc.) melden. Deaktiviere dies, wenn dein Touchscreen nicht korrekt funktioniert.</string>
+
     <string name="kill_on_disconnect">App beim Trennen schließen</string>
     <string name="kill_on_disconnect_description">Die App automatisch schließen, wenn Android Auto getrennt wird</string>
     <string name="kill_on_disconnect_warning_title">Warnung</string>
     <string name="kill_on_disconnect_warning">Die folgenden Wiederverbindungseinstellungen stehen im Konflikt mit dem Schließen der App bei Trennung:\n\n%1$s\n\nIhre anfänglichen Verbindungseinstellungen (automatische Verbindung, automatischer Start) funktionieren weiterhin beim Einschalten der Headunit. Nach der ersten Trennung wird die App jedoch sofort geschlossen, anstatt eine erneute Verbindung zu versuchen.\n\nHinweis: Einige Aftermarket-Headunits schalten sich nie vollständig aus — sie gehen stattdessen in den Ruhezustand, ähnlich wie ein Telefon, das den Bildschirm sperrt, aber nie wirklich ausschaltet. Mit dieser Option wird die App nach der ersten Trennung geschlossen und öffnet sich möglicherweise beim nächsten Zündungszyklus nicht automatisch wieder.\n\nMöchten Sie die oben aufgeführten Wiederverbindungseinstellungen deaktivieren?</string>
     <string name="kill_on_disconnect_disable_and_enable">Deaktivieren und aktivieren</string>
     <string name="kill_on_disconnect_enable_anyway">Trotzdem aktivieren</string>
+    <string name="kill_on_disconnect_conflicts_disabled">Konfliktierende Einstellungen wurden deaktiviert</string>
     <string name="kill_on_disconnect_boot_warning">\"Beim Booten starten\" ist aktiviert. Wenn die App beim Trennen geschlossen wird und dieses Gerät in den Ruhezustand wechselt statt sich auszuschalten, öffnet sich die App beim nächsten Zündungszyklus möglicherweise nicht automatisch, da kein Boot-Ereignis ausgelöst wird — das Gerät wacht einfach aus dem Schlafmodus auf.</string>
     <string name="kill_on_disconnect_screen_on_warning">Sie haben \"Bei Bildschirmaktivierung starten\" aktiviert. Diese Einstellung öffnet die App jedes Mal, wenn der Bildschirm eingeschaltet wird. In Kombination mit dem Schließen bei Trennung wird die App nach der Trennung geschlossen, aber sofort wieder geöffnet, wenn der Bildschirm erneut eingeschaltet wird, was eine Neustartschleife erzeugt.</string>
-    <string name="kill_on_disconnect_conflicts_disabled">Konfliktierende Einstellungen wurden deaktiviert</string>
+
     <string name="wifi_disabled_info">Info: WLAN ist deaktiviert.</string>
     <string name="bt_not_enabled">Bluetooth ist deaktiviert</string>
 
@@ -406,20 +414,47 @@
     <string name="vehicle_year_error_invalid">Geben Sie ein gültiges Jahr ein</string>
     <string name="vehicle_year_error_max">Das Jahr darf nicht später als %1$d sein</string>
     <string name="vehicle_info_restart_note">Diese Daten werden bei jeder Verbindung an Android Auto gesendet.</string>
+
     <string name="auto_enable_hotspot">Hotspot automatisch aktivieren</string>
     <string name="auto_enable_hotspot_description">Startet automatisch einen WLAN-Hotspot auf diesem Gerät. (Funktioniert nicht auf allen Geräten)</string>
-    <string name="native_aa_wireless">Natives Android Auto Wireless</string>
-    <string name="native_aa_wireless_description">Aktiviert den offiziellen Bluetooth-Handshake für kabellose Verbindungen. Dies ermöglicht dem Handy, die Headunit automatisch zu erkennen.</string>
     <string name="hotspot_warning_title">Experimentelle Funktion</string>
     <string name="hotspot_warning_message">Diese Funktion nutzt Reflection und funktioniert möglicherweise nicht auf allen Geräten. Eventuell muss die Berechtigung \"Systemeinstellungen ändern\" manuell erteilt werden.</string>
     <string name="hotspot_permission_title">Berechtigung erforderlich</string>
     <string name="hotspot_permission_message">Die Hotspot-Funktion benötigt die Berechtigung \"Systemeinstellungen ändern\". Bitte aktivieren Sie diese im nächsten Bildschirm.</string>
+
+    <string name="supported_nativeaa">Verbesserte kabellose Unterstützung</string>
+    <string name="supported_nativeaa_desc">Gute Nachrichten! Ihr Gerät unterstützt den Modus „Natives WLAN“, der ein reibungsloseres Android Auto-Erlebnis bietet. \n\nUm dies zu aktivieren, müssen wir Ihren Bluetooth-Cache aktualisieren. Bitte: \n1. Entfernen Sie die vorhandene Kopplung auf Ihrem Telefon \n2. Klicken Sie auf OK, um Bluetooth neu zu starten \n3. Koppeln Sie Ihr Telefon erneut \n\nMöchten Sie jetzt in den nativen AA-Modus wechseln?</string>
     <string name="not_supported_nativeaa">Natives WLAN scheint nicht unterstützt zu werden</string>
     <string name="not_supported_nativeaa_desc">Ihr Gerät unterstützt möglicherweise nicht die erforderlichen Bluetooth- oder WLAN-Funktionen für natives WLAN. Sie können es trotzdem versuchen, aber wenn es fehlschlägt, verwenden Sie bitte stattdessen den „Wireless Helper“ oder den Modus „Auto (Headunit Server)“.</string>
+
     <string name="wait_for_wifi">Auf WLAN warten vor WiFi Direct</string>
     <string name="wait_for_wifi_description">Beim Starten auf WLAN-Verbindung warten, bevor WiFi Direct gestartet wird. Nützlich, wenn Ihr Headunit nach dem Einschalten einige Sekunden braucht, um sich mit dem WLAN zu verbinden.</string>
     <string name="wait_for_wifi_timeout">WLAN-Wartezeit</string>
     <string name="wireless_24ghz_warning">Hinweis: Kabelloses Android Auto auf 2,4-GHz-Geräten kann zu Verzögerungen, Rucklern und Verbindungsabbrüchen führen. Bei Problemen testen Sie bitte die USB-Verbindung, um festzustellen, ob es sich um eine Netzwerkbeschränkung handelt.</string>
     <string name="fake_speed_title">Video-Sperre deaktivieren (Fake Speed)</string>
     <string name="fake_speed_description">Meldet dem Handy eine konstante niedrige Geschwindigkeit (0,5 m/s), um die Video-Sperre während der Fahrt zu umgehen. Mit Vorsicht verwenden.</string>
+    <string name="wireless_mode_helper">Wireless Helper</string>
+    <string name="wireless_mode_native">Native</string>
+    <string name="wireless_mode_server">Headunit Server</string>
+    <string name="server_mode_label">Server-Modus</string>
+    <string name="server_mode_manual">Manuell</string>
+    <string name="server_mode_auto">Auto</string>
+
+    <string name="helper_strategy_label">Verbindungsmethode (Helper)</string>
+    <string-array name="helper_strategies">
+        <item>Gemeinsames WLAN (NSD)</item>
+        <item>WiFi Direct (P2P)</item>
+        <item>Google Nearby (Beta)</item>
+        <item>Handy-Hotspot (Host)</item>
+        <item>Headunit-Hotspot (Passiv)</item>
+    </string-array>
+
+    <string name="select_nearby_device">Nearby-Gerät auswählen</string>
+    <string name="connecting_to_nearby">Verbinde mit %s…</string>
+
+    <string name="exit_dialog_title">Android Auto beenden</string>
+    <string name="exit_dialog_stop">Verbindung stoppen</string>
+    <string name="exit_dialog_pip">Bild-in-Bild</string>
+    <string name="exit_dialog_background">In den Hintergrund</string>
+    <string name="gesture_hint">Tipp: Wischen Sie mit 2 Fingern vom linken Rand, um das Beenden-Menü zu öffnen.</string>
 </resources>

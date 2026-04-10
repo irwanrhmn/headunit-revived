@@ -418,4 +418,32 @@
     <string name="wait_for_wifi_description">開機時，在啟動 WiFi Direct 之前等待 WiFi 連接。適用於主機開機後需要幾秒才能連上 WiFi 的情況。</string>
     <string name="wait_for_wifi_timeout">WiFi 等待逾時</string>
     <string name="wireless_24ghz_warning">注意：在 2.4GHz 設備上使用無線 Android Auto 可能會導致延遲、卡頓和斷開連接。如果您遇到問題，請透過 USB 進行測試，以確認是否為網絡限制。</string>
+    <string name="supported_nativeaa">增強型無線支援</string>
+    <string name="supported_nativeaa_desc">好消息！您的裝置支援「原生無線」模式，這將提供更無縫的 Android Auto 體驗。\n\n要啟用此功能，我們需要重新整理您的藍牙快取。請：\n1. 移除手機上現有的配對\n2. 點擊「確定」以重新啟動藍牙\n3. 重新配對您的手機\n\n您想現在切換到原生 AA 模式嗎？</string>
+    <string name="fake_speed_title">停用影片鎖定 (虛擬速度)</string>
+    <string name="fake_speed_description">向手機報告穩定的低速 (0.5 m/s)，以防止駕駛時影片內容被鎖定。請謹慎使用。</string>
+    <string name="wireless_mode_helper">蘇醒助手 (Wireless Helper)</string>
+    <string name="wireless_mode_native">原生 (Native)</string>
+    <string name="wireless_mode_server">車機伺服器 (Server)</string>
+    <string name="server_mode_label">伺服器模式</string>
+    <string name="server_mode_manual">手動</string>
+    <string name="server_mode_auto">自動</string>
+
+    <string name="helper_strategy_label">助手連線策略</string>
+    <string-array name="helper_strategies">
+        <item>普通 Wifi (NSD)</item>
+        <item>WiFi 直連 (P2P)</item>
+        <item>搜尋附近裝置 (Beta)</item>
+        <item>手機熱點 (Host)</item>
+        <item>車機熱點 (Passive)</item>
+    </string-array>
+
+    <string name="select_nearby_device">選擇附近裝置</string>
+    <string name="connecting_to_nearby">正在連線至 %s…</string>
+
+    <string name="exit_dialog_title">退出 Android Auto</string>
+    <string name="exit_dialog_stop">停止連線</string>
+    <string name="exit_dialog_pip">畫中畫 (PiP)</string>
+    <string name="exit_dialog_background">移至背景</string>
+    <string name="gesture_hint">提示：用兩根手指從左側邊緣滑動即可開啟退出功能表。</string>
 </resources>

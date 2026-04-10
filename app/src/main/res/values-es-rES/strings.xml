@@ -418,4 +418,32 @@
     <string name="wait_for_wifi_description">Al arrancar, espera a que el WiFi se conecte antes de iniciar WiFi Direct. Útil si tu dispositivo móvil tarda unos segundos en conectarse al WiFi después de encenderse.</string>
     <string name="wait_for_wifi_timeout">Tiempo de espera WiFi</string>
     <string name="wireless_24ghz_warning">Nota: Android Auto inalámbrico en dispositivos de 2.4GHz puede causar lag, tirones y desconexiones. Si tiene problemas, pruebe a través de USB para confirmar si es una limitación de la red.</string>
+    <string name="supported_nativeaa">Soporte inalámbrico mejorado</string>
+    <string name="supported_nativeaa_desc">¡Buenas noticias! Tu dispositivo es compatible con el modo \"Inalámbrico Nativo\", que ofrece una experiencia de Android Auto más fluida. \n\nPara activarlo, necesitamos refrescar la caché de Bluetooth. Por favor: \n1. Elimina la vinculación existente en tu móvil \n2. Pulsa OK para reiniciar el Bluetooth \n3. Vuelve a vincular tu móvil \n\n¿Deseas cambiar al modo Inalámbrico Nativo ahora?</string>
+    <string name="fake_speed_title">Desactivar bloqueo de video (Fake Speed)</string>
+    <string name="fake_speed_description">Informa una velocidad baja constante (0.5 m/s) al móvil para evitar que se bloquee el contenido de video mientras se conduce. Usar con precaución.</string>
+    <string name="wireless_mode_helper">Wireless Helper</string>
+    <string name="wireless_mode_native">Nativo</string>
+    <string name="wireless_mode_server">Headunit Server</string>
+    <string name="server_mode_label">Modo Servidor</string>
+    <string name="server_mode_manual">Manual</string>
+    <string name="server_mode_auto">Automático</string>
+
+    <string name="helper_strategy_label">Estrategia de conexión (Helper)</string>
+    <string-array name="helper_strategies">
+        <item>WiFi Común (NSD)</item>
+        <item>WiFi Direct (P2P)</item>
+        <item>Dispositivos cercanos (Beta)</item>
+        <item>Punto de acceso del móvil (Host)</item>
+        <item>Punto de acceso de la radio (Pasivo)</item>
+    </string-array>
+
+    <string name="select_nearby_device">Seleccionar dispositivo cercano</string>
+    <string name="connecting_to_nearby">Conectando a %s…</string>
+
+    <string name="exit_dialog_title">Salir de Android Auto</string>
+    <string name="exit_dialog_stop">Detener conexión</string>
+    <string name="exit_dialog_pip">Imagen en imagen (PiP)</string>
+    <string name="exit_dialog_background">Mover a segundo plano</string>
+    <string name="gesture_hint">Consejo: Deslice desde el borde izquierdo con 2 dedos para abrir el menú de salida.</string>
 </resources>

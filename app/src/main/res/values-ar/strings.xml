@@ -418,4 +418,32 @@
     <string name="wait_for_wifi_description">عند بدء التشغيل، انتظر اتصال WiFi قبل بدء WiFi Direct. مفيد إذا كان جهازك يحتاج بضع ثوانٍ للاتصال بشبكة WiFi بعد التشغيل.</string>
     <string name="wait_for_wifi_timeout">مهلة انتظار WiFi</string>
     <string name="wireless_24ghz_warning">ملاحظة: يمكن أن يؤدي استخدام Android Auto اللاسلكي على أجهزة 2.4 جيجا هرتز إلى حدوث تأخير وتقطع وانقطاع في الاتصال. إذا واجهت مشكلات، يرجى الاختبار عبر USB للتأكد مما ifا كان ذلك بسبب قيود الشبكة.</string>
+    <string name="supported_nativeaa">دعم لاسلكي محسّن</string>
+    <string name="supported_nativeaa_desc">أخبار رائعة! يدعم جهازك وضع \"لاسلكي أصلي\"، مما يوفر تجربة Android Auto أكثر سلاسة. \n\nلتفعيل هذا السمة، نحتاج إلى تحديث ذاكرة التخزين المؤقت للبلوتوث. يرجى: \n1. إزالة الاقتران الحالي على هاتفك \n2. النقر على موافق لإعادة تشغيل البلوتوث \n3. إعادة اقتران هاتفك \n\nهل ترغب في الانتقال إلى وضع AA الأصلي الآن؟</string>
+    <string name="fake_speed_title">تعطيل قفل الفيديو (Fake Speed)</string>
+    <string name="fake_speed_description">يبلغ الهاتف سرعة منخفضة ثابتة (0.5 م/ث) لمنع قفل محتوى الفيديو أثناء القيادة. استخدم بحذر.</string>
+    <string name="wireless_mode_helper">Wireless Helper</string>
+    <string name="wireless_mode_native">أصلي (Native)</string>
+    <string name="wireless_mode_server">خادم شاشة السيارة (Server)</string>
+    <string name="server_mode_label">وضع الخادم</string>
+    <string name="server_mode_manual">يدوي</string>
+    <string name="server_mode_auto">تلقائي</string>
+
+    <string name="helper_strategy_label">طريقة اتصال المساعد</string>
+    <string-array name="helper_strategies">
+        <item>WiFi عادي (NSD)</item>
+        <item>WiFi مباشر (P2P)</item>
+        <item>الأجهزة القريبة (Beta)</item>
+        <item>نقطة اتصال الهاتف (Host)</item>
+        <item>نقطة اتصال الشاشة (Passive)</item>
+    </string-array>
+
+    <string name="select_nearby_device">اختر جهازاً قريباً</string>
+    <string name="connecting_to_nearby">جاري الاتصال بـ %s…</string>
+
+    <string name="exit_dialog_title">خروج من Android Auto</string>
+    <string name="exit_dialog_stop">إيقاف الاتصال</string>
+    <string name="exit_dialog_pip">صورة داخل صورة (PiP)</string>
+    <string name="exit_dialog_background">نقل إلى الخلفية</string>
+    <string name="gesture_hint">نصيحة: اسحب بإصبعين من الحافة اليسرى لفتح قائمة الخروج.</string>
 </resources>

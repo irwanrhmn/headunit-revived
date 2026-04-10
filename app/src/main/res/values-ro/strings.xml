@@ -419,4 +419,32 @@
     <string name="wait_for_wifi_description">La pornire, așteaptă conectarea WiFi înainte de a porni WiFi Direct. Util dacă headunit-ul tău are nevoie de câteva secunde pentru a se conecta la WiFi după pornire.</string>
     <string name="wait_for_wifi_timeout">Limita de așteptare WiFi</string>
     <string name="wireless_24ghz_warning">Notă: Android Auto wireless pe dispozitive de 2,4 GHz poate duce la întârzieri, sacadări și deconectări. Dacă întâmpinați probleme, vă rugăm să testați prin USB pentru a confirma dacă este o limitare a rețelei.</string>
+    <string name="supported_nativeaa">Suport wireless îmbunătățit</string>
+    <string name="supported_nativeaa_desc">Vești bune! Dispozitivul tău suportă modul „Native Wireless”, care oferă o experiență Android Auto mai fluidă. \n\nPentru a-l activa, trebuie să reîmprospătăm cache-ul Bluetooth. Te rugăm să: \n1. Elimini asocierea existentă pe telefon \n2. Dai clic pe OK pentru a reporni Bluetooth \n3. Reasociezi telefonul \n\nDorești să treci acum la modul Native AA?</string>
+    <string name="fake_speed_title">Dezactivează blocarea video (Fake Speed)</string>
+    <string name="fake_speed_description">Raportează telefonului o viteză redusă constantă (0,5 m/s) pentru a preveni blocarea conținutului video în timpul conducerii. Utilizați cu prudență.</string>
+    <string name="wireless_mode_helper">Wireless Helper</string>
+    <string name="wireless_mode_native">Nativ</string>
+    <string name="wireless_mode_server">Headunit Server</string>
+    <string name="server_mode_label">Mod Server</string>
+    <string name="server_mode_manual">Manual</string>
+    <string name="server_mode_auto">Auto</string>
+
+    <string name="helper_strategy_label">Metoda de conectare Helper</string>
+    <string-array name="helper_strategies">
+        <item>WiFi Comun (NSD)</item>
+        <item>WiFi Direct (P2P)</item>
+        <item>Dispozitive în apropiere (Beta)</item>
+        <item>Hotspot telefon (Host)</item>
+        <item>Hotspot unitate (Pasiv)</item>
+    </string-array>
+
+    <string name="select_nearby_device">Selectează dispozitiv în apropiere</string>
+    <string name="connecting_to_nearby">Conectare la %s…</string>
+
+    <string name="exit_dialog_title">Ieșire din Android Auto</string>
+    <string name="exit_dialog_stop">Oprește conexiunea</string>
+    <string name="exit_dialog_pip">Picture-in-Picture (PiP)</string>
+    <string name="exit_dialog_background">Mută în fundal</string>
+    <string name="gesture_hint">Sugestie: Glisează cu 2 degete de la marginea stângă pentru a deschide meniul de ieșire.</string>
 </resources>

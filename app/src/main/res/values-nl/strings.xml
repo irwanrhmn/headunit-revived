@@ -418,4 +418,32 @@
     <string name="wait_for_wifi_description">Wacht bij het opstarten tot WiFi verbonden is voordat WiFi Direct wordt gestart. Handig als uw headunit een paar seconden nodig heeft om verbinding te maken met WiFi na het opstarten.</string>
     <string name="wait_for_wifi_timeout">WiFi wachttijd</string>
     <string name="wireless_24ghz_warning">Opmerking: Draadloze Android Auto op 2,4 GHz-apparaten kan leiden tot vertragingen, haperingen en verbrekingen. Als u problemen ondervindt, test dan via USB om te bevestigen of het een netwerkbeperking is.</string>
+    <string name="supported_nativeaa">Verbeterde draadloze ondersteuning</string>
+    <string name="supported_nativeaa_desc">Goed nieuws! Je apparaat ondersteunt de modus \"Native Wireless\", wat zorgt voor een vlottere Android Auto-ervaring. \n\nOm dit in te schakelen, moeten we je Bluetooth-cache vernieuwen. Graag: \n1. Verwijder de bestaande koppeling op je telefoon \n2. Klik op OK om Bluetooth te herstarten \n3. Koppel je telefoon opnieuw \n\nWil je nu overschakelen naar de Native AA-modus?</string>
+    <string name="fake_speed_title">Video-blokkade uitschakelen (Fake Speed)</string>
+    <string name="fake_speed_description">Meldt een constante lage snelheid (0,5 m/s) aan de telefoon om te voorkomen dat video-inhoud wordt geblokkeerd tijdens het rijden. Gebruik met zorg.</string>
+    <string name="wireless_mode_helper">Wireless Helper</string>
+    <string name="wireless_mode_native">Native</string>
+    <string name="wireless_mode_server">Headunit Server</string>
+    <string name="server_mode_label">Servermodus</string>
+    <string name="server_mode_manual">Handmatig</string>
+    <string name="server_mode_auto">Auto</string>
+
+    <string name="helper_strategy_label">Verbindingsmethode (Helper)</string>
+    <string-array name="helper_strategies">
+        <item>Gemeenschappelijke WiFi (NSD)</item>
+        <item>WiFi Direct (P2P)</item>
+        <item>Apparaten in de buurt (Beta)</item>
+        <item>Telefoon-hotspot (Host)</item>
+        <item>Headunit-hotspot (Passief)</item>
+    </string-array>
+
+    <string name="select_nearby_device">Selecteer apparaat in de buurt</string>
+    <string name="connecting_to_nearby">Verbinden met %s…</string>
+
+    <string name="exit_dialog_title">Android Auto afsluiten</string>
+    <string name="exit_dialog_stop">Verbinding stoppen</string>
+    <string name="exit_dialog_pip">Beeld-in-beeld (PiP)</string>
+    <string name="exit_dialog_background">Verplaats naar achtergrond</string>
+    <string name="gesture_hint">Tip: Veeg met 2 vingers vanaf de linkerrand om het afsluitmenu te openen.</string>
 </resources>

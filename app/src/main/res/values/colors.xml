@@ -30,4 +30,7 @@
     <color name="color_wifi_purple">#8e44ad</color>
     <color name="color_settings_darkblue">#2c3e50</color>
 
+    <!-- Segmented Button Colors -->
+    <color name="segmented_button_stroke">#808080</color>
+
 </resources>

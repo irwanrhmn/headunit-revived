@@ -55,12 +55,14 @@ adb shell am start -a android.intent.action.VIEW -d "headunit://connect?ip=192.1
 
 ## Planned
 - Theme-Options for Colors and Images, Car-Logos
-- Change settings in Projection
+- Change settings in Projection, maybe call it "Quick-Settings"
 - Remove Native-SSL Libraries to reduce filesize
+- Add Permission Checker
+- Settings-Reset Button
 
 ## Known Issues
 - **Google Maps in Portrait Mode:** Touch interactions (searching, scrolling) within Google Maps may not work as expected when using Portrait Mode on some devices. **Fix:** Try reducing the **Pixel density (DPI)** setting to **below 200** (e.g., 190) in the app settings. This often restores full functionality.
-- **Wireless Connection Drops:** If the connection drops frequently, disable **"WiFi Assistant"** or **"Switch between networks"** in your phone's WiFi settings to prevent it from killing the connection due to "no internet."
+- **Wireless Connection Drops:** If the connection drops frequently, disable **"WiFi Assistant"** or **"Switch between networks"** in your phone's WiFi settings to prevent it from killing the connection due to "no internet." Check battery saving options
 
 ## Changelog
 ### v.2.2.0-beta3
@@ -74,7 +76,7 @@ adb shell am start -a android.intent.action.VIEW -d "headunit://connect?ip=192.1
 - Added Japanese language 🇯🇵 thanks to @mattyann87
 - Enhanced: Media Session Announcement. Thanks to @irwanrhmn
 - Added: Pip-Support
-- Added: Google Nearby Support
+- Added: Google Nearby Support (Super shaky. This needs to be addressed for full release of 2.2.0)
 - Added: 4K in select
 - New App-Icon without text for better visibility
 

@@ -58,6 +58,7 @@
     <string name="gles_required_message">モノクロモードを利用するにはビデオ出力でグレースケールフィルターを利用するためにGLESレンダリングが必要です。GLESを有効にしますか？</string>
     <string name="enable_gles">GLESを有効にする</string>
     <string name="category_navigation">ナビゲーション</string>
+    <string name="category_wireless">ワイヤレス接続</string>
 
     <string name="reconnection_required_title">再接続が必要です</string>
     <string name="reconnection_required_message">デバイスが待機状態です。Android Autoを再度起動するためにはUSBケーブルを抜き差ししてください。</string>
@@ -100,6 +101,8 @@
     <string name="fullscreen_none">普通 (全てのバーを表示)</string>
     <string name="fullscreen_immersive">イマーシブ (全てのバーが非表示)</string>
     <string name="fullscreen_status_only">ステータスバーのみ非表示</string>
+    <string name="fullscreen_immersive_avoid_notch">イマーシブ (ノッチ回避)</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">すべてのバーを非表示にし、投影がノッチやカットアウトで隠れないようにパディングを追加します。</string>
 
     <string name="usb_status">USBの状態: %s</string>
     <string name="projection_status">投影状況: %s</string>
@@ -174,6 +177,7 @@
     <string name="overlay_permission_title">バックグラウンド起動許可</string>
     <string name="overlay_permission_description">Bluetooth接続時にHeadunit Revivedが自動的に起動するようにするには、次の画面で「他のアプリの上に表示する」権限を有効にしてください。</string>
     <string name="open_settings">設定</string>
+    <string name="wireless_connection_settings">ワイヤレス接続</string>
     <string name="right_hand_drive">右ハンドル</string>
     <string name="right_hand_drive_description">右側通行用のUI配置</string>
     <string name="category_graphic">グラフィック</string>
@@ -220,6 +224,9 @@
 
 
     <!-- Audio Settings -->
+    <string name="forced_scale">強制スケール (レガシー修正)</string>
+    <string name="forced_scale_description">SurfaceViewを使用する一部の古いデバイスでのスケーリングの問題を修正します。画像が歪んだりずれたりして見える場合にのみ使用してください。</string>
+
     <string name="category_audio">オーディオ</string>
     <string name="enable_audio_sink">オーディオシンク</string>
     <string name="enable_audio_sink_description">無効にすると、ヘッドユニットは音声を受信しなくなります。音声はスマートフォンから再生されます。</string>
@@ -305,6 +312,8 @@
     <string name="notification_projection_active">Android Autoを起動中</string>
     <string name="shortcut_connect_title">接続</string>
     <string name="shortcut_connect_desc">最後に認識されたデバイスに接続する</string>
+    <string name="shortcut_selfmode_title">セルフモード</string>
+    <string name="shortcut_selfmode_desc">このデバイスでAndroid Autoを開始</string>
     <string name="shortcut_disconnect_title">切断</string>
     <string name="shortcut_disconnect_desc">現在のセッションを終了する</string>
     <string name="shortcut_exit_title">アプリを閉じる</string>
@@ -384,6 +393,8 @@
 
     <string name="wifi_disabled_info">お知らせ：Wi-Fiは無効になっています。</string>
 
+    <string name="bt_not_enabled">Bluetoothが無効です</string>
+
     <!-- Vehicle Info Settings -->
     <string name="vehicle_info_settings">車両情報</string>
     <string name="vehicle_info_settings_description">お使いのスマートフォン上で、車両情報の表示方法をカスタマイズできます。</string>
@@ -419,4 +430,34 @@
     <string name="wait_for_wifi_description">起動時に、Wi-Fi接続が完了するまで待ってからWi-Fi Directを開始します。ヘッドユニットの電源投入後、Wi-Fi接続に数秒かかる場合は、この設定を有効にしてください。</string>
     <string name="wait_for_wifi_timeout">WiFi待機タイムアウト</string>
     <string name="wireless_24ghz_warning">注意：2.4GHzデバイスでのワイヤレスAndroid Autoは、ラグ、カクつき、切断の原因となる場合があります。問題が発生した場合は、USB接続でテストし、ネットワークの制限かどうかを確認してください。</string>
+    <string name="supported_nativeaa">高度なワイヤレスサポート</string>
+    <string name="supported_nativeaa_desc">素晴らしいニュース！お使いのデバイスは「ネイティブワイヤレス」モードをサポートしており、よりシームレスな Android Auto 体験を提供します。\n\nこれを有効にするには、Bluetooth キャッシュをリフレッシュする必要があります。次の手順をお願いします：\n1. スマートフォンにある既存のペアリングを削除する\n2. OK をクリックして Bluetooth を再起動する\n3. スマートフォンを再度ペアリングする\n\n今すぐネイティブ AA モードに切り替えますか？</string>
+    <string name="not_supported_nativeaa">ネイティブワイヤレスはサポートされていないようです</string>
+    <string name="not_supported_nativeaa_desc">お使いのデバイスは、ネイティブワイヤレスに必要な Bluetooth または Wi-Fi 機能をサポートしていない可能性があります。とにかく試してみることもできますが、失敗した場合は、代わりに「Wireless Helper」または「Auto (Headunit Server)」モードを使用してください。</string>
+    <string name="fake_speed_title">ビデオロックの無効化 (Fake Speed)</string>
+    <string name="fake_speed_description">走行中にビデオコンテンツがブロックされるのを防ぐため、一定の低速 (0.5 m/s) をスマートフォンに報告します。注意して使用してください。</string>
+    <string name="wireless_mode_helper">Wireless Helper</string>
+    <string name="wireless_mode_native">ネイティブ</string>
+    <string name="wireless_mode_server">Headunit Server</string>
+    <string name="server_mode_label">サーバーモード</string>
+    <string name="server_mode_manual">マニュアル</string>
+    <string name="server_mode_auto">オート</string>
+
+    <string name="helper_strategy_label">ヘルパーの接続戦略</string>
+    <string-array name="helper_strategies">
+        <item>共通 Wifi (NSD)</item>
+        <item>WiFi Direct (P2P)</item>
+        <item>周辺のデバイス (ベータ)</item>
+        <item>スマホのホットスポット (ホスト)</item>
+        <item>車載機のホットスポット (パッシブ)</item>
+    </string-array>
+
+    <string name="select_nearby_device">周辺のデバイスを選択</string>
+    <string name="connecting_to_nearby">%s に接続中…</string>
+
+    <string name="exit_dialog_title">Android Auto を終了</string>
+    <string name="exit_dialog_stop">接続を停止</string>
+    <string name="exit_dialog_pip">ピクチャー・イン・ピクチャー (PiP)</string>
+    <string name="exit_dialog_background">バックグラウンドへ移動</string>
+    <string name="gesture_hint">ヒント：左端から 2 本の指でスワイプすると、終了メニューが開きます。</string>
 </resources>

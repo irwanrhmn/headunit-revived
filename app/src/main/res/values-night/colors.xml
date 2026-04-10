@@ -6,4 +6,5 @@
     <color name="adaptive_text_color">#FFFFFF</color>
     <color name="text_primary">#f7f7f7</color>
     <color name="text_shadow">#00000000</color>
+    <color name="segmented_button_stroke">#CCCCCC</color>
 </resources>

@@ -2,6 +2,7 @@ package com.andrerinas.headunitrevived.main
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
@@ -56,13 +57,18 @@ class SettingsFragment : Fragment() {
     private var pendingAppLanguage: String? = null
     private var pendingFakeSpeed: Boolean? = null
     
+    private var pendingWifiConnectionMode: Int? = null
+    private var pendingHelperConnectionStrategy: Int? = null
+    private var pendingAutoEnableHotspot: Boolean? = null
+    private var pendingWaitForWifi: Boolean? = null
+    private var pendingWaitForWifiTimeout: Int? = null
+
     // Flag to determine if the projection should stretch to fill the screen
     private var pendingStretchToFill: Boolean? = null
     private var pendingForcedScale: Boolean? = null
 
     private var pendingKillOnDisconnect: Boolean? = null
-    private var pendingAutoEnableHotspot: Boolean? = null
-    
+
     // Custom Insets
     private var pendingInsetLeft: Int? = null
     private var pendingInsetTop: Int? = null
@@ -114,6 +120,11 @@ class SettingsFragment : Fragment() {
         pendingKillOnDisconnect = settings.killOnDisconnect
         pendingAutoEnableHotspot = settings.autoEnableHotspot
         pendingFakeSpeed = settings.fakeSpeed
+
+        pendingWifiConnectionMode = settings.wifiConnectionMode
+        pendingHelperConnectionStrategy = settings.helperConnectionStrategy
+        pendingWaitForWifi = settings.waitForWifiBeforeWifiDirect
+        pendingWaitForWifiTimeout = settings.waitForWifiTimeout
         
         pendingInsetLeft = settings.insetLeft
         pendingInsetTop = settings.insetTop
@@ -239,6 +250,12 @@ class SettingsFragment : Fragment() {
         pendingKillOnDisconnect?.let { settings.killOnDisconnect = it }
         pendingAutoEnableHotspot?.let { settings.autoEnableHotspot = it }
         pendingFakeSpeed?.let { settings.fakeSpeed = it }
+
+        val oldWifiMode = settings.wifiConnectionMode
+        pendingWifiConnectionMode?.let { settings.wifiConnectionMode = it }
+        pendingHelperConnectionStrategy?.let { settings.helperConnectionStrategy = it }
+        pendingWaitForWifi?.let { settings.waitForWifiBeforeWifiDirect = it }
+        pendingWaitForWifiTimeout?.let { settings.waitForWifiTimeout = it }
         
         pendingInsetLeft?.let { settings.insetLeft = it }
         pendingInsetTop?.let { settings.insetTop = it }
@@ -246,6 +263,15 @@ class SettingsFragment : Fragment() {
         pendingInsetBottom?.let { settings.insetBottom = it }
 
         settings.commit()
+
+        if (oldWifiMode != settings.wifiConnectionMode) {
+            val intent = Intent(requireContext(), AapService::class.java).apply {
+                val mode = settings.wifiConnectionMode
+                action = if (mode == 1 || mode == 2 || mode == 3)
+                    AapService.ACTION_START_WIRELESS else AapService.ACTION_STOP_WIRELESS
+            }
+            requireContext().startService(intent)
+        }
 
         if (requiresRestart) {
             if (App.provide(requireContext()).commManager.isConnected) {
@@ -301,7 +327,12 @@ class SettingsFragment : Fragment() {
                         pendingAssistantVolumeOffset != settings.assistantVolumeOffset ||
                         pendingNavigationVolumeOffset != settings.navigationVolumeOffset ||
                         pendingKillOnDisconnect != settings.killOnDisconnect ||
-                        pendingAutoEnableHotspot != settings.autoEnableHotspot
+                        pendingAutoEnableHotspot != settings.autoEnableHotspot ||
+                        pendingFakeSpeed != settings.fakeSpeed ||
+                        pendingWifiConnectionMode != settings.wifiConnectionMode ||
+                        pendingHelperConnectionStrategy != settings.helperConnectionStrategy ||
+                        pendingWaitForWifi != settings.waitForWifiBeforeWifiDirect ||
+                        pendingWaitForWifiTimeout != settings.waitForWifiTimeout
 
         hasChanges = anyChange
 
@@ -318,7 +349,8 @@ class SettingsFragment : Fragment() {
                           pendingInsetLeft != settings.insetLeft ||
                           pendingInsetTop != settings.insetTop ||
                           pendingInsetRight != settings.insetRight ||
-                          pendingInsetBottom != settings.insetBottom
+                          pendingInsetBottom != settings.insetBottom ||
+                          pendingWifiConnectionMode != settings.wifiConnectionMode
 
         updateSaveButtonState()
     }
@@ -392,16 +424,139 @@ class SettingsFragment : Fragment() {
         // --- Wireless Connection ---
         items.add(SettingItem.CategoryHeader("wirelessConnection", R.string.category_wireless))
 
-        items.add(SettingItem.SettingEntry(
-            stableId = "wirelessConnectionSettings",
-            nameResId = R.string.wireless_connection_settings,
-            value = getString(R.string.wireless_mode_description),
-            onClick = {
-                try {
-                    findNavController().navigate(R.id.action_settingsFragment_to_wirelessConnectionFragment)
-                } catch (e: Exception) { }
+        // Add 2.4GHz Warning Banner
+        items.add(SettingItem.InfoBanner(
+            stableId = "wireless24ghzWarning",
+            textResId = R.string.wireless_24ghz_warning
+        ))
+
+        val wirelessModeOptions = listOf(
+            getString(R.string.wireless_mode_helper),
+            getString(R.string.wireless_mode_native),
+            getString(R.string.wireless_mode_server)
+        )
+
+        val wirelessSelectedIndex = when (pendingWifiConnectionMode) {
+            2 -> 0 // Helper
+            3 -> 1 // Native
+            0, 1 -> 2 // Server
+            else -> 2
+        }
+
+        items.add(SettingItem.SegmentedButtonSettingEntry(
+            stableId = "wifiConnectionMode",
+            nameResId = R.string.wireless_mode,
+            options = wirelessModeOptions,
+            selectedIndex = wirelessSelectedIndex,
+            onOptionSelected = { index ->
+                val newMode = when (index) {
+                    0 -> 2 // Helper
+                    1 -> 3 // Native
+                    2 -> if (pendingWifiConnectionMode == 0) 0 else 1 // Keep manual/auto choice if already in server mode
+                    else -> 1
+                }
+
+                if (newMode == 3) {
+                    // Compatibility check for Native AA
+                    if (com.andrerinas.headunitrevived.connection.NativeAaHandshakeManager.checkCompatibility()) {
+                        MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+                            .setTitle(R.string.supported_nativeaa)
+                            .setMessage(R.string.supported_nativeaa_desc)
+                            .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                                pendingWifiConnectionMode = 3
+                                checkChanges()
+                                updateSettingsList()
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show()
+                    } else {
+                        MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+                            .setTitle(R.string.not_supported_nativeaa)
+                            .setMessage(R.string.not_supported_nativeaa_desc)
+                            .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                                pendingWifiConnectionMode = 3
+                                checkChanges()
+                                updateSettingsList()
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show()
+                    }
+                } else {
+                    pendingWifiConnectionMode = newMode
+                    checkChanges()
+                    updateSettingsList()
+                }
             }
         ))
+
+        // Sub-setting for Headunit Server (Manual vs Auto)
+        if (pendingWifiConnectionMode == 0 || pendingWifiConnectionMode == 1) {
+            items.add(SettingItem.SegmentedButtonSettingEntry(
+                stableId = "serverModeSelection",
+                nameResId = R.string.server_mode_label,
+                options = listOf(getString(R.string.server_mode_manual), getString(R.string.server_mode_auto)),
+                selectedIndex = if (pendingWifiConnectionMode == 0) 0 else 1,
+                onOptionSelected = { index ->
+                    pendingWifiConnectionMode = if (index == 0) 0 else 1
+                    checkChanges()
+                    updateSettingsList()
+                }
+            ))
+        }
+
+        // Sub-setting for Wireless Helper Strategy
+        if (pendingWifiConnectionMode == 2) {
+            val helperStrategies = resources.getStringArray(R.array.helper_strategies)
+            items.add(SettingItem.SettingEntry(
+                stableId = "helperStrategy",
+                nameResId = R.string.helper_strategy_label,
+                value = helperStrategies.getOrElse(pendingHelperConnectionStrategy!!) { "" },
+                onClick = {
+                    MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+                        .setTitle(R.string.helper_strategy_label)
+                        .setSingleChoiceItems(helperStrategies, pendingHelperConnectionStrategy!!) { dialog, which ->
+                            pendingHelperConnectionStrategy = which
+                            checkChanges()
+                            dialog.dismiss()
+                            updateSettingsList()
+                        }
+                        .show()
+                }
+            ))
+
+            if (pendingHelperConnectionStrategy == 1) { // WiFi Direct (P2P)
+                items.add(SettingItem.ToggleSettingEntry(
+                    stableId = "waitForWifi",
+                    nameResId = R.string.wait_for_wifi,
+                    descriptionResId = R.string.wait_for_wifi_description,
+                    isChecked = pendingWaitForWifi ?: false,
+                    onCheckedChanged = { isChecked ->
+                        pendingWaitForWifi = isChecked
+                        checkChanges()
+                        updateSettingsList()
+                    }
+                ))
+
+                if (pendingWaitForWifi == true) {
+                    items.add(SettingItem.SliderSettingEntry(
+                        stableId = "waitForWifiTimeout",
+                        nameResId = R.string.wait_for_wifi_timeout,
+                        value = "${pendingWaitForWifiTimeout}s",
+                        sliderValue = (pendingWaitForWifiTimeout ?: 10).toFloat(),
+                        valueFrom = 5f,
+                        valueTo = 30f,
+                        stepSize = 1f,
+                        onValueChanged = { value ->
+                            pendingWaitForWifiTimeout = value.toInt()
+                            checkChanges()
+                            updateSettingsList()
+                        }
+                    ))
+                }
+            }
+        }
 
         // --- Dark Mode ---
         items.add(SettingItem.CategoryHeader("darkMode", R.string.category_dark_mode))
@@ -1218,6 +1373,43 @@ class SettingsFragment : Fragment() {
         // Only disable reconnection-related settings.
         // Initial connection settings are kept so they work when the car starts.
         settings.reopenOnReconnection = false
+    }
+
+    private fun showHotspotPermissionDialog() {
+        MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+            .setTitle(R.string.hotspot_permission_title)
+            .setMessage(R.string.hotspot_permission_message)
+            .setPositiveButton(R.string.open_settings) { dialog, _ ->
+                val intent = Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS).apply {
+                    data = Uri.parse("package:${requireContext().packageName}")
+                }
+                startActivity(intent)
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.cancel) { _, _ ->
+                pendingAutoEnableHotspot = false
+                checkChanges()
+                updateSettingsList()
+            }
+            .show()
+    }
+
+    private fun showHotspotExperimentalWarning() {
+        MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
+            .setTitle(R.string.hotspot_warning_title)
+            .setMessage(R.string.hotspot_warning_message)
+            .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                pendingAutoEnableHotspot = true
+                checkChanges()
+                updateSettingsList()
+                dialog.dismiss()
+            }
+            .setNegativeButton(android.R.string.cancel) { _, _ ->
+                pendingAutoEnableHotspot = false
+                checkChanges()
+                updateSettingsList()
+            }
+            .show()
     }
 
     private fun getAutoConnectSummary(): String {
