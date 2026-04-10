@@ -162,6 +162,7 @@
     <string name="overlay_permission_title">Uprawnienie do startu w tle</string>
     <string name="overlay_permission_description">Aby umożliwić automatyczne otwarcie Headunit Revived po połączeniu Bluetooth, włącz uprawnienie "Wyświetlanie nad innymi aplikacjami" na następnym ekranie.</string>
     <string name="open_settings">Ustawienia</string>
+    <string name="wireless_connection_settings">Połączenie bezprzewodowe</string>
     <string name="right_hand_drive">Kierownica po prawej stronie</string>
     <string name="right_hand_drive_description">Dostosuj interfejs dla ruchu lewostronnego (RHD)</string>
     <string name="category_graphic">Grafika</string>
@@ -208,7 +209,10 @@
     <string name="pref_stretch_screen_summary">Ignoruje proporcje ekranu, aby wypełnić cały wyświetlacz (usuwa czarne paski)</string>
 
     <!-- Audio Settings -->
-    <string name="category_audio">Dźwięk</string>
+        <string name="forced_scale">Wymuszone skalowanie (Poprawka legacy)</string>
+    <string name="forced_scale_description">Naprawia problemy ze skalowaniem na niektórych starszych urządzeniach korzystających z SurfaceView. Używaj tylko wtedy, gdy obraz jest zniekształcony lub przesunięty.</string>
+
+<string name="category_audio">Dźwięk</string>
     <string name="enable_audio_sink">Włącz wyjście dźwięku</string>
     <string name="enable_audio_sink_description">Jeśli wyłączone, jednostka nie będzie działać jako wyjście dźwięku. Dźwięk będzie odtwarzany z telefonu.</string>
     <string name="use_aac_audio">Użyj dźwięku AAC</string>
@@ -321,6 +325,8 @@
     <string name="auto_optimize_desc">Uruchom sprawdzanie systemu, aby znaleźć najlepsze ustawienia dla swojego urządzenia.</string>
     <string name="fullscreen_none">Normalny (Wszystkie paski widoczne)</string>
     <string name="fullscreen_immersive">Pełny ekran (Wszystkie paski ukryte)</string>
+    <string name="fullscreen_immersive_avoid_notch">Immersyjny (Unikaj Notch)</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">Ukrywa wszystkie paski i dodaje wypełnienie, aby zapobiec zasłanianiu projekcji przez Notch/Wycięcie.</string>
     <string name="fullscreen_status_only">Ukryj tylko pasek stanu</string>
     <string name="log_level">Poziom logowania</string>
     <string name="log_level_description">Wybierz poziom szczegółowości logów do debugowania.</string>

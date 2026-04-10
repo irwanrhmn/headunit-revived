@@ -161,6 +161,7 @@
     <string name="overlay_permission_title">Toestemming voor starten op achtergrond</string>
     <string name="overlay_permission_description">Om Headunit Revived automatisch te openen wanneer Bluetooth verbinding maakt, dient u de toestemming "Weergeven over andere apps" in te schakelen in het volgende scherm.</string>
     <string name="open_settings">Instellingen</string>
+    <string name="wireless_connection_settings">Draadloze verbinding</string>
     <string name="right_hand_drive">Rechts hand gestuurd</string>
     <string name="right_hand_drive_description">Positioneer de gebruikersinterface voor rechts rijden.</string>
     <string name="category_graphic">Grafisch</string>
@@ -207,7 +208,10 @@
     <string name="pref_stretch_screen_summary">Negeert de beeldverhouding om het volledige display te vullen (verwijdert zwarte balken)</string>
 
     <!-- Audio Settings -->
-    <string name="category_audio">Audio</string>
+        <string name="forced_scale">Geforceerde schaal (Legacy Fix)</string>
+    <string name="forced_scale_description">Corrigeert schalingsproblemen op sommige oudere apparaten die SurfaceView gebruiken. Alleen gebruiken als het beeld vervormd of verschoven is.</string>
+
+<string name="category_audio">Audio</string>
     <string name="enable_audio_sink">Audio-sink inschakelen</string>
     <string name="enable_audio_sink_description">Indien uitgeschakeld, fungeert de autoradio niet als audio-uitgang. Het geluid wordt dan vanaf de telefoon afgespeeld.</string>
     <string name="use_aac_audio">Gebruik AAC Audio</string>
@@ -320,6 +324,8 @@
     <string name="auto_optimize_desc">Voer de systeemcontrole uit om de beste instellingen voor je apparaat te vinden.</string>
     <string name="fullscreen_none">Normaal (Alle balken zichtbaar)</string>
     <string name="fullscreen_immersive">Meislepende modus (Alle balken verborgen)</string>
+    <string name="fullscreen_immersive_avoid_notch">Immersief (Notch vermijden)</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">Verbergt alle balken en voegt opvulling toe om te voorkomen dat de projectie wordt afgedekt door de Notch/Uitsparing.</string>
     <string name="fullscreen_status_only">Alleen statusbalk verbergen</string>
     <string name="log_level">Logboekniveau</string>
     <string name="log_level_description">Kies het detailniveau van de loguitvoer voor foutopsporing.</string>

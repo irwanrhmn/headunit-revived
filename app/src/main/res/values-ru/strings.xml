@@ -162,6 +162,7 @@
     <string name="overlay_permission_title">Разрешение на запуск в фоне</string>
     <string name="overlay_permission_description">Чтобы Headunit Revived мог автоматически открываться при подключении Bluetooth, включите разрешение "Показывать поверх других приложений" на следующем экране.</string>
     <string name="open_settings">Настройки</string>
+    <string name="wireless_connection_settings">Беспроводное соединение</string>
     <string name="right_hand_drive">Праворульный автомобиль</string>
     <string name="right_hand_drive_description">Адаптировать интерфейс для праворульного автомобиля</string>
     <string name="category_graphic">Графика</string>
@@ -208,7 +209,10 @@
     <string name="pref_stretch_screen_summary">Игнорирует соотношение сторон для заполнения всего дисплея (убирает черные полосы)</string>
 
     <!-- Audio Settings -->
-    <string name="category_audio">Аудио</string>
+        <string name="forced_scale">Принудительное масштабирование (Legacy Fix)</string>
+    <string name="forced_scale_description">Исправляет проблемы с масштабированием на некоторых старых устройствах, использующих SurfaceView. Используйте только если изображение выглядит искаженным или смещенным.</string>
+
+<string name="category_audio">Аудио</string>
     <string name="enable_audio_sink">Включить вывод звука</string>
     <string name="enable_audio_sink_description">Если выключить этот параметр, то ГУ не будет выводить звук. Звук будет воспроизводиться на телефоне.</string>
     <string name="use_aac_audio">Использовать AAC</string>
@@ -321,6 +325,8 @@
     <string name="auto_optimize_desc">Запустить проверку системы для подбора лучших настроек für вашего устройства.</string>
     <string name="fullscreen_none">Обычный (Все панели видны)</string>
     <string name="fullscreen_immersive">Погружение (Все панели скрыты)</string>
+    <string name="fullscreen_immersive_avoid_notch">Иммерсивный (Избегать выреза)</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">Скрывает все полосы и добавляет отступы, чтобы предотвратить перекрытие проекции вырезом или челкой.</string>
     <string name="fullscreen_status_only">Скрыть только строку состояния</string>
     <string name="log_level">Уровень логирования</string>
     <string name="log_level_description">Выберите уровень детализации логов für отладки.</string>

@@ -162,6 +162,7 @@
     <string name="overlay_permission_title">إذن البدء في الخلفية</string>
     <string name="overlay_permission_description">للسماح لـ Headunit Revived بالفتح التلقائي عند اتصال البلوتوث، يرجى تفعيل إذن "العرض فوق التطبيقات الأخرى" في الشاشة التالية.</string>
     <string name="open_settings">الإعدادات</string>
+    <string name="wireless_connection_settings">اتصال لاسلكي</string>
     <string name="right_hand_drive">القيادة على اليمين</string>
     <string name="right_hand_drive_description">ضبط واجهة المستخدم للقيادة على الجانب الأيمن</string>
     <string name="category_graphic">الرسوميات</string>
@@ -208,7 +209,10 @@
     <string name="pref_stretch_screen_summary">يتجاهل نسبة العرض إلى الارتفاع لملء الشاشة بأكملها (يزيل الأشرطة السوداء)</string>
 
     <!-- Audio Settings -->
-    <string name="category_audio">الصوت</string>
+        <string name="forced_scale">قياس إجباري (إصلاح قديم)</string>
+    <string name="forced_scale_description">يصحح مشاكل القياس على بعض الأجهزة القديمة التي تستخدم SurfaceView. استخدمه فقط إذا كانت الصورة تبدو مشوهة أو مزاحة.</string>
+
+<string name="category_audio">الصوت</string>
     <string name="enable_audio_sink">مخرج الصوت</string>
     <string name="enable_audio_sink_description">إذا كان معطلا، لن تستقبل وحدة الرأس الصوت. سيشغل الصوت من الهاتف.</string>
     <string name="use_aac_audio">استخدام ترميز AAC للصوت</string>
@@ -323,6 +327,8 @@
     <string name="auto_optimize_desc">قم بتشغيل فحص النظام للعثور على أفضل الإعدادات لجهازك.</string>
     <string name="fullscreen_none">عادي (جميع الأشرطة مرئية)</string>
     <string name="fullscreen_immersive">غامر (جميع الأشرطة مخفية)</string>
+    <string name="fullscreen_immersive_avoid_notch">غامر (تجنب النوتش)</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">يخفي جميع الأعمدة ويضيف حشوة لمنع تغطية العرض بواسطة النوتش أو الانقطاع.</string>
     <string name="fullscreen_status_only">إخفاء شريط الحالة فقط</string>
     <string name="log_level">مستوى السجل</string>
     <string name="log_level_description">اختر مستوى تفصيل مخرجات السجل للتصحيح.</string>

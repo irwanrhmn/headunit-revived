@@ -161,6 +161,7 @@
     <string name="overlay_permission_title">Háttérben indítás engedélye</string>
     <string name="overlay_permission_description">Ahhoz, hogy a Headunit Revived automatikusan megnyíljon Bluetooth-csatlakozáskor, engedélyezd a következő képernyőn a „Megjelenítés más alkalmazások felett” jogosultságot.</string>
     <string name="open_settings">Beállítások</string>
+    <string name="wireless_connection_settings">Vezeték nélküli kapcsolat</string>
     <string name="right_hand_drive">Jobbkormányos vezetés</string>
     <string name="right_hand_drive_description">Felhasználói felület pozícionálása jobbkormányos vezetéshez</string>
     <string name="category_graphic">Grafika</string>
@@ -207,7 +208,10 @@
     <string name="pref_stretch_screen_summary">Figyelmen kívül hagyja a képarányt a teljes kijelző kitöltéséhez (eltávolítja a fekete sávokat)</string>
 
     <!-- Audio Settings -->
-    <string name="category_audio">Hang</string>
+        <string name="forced_scale">Kényszerített méretezés (Legacy javítás)</string>
+    <string name="forced_scale_description">Javítja a méretezési problémákat egyes régebbi, SurfaceView-t használó eszközökön. Csak akkor használja, ha a kép torz vagy eltolt.</string>
+
+<string name="category_audio">Hang</string>
     <string name="enable_audio_sink">Hang fogadása</string>
     <string name="enable_audio_sink_description">Ha nincs engedélyezve, a fejegység nem kap hangot. A hang a telefonon fog szólni.</string>
     <string name="use_aac_audio">AAC hang használata</string>
@@ -322,6 +326,8 @@
     <string name="auto_optimize_desc">Rendszerellenőrzés futtatása az eszközhöz legjobban illő beállítások megtalálásához.</string>
     <string name="fullscreen_none">Normál (Minden sáv látható)</string>
     <string name="fullscreen_immersive">Teljes képernyő (Minden sáv rejtett)</string>
+    <string name="fullscreen_immersive_avoid_notch">Immerzív (Notch elkerülése)</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">Elrejti az összes sávot, és kitöltést ad hozzá, hogy megakadályozza a vetítés Notch/Kivágás általi lefedését.</string>
     <string name="fullscreen_status_only">Csak az állapotsor elrejtése</string>
     <string name="log_level">Naplózási szint</string>
     <string name="log_level_description">A hibaelhárításhoz szükséges részletesség beállítása.</string>

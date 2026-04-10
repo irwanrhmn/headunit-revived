@@ -96,6 +96,8 @@
     <string name="start_in_fullscreen_mode_description">Alege cum vrei să fie afișate barele de sistem (status și navigație).</string>
     <string name="fullscreen_none">Normal (Toate barele vizibile)</string>
     <string name="fullscreen_immersive">Imersiv (Toate barele ascunse)</string>
+    <string name="fullscreen_immersive_avoid_notch">Imersiv (Evitare Notch)</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">Ascunde toate barele și adaugă spațiere pentru a preveni acoperirea proiecției de către Notch/Decupaj.</string>
     <string name="fullscreen_status_only">Ascunde doar bara de status</string>
 
     <string name="usb_status">Stare USB: %s</string>
@@ -171,6 +173,7 @@
     <string name="overlay_permission_title">Permisiune pornire în fundal</string>
     <string name="overlay_permission_description">Pentru a lăsa Headunit Revived să se deschidă automat la conectarea Bluetooth-ului, activează permisiunea "Afișare peste alte aplicații" în ecranul următor.</string>
     <string name="open_settings">Setări</string>
+    <string name="wireless_connection_settings">Conexiune wireless</string>
     <string name="right_hand_drive">Volan pe dreapta</string>
     <string name="right_hand_drive_description">Poziționează interfața (UI) pentru volan pe dreapta</string>
     <string name="category_graphic">Grafică</string>
@@ -217,7 +220,10 @@
     <string name="pref_stretch_screen_summary">Ignoră raportul de aspect pentru a umple întregul afișaj (elimină barele negre)</string>
 
     <!-- Audio Settings -->
-    <string name="category_audio">Audio</string>
+        <string name="forced_scale">Scalare forțată (Fix legacy)</string>
+    <string name="forced_scale_description">Corectează problemele de scalare pe unele dispozitive mai vechi care folosesc SurfaceView. Utilizați numai dacă imaginea pare distorsionată sau deplasată.</string>
+
+<string name="category_audio">Audio</string>
     <string name="enable_audio_sink">Receptor Audio (Sink)</string>
     <string name="enable_audio_sink_description">Dacă dezactivezi asta, playerul nu va primi semnal audio. Sunetul se va auzi din telefon.</string>
     <string name="use_aac_audio">Folosește Audio AAC</string>

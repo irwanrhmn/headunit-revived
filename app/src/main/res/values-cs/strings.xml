@@ -162,6 +162,7 @@
     <string name="overlay_permission_title">Oprávnění pro spuštění na pozadí</string>
     <string name="overlay_permission_description">Pro automatické otevření Headunit Revived při připojení Bluetooth povolte prosím oprávnění "Zobrazit přes ostatní aplikace" na další obrazovce.</string>
     <string name="open_settings">Nastavení</string>
+    <string name="wireless_connection_settings">Bezdrátové připojení</string>
     <string name="right_hand_drive">Pravostranné řízení</string>
     <string name="right_hand_drive_description">Upravit rozhraní pro řízení na pravé straně</string>
     <string name="category_graphic">Grafické</string>
@@ -208,7 +209,10 @@
     <string name="pref_stretch_screen_summary">Ignoruje poměr stran a vyplní celý displej (odstraní černé pruhy)</string>
 
     <!-- Audio Settings -->
-    <string name="category_audio">Audio</string>
+        <string name="forced_scale">Vynucené měřítko (Legacy oprava)</string>
+    <string name="forced_scale_description">Opravuje problémy s měřítkem u některých starších zařízení používajících SurfaceView. Používejte pouze v případě, že obraz vypadá zkresleně nebo posunutě.</string>
+
+<string name="category_audio">Audio</string>
     <string name="enable_audio_sink">Povolit audio výstup (Sink)</string>
     <string name="enable_audio_sink_description">Pokud je zakázáno, hlavní jednotka nebude přijímat zvuk. Zvuk se bude přehrávat z telefonu.</string>
     <string name="use_aac_audio">Použít AAC audio</string>
@@ -323,6 +327,8 @@
     <string name="auto_optimize_desc">Spustit kontrolu systému pro nalezení nejlepšího nastavení pro vaše zařízení.</string>
     <string name="fullscreen_none">Normální (Všechny lišty viditelné)</string>
     <string name="fullscreen_immersive">Imerzivní (Všechny lišty skryté)</string>
+    <string name="fullscreen_immersive_avoid_notch">Imerzivní (Vyhnout se Notch)</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">Skryje všechny lišty a přidá odsazení, aby se zabránilo zakrytí projekce výřezem (Notch).</string>
     <string name="fullscreen_status_only">Skrýt pouze stavovou lištu</string>
     <string name="log_level">Úroveň protokolování</string>
     <string name="log_level_description">Vyberte úroveň podrobnosti výstupu protokolu pro ladění.</string>

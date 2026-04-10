@@ -161,6 +161,7 @@
     <string name="overlay_permission_title">背景啟動權限</string>
     <string name="overlay_permission_description">為了讓 Headunit Revived 在藍牙連接時自動開啟，請在下一個畫面啟用「顯示在其他應用程式上層」的權限。</string>
     <string name="open_settings">設定</string>
+    <string name="wireless_connection_settings">無線連線</string>
     <string name="right_hand_drive">右側駕駛</string>
     <string name="right_hand_drive_description">右側行駛位置 UI</string>
     <string name="category_graphic">圖形</string>
@@ -207,7 +208,10 @@
     <string name="pref_stretch_screen_summary">忽略長寬比以填滿整個顯示器（移除黑邊）</string>
 
     <!-- Audio Settings -->
-    <string name="category_audio">音訊</string>
+        <string name="forced_scale">強制縮放 (舊版修正)</string>
+    <string name="forced_scale_description">修正某些使用 SurfaceView 的舊裝置上的縮放問題。僅在影像看起來扭曲 or 位移時使用。</string>
+
+<string name="category_audio">音訊</string>
     <string name="enable_audio_sink">啟用音訊接收器</string>
     <string name="enable_audio_sink_description">如果已停用，主機將不會作為音訊接收器。 音訊將從手機播放。</string>
     <string name="use_aac_audio">使用 AAC 音訊</string>
@@ -320,6 +324,8 @@
     <string name="auto_optimize_desc">執行系統檢查，為您的裝置尋找最佳設定。</string>
     <string name="fullscreen_none">正常（顯示所有欄位）</string>
     <string name="fullscreen_immersive">沉浸模式（隱藏所有欄位）</string>
+    <string name="fullscreen_immersive_avoid_notch">沈浸模式 (避開瀏海)</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">隱藏所有工具列並增加間距，以防止投影被瀏海或切口遮擋。</string>
     <string name="fullscreen_status_only">僅隱藏狀態列</string>
     <string name="log_level">日誌級別</string>
     <string name="log_level_description">選擇日誌輸出的詳細程度以進行偵錯。</string>

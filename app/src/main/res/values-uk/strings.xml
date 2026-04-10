@@ -162,6 +162,7 @@
     <string name="overlay_permission_title">Дозвіл на запуск у фоні</string>
     <string name="overlay_permission_description">Щоб Headunit Revived міг автоматично відкриватися при підключенні Bluetooth, увімкніть дозвіл "Показувати поверх інших програм" на наступному екрані.</string>
     <string name="open_settings">Налаштування</string>
+    <string name="wireless_connection_settings">Бездротове з'єднання</string>
     <string name="right_hand_drive">Правостороннє керування</string>
     <string name="right_hand_drive_description">Розмістити інтерфейс для правостороннього керування автомобілем.</string>
     <string name="category_graphic">Графіка</string>
@@ -208,7 +209,10 @@
     <string name="pref_stretch_screen_summary">Ігнорує співвідношення сторін для заповнення всього дисплея (прибирає чорні смуги)</string>
 
     <!-- Audio Settings -->
-    <string name="category_audio">Звук</string>
+        <string name="forced_scale">Примусове масштабування (Legacy Fix)</string>
+    <string name="forced_scale_description">Виправляє проблеми з масштабуванням на деяких старих пристроях, що використовують SurfaceView. Використовуйте лише якщо зображення виглядає спотвореним або зміщеним.</string>
+
+<string name="category_audio">Звук</string>
     <string name="enable_audio_sink">Увімкнути аудіоприймач</string>
     <string name="enable_audio_sink_description">Якщо вимкнено, головний пристрій не працюватиме як аудіоприймач. Звук відтворюватиметься з телефону.</string>
     <string name="use_aac_audio">Використовувати аудіокодек AAC</string>
@@ -321,6 +325,8 @@
     <string name="auto_optimize_desc">Запустити перевірку системи, щоб знайти найкращі налаштування для вашого пристрою.</string>
     <string name="fullscreen_none">Звичайний (Усі панелі видимі)</string>
     <string name="fullscreen_immersive">Повне занурення (Усі панелі приховані)</string>
+    <string name="fullscreen_immersive_avoid_notch">Іммерсивний (Уникати вирізу)</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">Приховує всі панелі та додає відступи, щоб запобігти перекриттю проекції вирізом або чубчиком.</string>
     <string name="fullscreen_status_only">Приховати лише рядок стану</string>
     <string name="log_level">Рівень логування</string>
     <string name="log_level_description">Виберіть рівень деталізації виводу логів для налагодження.</string>

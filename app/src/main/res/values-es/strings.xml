@@ -162,6 +162,7 @@
     <string name="overlay_permission_title">Permiso de inicio en segundo plano</string>
     <string name="overlay_permission_description">Para permitir que Headunit Revived se abra automáticamente cuando se conecta Bluetooth, habilite el permiso "Mostrar sobre otras aplicaciones" en la siguiente pantalla.</string>
     <string name="open_settings">Ajustes</string>
+    <string name="wireless_connection_settings">Conexión inalámbrica</string>
     <string name="right_hand_drive">Conducción por la derecha</string>
     <string name="right_hand_drive_description">Posiciona la interfaz para conducción por el lado derecho</string>
     <string name="category_graphic">Gráficos</string>
@@ -208,7 +209,10 @@
     <string name="pref_stretch_screen_summary">Ignora la relación de aspecto para rellenar toda la pantalla (elimina las barras negras)</string>
 
     <!-- Audio Settings -->
-    <string name="category_audio">Audio</string>
+        <string name="forced_scale">Escalado forzado (Corrección heredada)</string>
+    <string name="forced_scale_description">Corrige problemas de escalado en algunos dispositivos antiguos que usan SurfaceView. Usar solo si la imagen se ve distorsionada o desplazada.</string>
+
+<string name="category_audio">Audio</string>
     <string name="enable_audio_sink">Activar receptor de audio</string>
     <string name="enable_audio_sink_description">Si está desactivado, el audio se reproducirá en el teléfono conectado.</string>
     <string name="use_aac_audio">Usar audio AAC</string>
@@ -323,6 +327,8 @@
     <string name="auto_optimize_desc">Ejecuta el chequeo del sistema para encontrar los mejores ajustes para tu dispositivo.</string>
     <string name="fullscreen_none">Normal (Barras visibles)</string>
     <string name="fullscreen_immersive">Inmersivo (Barras ocultas)</string>
+    <string name="fullscreen_immersive_avoid_notch">Inmersivo (Evitar Notch)</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">Oculta todas las barras y agrega espaciado para evitar que la proyección sea cubierta por el Notch/Recorte.</string>
     <string name="fullscreen_status_only">Ocultar solo barra de estado</string>
     <string name="log_level">Nivel de log</string>
     <string name="log_level_description">Elija el nivel de detalle de los mensajes de log para depuración.</string>
