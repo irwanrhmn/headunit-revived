@@ -327,11 +327,11 @@ class Settings(context: Context) {
         set(value) { prefs.edit().putInt("mic-input-source", value).apply() }
 
     var audioLatencyMultiplier: Int
-        get() = prefs.getInt("audio-latency-multiplier", 2)
+        get() = prefs.getInt("audio-latency-multiplier", 8)
         set(value) { prefs.edit().putInt("audio-latency-multiplier", value).apply() }
     
     var audioQueueCapacity: Int
-        get() = prefs.getInt("audio-queue-capacity", 20)
+        get() = prefs.getInt("audio-queue-capacity", 0)
         set(value) { prefs.edit().putInt("audio-queue-capacity", value).apply() }
 
     var useAacAudio: Boolean

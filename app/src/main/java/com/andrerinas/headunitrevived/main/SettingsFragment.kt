@@ -848,7 +848,7 @@ class SettingsFragment : Fragment() {
             onClick = { _ ->
                 val options = arrayOf("1x (Lowest Latency)", "2x (Low Latency)", "4x (High Latency)", "8x (Very High Latency)")
                 val values = intArrayOf(1, 2, 4, 8)
-                val currentIndex = values.indexOf(pendingAudioLatencyMultiplier ?: 2).coerceAtLeast(0)
+                val currentIndex = values.indexOf(pendingAudioLatencyMultiplier ?: 8).coerceAtLeast(0)
                 AlertDialog.Builder(requireContext())
                     .setTitle(R.string.audio_latency_multiplier)
                     .setSingleChoiceItems(options, currentIndex) { dialog, which ->
@@ -868,7 +868,7 @@ class SettingsFragment : Fragment() {
             onClick = { _ ->
                 val options = arrayOf("10 chunks (Low Latency)", "20 chunks (Balanced)", "50 chunks (High Latency)", "Unbounded (Max Backlog)")
                 val values = intArrayOf(10, 20, 50, 0)
-                val currentIndex = values.indexOf(pendingAudioQueueCapacity ?: 20).coerceAtLeast(0)
+                val currentIndex = values.indexOf(pendingAudioQueueCapacity ?: 0).coerceAtLeast(0)
                 AlertDialog.Builder(requireContext())
                     .setTitle(R.string.audio_queue_capacity)
                     .setSingleChoiceItems(options, currentIndex) { dialog, which ->

@@ -22,8 +22,8 @@ class AudioTrackWrapper(
     channelCount: Int,
     private val isAac: Boolean = false,
     gain: Float,
-    private val audioLatencyMultiplier: Int = 2,
-    private val audioQueueCapacity: Int = 20
+    private val audioLatencyMultiplier: Int = 8,
+    private val audioQueueCapacity: Int = 0
 ) : Thread() {
 
     private val audioTrack: AudioTrack
