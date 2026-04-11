@@ -282,7 +282,7 @@ class AudioTrackWrapper(
 
         val minBufferSize = AudioTrack.getMinBufferSize(sampleRateInHz, channelConfig, dataFormat)
         // Adjust buffer size based on user preference to balance latency and stutter
-        val bufferSize = minBufferSize * multiplier
+        val bufferSize = if (minBufferSize > 0) minBufferSize * multiplier else minBufferSize
 
         AppLog.i("Audio stream: $stream buffer size: $bufferSize (min: $minBufferSize) sampleRateInHz: $sampleRateInHz channelCount: $channelCount")
 
