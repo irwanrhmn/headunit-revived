@@ -581,9 +581,11 @@ class Settings(context: Context) {
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED
             else
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-            context.packageManager.setComponentEnabledSetting(
-                component, newState, PackageManager.DONT_KILL_APP
-            )
+            if (context.packageManager.getComponentEnabledSetting(component) != newState) {
+                context.packageManager.setComponentEnabledSetting(
+                    component, newState, PackageManager.DONT_KILL_APP
+                )
+            }
         }
 
         /**
