@@ -57,7 +57,6 @@ import android.graphics.PixelFormat
 import android.provider.Settings as AndroidSettings
 import android.view.View
 import android.view.WindowManager
-import com.andrerinas.headunitrevived.app.UsbAttachedActivity
 import android.media.AudioManager
 import com.andrerinas.headunitrevived.utils.HotspotManager
 import com.andrerinas.headunitrevived.utils.VpnControl
@@ -1392,13 +1391,8 @@ class AapService : Service(), UsbReceiver.Listener {
                 val deviceName = UsbDeviceCompat(device).uniqueName
                 AppLog.i("Found device already in accessory mode: $deviceName")
                 if (!usbManager.hasPermission(device)) {
-                    AppLog.i("Accessory-mode device has no permission (re-enumerated); launching UsbAttachedActivity: $deviceName")
-                    // Launch UsbAttachedActivity to handle permission request from foreground
-                    startActivity(Intent(this, UsbAttachedActivity::class.java).apply {
-                        action = UsbManager.ACTION_USB_DEVICE_ATTACHED
-                        putExtra(UsbManager.EXTRA_DEVICE, device)
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    })
+                    AppLog.i("Accessory-mode device has no permission (re-enumerated); requesting permission: $deviceName")
+                    requestUsbPermission(device)
                     return
                 }
                 isSwitchingToAccessory.set(true)

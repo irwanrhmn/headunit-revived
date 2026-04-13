@@ -1,10 +1,8 @@
 package com.andrerinas.headunitrevived.main
 
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.hardware.usb.UsbManager
-import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Html
@@ -27,12 +25,11 @@ import com.andrerinas.headunitrevived.App
 import com.andrerinas.headunitrevived.R
 import com.andrerinas.headunitrevived.aap.AapProjectionActivity
 import com.andrerinas.headunitrevived.aap.AapService
-import com.andrerinas.headunitrevived.app.UsbAttachedActivity
 import com.andrerinas.headunitrevived.connection.UsbAccessoryMode
 import com.andrerinas.headunitrevived.connection.UsbDeviceCompat
+import com.andrerinas.headunitrevived.connection.UsbReceiver
 import com.andrerinas.headunitrevived.utils.Settings
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class UsbListFragment : Fragment() {
     private lateinit var adapter: DeviceAdapter
@@ -192,9 +189,11 @@ class UsbListFragment : Fragment() {
                         notifyDataSetChanged()
                     } else {
                         Toast.makeText(mContext, R.string.requesting_usb_permission, Toast.LENGTH_SHORT).show()
-                        usbManager.requestPermission(device.wrappedDevice, PendingIntent.getActivity(
-                            mContext, 500, Intent(mContext, UsbAttachedActivity::class.java),
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT))
+                        ContextCompat.startForegroundService(mContext, Intent(mContext, AapService::class.java))
+                        usbManager.requestPermission(
+                            device.wrappedDevice,
+                            UsbReceiver.createPermissionPendingIntent(mContext)
+                        )
                     }
                 }
             }
