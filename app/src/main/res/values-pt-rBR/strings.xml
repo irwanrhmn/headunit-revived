@@ -209,7 +209,7 @@
     <string name="pref_stretch_screen_summary">Ignora a proporção original para preencher todo o visor (remove as barras pretas)</string>
 
     <!-- Audio Settings -->
-        <string name="forced_scale">Escala forçada (Correção legada)</string>
+        <string name="forced_scale">Escala forçada (Modo de compatibilidade)</string>
     <string name="forced_scale_description">Corrige problemas de escala em alguns dispositivos antigos que usam SurfaceView. Use apenas se a imagem parecer distorcida ou deslocada.</string>
 
 <string name="category_audio">Áudio</string>
@@ -326,7 +326,7 @@
     <string name="fullscreen_none">Normal (Barras visíveis)</string>
     <string name="fullscreen_immersive">Imersivo (Barras ocultas)</string>
     <string name="fullscreen_immersive_avoid_notch">Imersivo (Evitar Notch)</string>
-    <string name="fullscreen_immersive_avoid_notch_desc">Oculta todas las barras e adiciona preenchimento para evitar que a projezione seja coberta pelo Notch/Recorte.</string>
+    <string name="fullscreen_immersive_avoid_notch_desc">Oculta todas as barras e adiciona preenchimento para evitar que a projeção seja coberta pelo Notch/Recorte.</string>
     <string name="fullscreen_status_only">Ocultar apenas a barra de status</string>
     <string name="log_level">Nível de Log</string>
     <string name="log_level_description">Escolha o nível de detalhe da saída de log para depuração.</string>
@@ -417,12 +417,12 @@
     <string name="hotspot_permission_title">Permissão necessária</string>
     <string name="hotspot_permission_message">O recurso de ponto de acesso requer a permissão \"Modificar configurações do sistema\". Por favor, ative-a na próxima tela.</string>
 
-    <string name="not_supported_nativeaa">O modo Sem Fio Nativo parece não ser suportado</string>
-    <string name="not_supported_nativeaa_desc">Seu dispositivo pode não suportar os recursos de Bluetooth ou Wi-Fi necessários para o modo Sem Fio Nativo. Você pode tentar de qualquer maneira, mas se falhar, use o modo \"Wireless Helper\" ou \"Auto (Headunit Server)\".</string>
+    <string name="not_supported_nativeaa">O modo Sem Fio Nativo pode não ser compatível</string>
+    <string name="not_supported_nativeaa_desc">Seu dispositivo pode não ser compatível com os recursos de Bluetooth ou Wi-Fi necessários para o modo Sem Fio Nativo. Você pode tentar de qualquer maneira, mas se falhar, use o modo \"Wireless Helper\" ou \"Auto (Headunit Server)\".</string>
     <string name="shortcut_selfmode_title">Modo Próprio (Self Mode)</string>
     <string name="shortcut_selfmode_desc">Iniciar Android Auto neste dispositivo</string>
     <string name="wait_for_wifi">Aguardar WiFi antes do WiFi Direct</string>
-    <string name="wait_for_wifi_description">Ao iniciar, aguarda a conexão WiFi antes de iniciar o WiFi Direct. Útil se seu headunit demora alguns segundos para conectar ao WiFi após ligar.</string>
+    <string name="wait_for_wifi_description">Ao iniciar, aguarda a conexão WiFi antes de iniciar o WiFi Direct. Útil se sua central multimídia demora alguns segundos para conectar ao WiFi após ligar.</string>
     <string name="wait_for_wifi_timeout">Tempo limite de espera WiFi</string>
     <string name="wireless_24ghz_warning">Nota: O Android Auto sem fio em dispositivos de 2,4 GHz pode causar atrasos, travamentos e desconexões. Se você tiver problemas, teste via USB para confirmar se é uma limitação da rede.</string>
     <string name="supported_nativeaa">Suporte sem fio aprimorado</string>
