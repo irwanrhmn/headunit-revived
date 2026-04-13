@@ -189,6 +189,7 @@ class UsbListFragment : Fragment() {
                         notifyDataSetChanged()
                     } else {
                         Toast.makeText(mContext, R.string.requesting_usb_permission, Toast.LENGTH_SHORT).show()
+                        ContextCompat.startForegroundService(mContext, Intent(mContext, AapService::class.java))
                         usbManager.requestPermission(
                             device.wrappedDevice,
                             UsbReceiver.createPermissionPendingIntent(mContext)
