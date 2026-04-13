@@ -65,8 +65,11 @@ adb shell am start -a android.intent.action.VIEW -d "headunit://connect?ip=192.1
 - **Wireless Connection Drops:** If the connection drops frequently, disable **"WiFi Assistant"** or **"Switch between networks"** in your phone's WiFi settings to prevent it from killing the connection due to "no internet." Check battery saving options
 
 ## Changelog
-### v.2.2.0-beta3
+### v.2.2.0
 - Added: Native AA. 🎉  Warning! This will only work on a limited amount of headunits! Most Android devices do not support connecting 2 Android devices via Bluetooth which is essential for this to work.
+- Added: Google Nearby Support as connection method. Needs Wireless Helper 1.6.0 or later
+- Added: Pip-Support
+- Added: 4K in select
 - Try to fix connection problems on WiFi
 - Added: Intent and routine for starting the app directly to self mode
 - Added: Force Scale Option for older devices on surface view
@@ -75,10 +78,9 @@ adb shell am start -a android.intent.action.VIEW -d "headunit://connect?ip=192.1
 - Added: 2 new WiFi-Options for a WiFi-Direct. Thanks to @andrecuellar
 - Added Japanese language 🇯🇵 thanks to @mattyann87
 - Enhanced: Media Session Announcement. Thanks to @irwanrhmn
-- Added: Pip-Support
-- Added: Google Nearby Support (Super shaky. This needs to be addressed for full release of 2.2.0)
-- Added: 4K in select
 - New App-Icon without text for better visibility
+- Fixed: USB modal appearing for non-Android Auto devices thanks to @andrecuellar
+- Added: Create configurable audio queue and audio buffer in settings thanks to @irwanrhmn
 
 ### v.2.1.1
 - Fixed: Layout crash on Android 4.2
