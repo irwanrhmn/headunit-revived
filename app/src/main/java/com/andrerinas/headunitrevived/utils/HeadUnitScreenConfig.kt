@@ -76,7 +76,7 @@ object HeadUnitScreenConfig {
                 if (systemInsetBottom == 0) {
                     systemInsetBottom = navHeight
                     predictedInsetsChanged = true
-                    AppLog.i("HeadUnitScreenConfig: Proactively predicted Navigation Bar height: $navHeight")
+                    AppLog.i("[UI_DEBUG] HeadUnitScreenConfig: Proactively predicted Navigation Bar height: $navHeight")
                 }
             }
         }
@@ -165,7 +165,7 @@ object HeadUnitScreenConfig {
         }
 
         // 2. Perform scaling calculations (now safe because negotiatedResolutionType is set)
-        AppLog.i("CarScreen: usable area ${screenWidthPx}x${screenHeightPx}, using $negotiatedResolutionType")
+        AppLog.i("[UI_DEBUG] CarScreen: usable area ${screenWidthPx}x${screenHeightPx}, using $negotiatedResolutionType")
 
         if (screenHeightPx > screenWidthPx) {
             isSmallScreen = screenWidthPx <= 1080 && screenHeightPx <= 1920
@@ -188,7 +188,7 @@ object HeadUnitScreenConfig {
             }
         }
         
-        AppLog.i("CarScreen isSmallScreen: $isSmallScreen, scaleFactor: $scaleFactor, margins: w=${getWidthMargin()}, h=${getHeightMargin()}")
+        AppLog.i("[UI_DEBUG] CarScreen isSmallScreen: $isSmallScreen, scaleFactor: $scaleFactor, margins: w=${getWidthMargin()}, h=${getHeightMargin()}")
     }
 
     fun getAdjustedHeight(): Int {

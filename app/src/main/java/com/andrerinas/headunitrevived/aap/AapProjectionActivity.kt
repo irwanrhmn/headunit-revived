@@ -581,12 +581,12 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
     }
 
     override fun onSurfaceCreated(surface: android.view.Surface) {
-        AppLog.i("[AapProjectionActivity] onSurfaceCreated")
+        AppLog.i("[UI_DEBUG] [AapProjectionActivity] onSurfaceCreated")
         // Decoder configuration is now in onSurfaceChanged
     }
 
     override fun onSurfaceChanged(surface: android.view.Surface, width: Int, height: Int) {
-        AppLog.i("[AapProjectionActivity] onSurfaceChanged. Actual surface dimensions: width=$width, height=$height")
+        AppLog.i("[UI_DEBUG] [AapProjectionActivity] onSurfaceChanged. Actual surface dimensions: width=$width, height=$height")
         isSurfaceSet = true
         
         videoDecoder.setSurface(surface)

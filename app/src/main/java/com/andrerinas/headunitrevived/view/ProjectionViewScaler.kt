@@ -102,7 +102,7 @@ object ProjectionViewScaler {
                 // To scale uiW -> viewW, we apply targetScale / defaultScale.
                 finalScaleX = videoW / uiW
                 finalScaleY = videoH / uiH
-                AppLog.i("ProjectionViewScaler: STRETCH - Scaling UI (${uiW}x${uiH}) to fill View (${viewW}x${viewH}). ScaleX=$finalScaleX, ScaleY=$finalScaleY")
+                AppLog.i("[UI_DEBUG] ProjectionViewScaler: STRETCH - Scaling UI (${uiW}x${uiH}) to fill View (${viewW}x${viewH}). ScaleX=$finalScaleX, ScaleY=$finalScaleY")
             } else {
                 // Letterbox / Fit Center: Keep the UI aspect ratio intact, max out at View dimensions.
                 val uiRatio = uiW / uiH
@@ -114,14 +114,14 @@ object ProjectionViewScaler {
                     val displayedUiW = viewH * uiRatio
                     finalScaleX = (displayedUiW * videoW) / (viewW * uiW)
                     finalScaleY = videoH / uiH 
-                    AppLog.i("ProjectionViewScaler: FIT - Pillarboxed UI (${displayedUiW}x${displayedUiH}) into View (${viewW}x${viewH}). ScaleX=$finalScaleX, ScaleY=$finalScaleY")
+                    AppLog.i("[UI_DEBUG] ProjectionViewScaler: FIT - Pillarboxed UI (${displayedUiW}x${displayedUiH}) into View (${viewW}x${viewH}). ScaleX=$finalScaleX, ScaleY=$finalScaleY")
                 } else {
                     // View is taller than UI. Letterboxing (black bars top/bottom). Limit by Width.
                     val displayedUiW = viewW
                     val displayedUiH = viewW / uiRatio
                     finalScaleX = videoW / uiW
                     finalScaleY = (displayedUiH * videoH) / (viewH * uiH)
-                    AppLog.i("ProjectionViewScaler: FIT - Letterboxed UI (${displayedUiW}x${displayedUiH}) into View (${viewW}x${viewH}). ScaleX=$finalScaleX, ScaleY=$finalScaleY")
+                    AppLog.i("[UI_DEBUG] ProjectionViewScaler: FIT - Letterboxed UI (${displayedUiW}x${displayedUiH}) into View (${viewW}x${viewH}). ScaleX=$finalScaleX, ScaleY=$finalScaleY")
                 }
             }
 
