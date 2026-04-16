@@ -287,6 +287,7 @@
     <string name="success">Успішно</string>
     <string name="failed">Помилка</string>
     <string name="failed_start_android_auto">Не вдалося запустити Android Auto</string>
+    <string name="failed_self_mode_android10">Самостійний режим (Self-mode), ймовірно, заблокований Google на Android 10 (AA 16.4+). Див. README.</string>
     <string name="android_auto_starting">Запуск Android Auto…</string>
     <string name="connection_interrupted">З\'єднання втрачено</string>
     <string name="connection_interrupted_detail">Повторна спроба…</string>
@@ -446,6 +447,7 @@
     </string-array>
 
     <string name="select_nearby_device">Виберіть пристрій поблизу</string>
+    <string name="nearby_device_found">Виявлено пристрій поблизу</string>
     <string name="connecting_to_nearby">Підключення до %s…</string>
 
     <string name="exit_dialog_title">Вийти з Android Auto</string>

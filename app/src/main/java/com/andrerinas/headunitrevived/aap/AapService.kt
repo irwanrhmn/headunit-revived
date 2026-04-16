@@ -1817,13 +1817,13 @@ class AapService : Service(), UsbReceiver.Listener {
         selfMode = true
         startWirelessServer()
 
-        serviceScope.launch(kotlinx.coroutines.Dispatchers.Main) {
+        serviceScope.launch(Dispatchers.Main) {
             val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && connectivityManager.activeNetwork == null) {
                 // Wait up to 1 second for the Dummy VPN to become the active network
                 for (i in 1..10) {
                     if (connectivityManager.activeNetwork != null) break
-                    kotlinx.coroutines.delay(100)
+                    delay(100)
                 }
             }
 
@@ -1850,20 +1850,28 @@ class AapService : Service(), UsbReceiver.Listener {
             } catch (e: Exception) {
                 AppLog.w("Activity launch failed (${e.message}). Attempting Broadcast fallback...")
                 try {
-                    val receiverIntent = Intent().apply {
-                        setClassName(
-                            "com.google.android.projection.gearhead",
-                            "com.google.android.apps.auto.wireless.setup.receiver.WirelessStartupReceiver"
-                        )
-                        action = "com.google.android.apps.auto.wireless.setup.receiver.wirelessstartup.START"
-                        putExtra("ip_address", "127.0.0.1")
-                        putExtra("projection_port", 5288)
-                        networkToUse?.let { putExtra("PARAM_SERVICE_WIFI_NETWORK", it) }
-                        fakeWifiInfo?.let { putExtra("wifi_info", it) }
-                        addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
+
+                    AppLog.w("WirelessStartupActivity not found (AA 16.4+ detected).")
+                    if (Build.VERSION.SDK_INT <= 29) {
+                        // On Android 10, if Activity is gone, Broadcast will definitely be blocked by Gearhead's version check.
+                        AppLog.e("Self-mode blocked by Google on Android 10 (AA 16.4+). Skipping broadcast fallback.")
+                        Toast.makeText(this@AapService, getString(R.string.failed_self_mode_android10), Toast.LENGTH_LONG).show()
+                    } else {
+                        val receiverIntent = Intent().apply {
+                            setClassName(
+                                "com.google.android.projection.gearhead",
+                                "com.google.android.apps.auto.wireless.setup.receiver.WirelessStartupReceiver"
+                            )
+                            action = "com.google.android.apps.auto.wireless.setup.receiver.wirelessstartup.START"
+                            putExtra("ip_address", "127.0.0.1")
+                            putExtra("projection_port", 5288)
+                            networkToUse?.let { putExtra("PARAM_SERVICE_WIFI_NETWORK", it) }
+                            fakeWifiInfo?.let { putExtra("wifi_info", it) }
+                            addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
+                        }
+                        sendBroadcast(receiverIntent)
+                        AppLog.i("Broadcast fallback sent successfully.")
                     }
-                    sendBroadcast(receiverIntent)
-                    AppLog.i("Broadcast fallback sent successfully.")
                 } catch (e2: Exception) {
                     AppLog.e("Both Activity and Broadcast triggers failed", e2)
                     Toast.makeText(this@AapService, getString(R.string.failed_start_android_auto), Toast.LENGTH_SHORT).show()
@@ -1898,6 +1906,8 @@ class AapService : Service(), UsbReceiver.Listener {
             wifiInfo
         } catch (e: Exception) { null }
     }
+
+
 
     // -------------------------------------------------------------------------
     // WirelessServer

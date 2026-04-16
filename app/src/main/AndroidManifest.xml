@@ -96,30 +96,26 @@
                 android:resource="@xml/usb_device_filter" />
         </activity>
 
-        <activity
-            android:name=".main.SplashActivity"
-            android:exported="true"
-            android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <activity
             android:name=".main.MainActivity"
             android:configChanges="keyboardHidden|uiMode"
             android:launchMode="singleTask"
             android:screenOrientation="sensor"
-            android:theme="@style/AppTheme"
+            android:theme="@style/SplashTheme"
             android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.APP_MAPS" />
                 <category android:name="android.intent.category.APP_NAVIGATION" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
 
             <!-- Navigation Intent Filters -->
             <intent-filter>
@@ -156,10 +152,6 @@
                 <action android:name="android.intent.action.NAVIGATE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
         </activity>
 
         <activity

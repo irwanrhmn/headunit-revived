@@ -22,10 +22,12 @@ import androidx.lifecycle.lifecycleScope
 import com.andrerinas.headunitrevived.utils.AppLog
 import android.content.res.Configuration
 import com.andrerinas.headunitrevived.utils.Settings
+import android.os.SystemClock
 import com.andrerinas.headunitrevived.utils.SetupWizard
 import com.andrerinas.headunitrevived.utils.SystemUI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity() {
@@ -61,7 +63,11 @@ class MainActivity : BaseActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
             startActivity(aapIntent)
-            // DO NOT finish() here, just let it stay in background
+            
+            // If we are auto-forwarding, hide the splash immediately to avoid flashing it twice
+            if (savedInstanceState == null) {
+                findViewById<View>(R.id.splash_overlay)?.visibility = View.GONE
+            }
         }
 
         setTheme(R.style.AppTheme)
@@ -108,10 +114,36 @@ class MainActivity : BaseActivity() {
             }
         })
 
+        if (savedInstanceState == null) {
+            val elapsedSinceStart = SystemClock.elapsedRealtime() - App.appStartTime
+            val targetTotalDuration = 1200L
+            val actualDelay = (targetTotalDuration - elapsedSinceStart).coerceAtLeast(0L)
+            
+            showSplashWithDelay(actualDelay)
+        } else {
+            findViewById<View>(R.id.splash_overlay)?.visibility = View.GONE
+        }
+
         requestPermissions()
         viewModel.register()
         handleIntent(intent)
         setupWifiDirectInfo()
+    }
+
+    private fun showSplashWithDelay(delayMs: Long) {
+        val overlay = findViewById<View>(R.id.splash_overlay) ?: return
+        lifecycleScope.launch(Dispatchers.Main) {
+            if (delayMs > 0) {
+                delay(delayMs)
+            }
+            overlay.animate()
+                .alpha(0f)
+                .setDuration(300)
+                .withEndAction {
+                    overlay.visibility = View.GONE
+                }
+                .start()
+        }
     }
 
     private fun setupWifiDirectInfo() {

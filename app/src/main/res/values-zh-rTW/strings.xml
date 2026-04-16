@@ -286,6 +286,7 @@
     <string name="success">成功</string>
     <string name="failed">失敗</string>
     <string name="failed_start_android_auto">啟動 Android Auto 失敗</string>
+    <string name="failed_self_mode_android10">Google 可能在 Android 10 (AA 16.4+) 上封鎖了自我模式。請參閱 README。</string>
     <string name="android_auto_starting">Android Auto 啟動中…</string>
     <string name="connection_interrupted">連線中斷</string>
     <string name="connection_interrupted_detail">正在重試…</string>
@@ -445,6 +446,7 @@
     </string-array>
 
     <string name="select_nearby_device">選擇附近裝置</string>
+    <string name="nearby_device_found">已發現附近裝置</string>
     <string name="connecting_to_nearby">正在連線至 %s…</string>
 
     <string name="exit_dialog_title">退出 Android Auto</string>

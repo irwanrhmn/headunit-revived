@@ -287,6 +287,7 @@
     <string name="success">Éxito</string>
     <string name="failed">Error</string>
     <string name="failed_start_android_auto">Error al iniciar Android Auto</string>
+    <string name="failed_self_mode_android10">Es probable que Google bloquee el modo Self en Android 10 (AA 16.4+). Consulte el README.</string>
     <string name="android_auto_starting">Android Auto está iniciando…</string>
     <string name="connection_interrupted">Conexión perdida</string>
     <string name="connection_interrupted_detail">Reintentando…</string>
@@ -445,6 +446,7 @@
     </string-array>
 
     <string name="select_nearby_device">Seleccionar dispositivo cercano</string>
+    <string name="nearby_device_found">Dispositivo cercano encontrado</string>
     <string name="connecting_to_nearby">Conectando a %s…</string>
 
     <string name="exit_dialog_title">Salir de Android Auto</string>

@@ -23,7 +23,7 @@
     </style>
 
     <style name="SplashTheme" parent="AppTheme">
-        <item name="android:windowBackground">@color/color_projection_blue</item>
+        <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
     <style name="SplashTheme.Fullscreen" parent="SplashTheme">

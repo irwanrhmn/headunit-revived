@@ -287,6 +287,7 @@
     <string name="success">نجاح</string>
     <string name="failed">فشل</string>
     <string name="failed_start_android_auto">فشل تشغيل Android Auto</string>
+    <string name="failed_self_mode_android10">من المحتمل أن يكون "Self-mode" محظورًا من قبل Google على Android 10 (AA 16.4+). راجع README.</string>
     <string name="android_auto_starting">جار تشغيل Android Auto…</string>
     <string name="connection_interrupted">فُقد الاتصال</string>
     <string name="connection_interrupted_detail">جارٍ إعادة المحاولة…</string>
@@ -445,6 +446,7 @@
     </string-array>
 
     <string name="select_nearby_device">اختر جهازاً قريباً</string>
+    <string name="nearby_device_found">تم العثور على جهاز قريب</string>
     <string name="connecting_to_nearby">جاري الاتصال بـ %s…</string>
 
     <string name="exit_dialog_title">خروج من Android Auto</string>

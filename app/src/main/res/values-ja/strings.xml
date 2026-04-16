@@ -302,6 +302,7 @@
     <string name="success">成功</string>
     <string name="failed">失敗</string>
     <string name="failed_start_android_auto">Android Autoの起動に失敗しました</string>
+    <string name="failed_self_mode_android10">セルフモードはAndroid 10 (AA 16.4+) でGoogleによってブロックされている可能性があります。READMEを同封します。</string>
     <string name="android_auto_starting">Android Autoは起動中です…</string>
     <string name="connection_interrupted">切断されました</string>
     <string name="connection_interrupted_detail">再試行中…</string>
@@ -453,6 +454,7 @@
     </string-array>
 
     <string name="select_nearby_device">周辺のデバイスを選択</string>
+    <string name="nearby_device_found">周辺のデバイスが見つかりました</string>
     <string name="connecting_to_nearby">%s に接続中…</string>
 
     <string name="exit_dialog_title">Android Auto を終了</string>

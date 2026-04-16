@@ -286,6 +286,7 @@
     <string name="success">Succes</string>
     <string name="failed">Mislukt</string>
     <string name="failed_start_android_auto">Starten van Android Auto mislukt</string>
+    <string name="failed_self_mode_android10">Self-mode wordt waarschijnlijk geblokkeerd door Google op Android 10 (AA 16.4+). Zie de README.</string>
     <string name="android_auto_starting">Android Auto start op…</string>
     <string name="connection_interrupted">Verbinding verloren</string>
     <string name="connection_interrupted_detail">Opnieuw proberen…</string>
@@ -445,6 +446,7 @@
     </string-array>
 
     <string name="select_nearby_device">Selecteer apparaat in de buurt</string>
+    <string name="nearby_device_found">Apparaat in de buurt gevonden</string>
     <string name="connecting_to_nearby">Verbinden met %s…</string>
 
     <string name="exit_dialog_title">Android Auto afsluiten</string>

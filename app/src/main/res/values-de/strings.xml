@@ -301,6 +301,7 @@
     <string name="success">Erfolg</string>
     <string name="failed">Fehlgeschlagen</string>
     <string name="failed_start_android_auto">Start von Android Auto fehlgeschlagen</string>
+    <string name="failed_self_mode_android10">Self-mode wird wahrscheinlich von Google auf Android 10 (AA 16.4+) blockiert. Siehe README.</string>
     <string name="android_auto_starting">Android Auto startet…</string>
     <string name="connection_interrupted">Verbindung verloren</string>
     <string name="connection_interrupted_detail">Erneuter Versuch…</string>
