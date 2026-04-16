@@ -456,4 +456,11 @@
     <string name="audio_latency_multiplier">Multiplicador de latência de áudio</string>
     <string name="audio_latency_multiplier_description">Ajuste o tamanho do buffer de áudio (Menor = menos lag, Maior = menos engasgos)</string>
     <string name="audio_queue_capacity">Capacidade da fila de áudio (Backpressure)</string>
+    <string name="media_action_previous">Anterior</string>
+    <string name="media_action_play">Reproduzir</string>
+    <string name="media_action_pause">Pausar</string>
+    <string name="media_action_next">Próxima</string>
+    <string name="media_session_aa_status_placeholder">Conectado</string>
+    <string name="sync_media_session_aa_metadata">Faixa atual do AA na sessão de mídia</string>
+    <string name="sync_media_session_aa_metadata_description">Mostrar título, artista, duração e capa do álbum do telefone na sessão de mídia do sistema e na notificação de mídia</string>
 </resources>

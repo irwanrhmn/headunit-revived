@@ -460,4 +460,11 @@
     <string name="audio_latency_multiplier">Audio-Latenz-Multiplikator</string>
     <string name="audio_latency_multiplier_description">Audio-Puffergröße anpassen (Niedriger = weniger Verzögerung, Höher = weniger Stottern)</string>
     <string name="audio_queue_capacity">Audio-Warteschlangenkapazität (Backpressure)</string>
+    <string name="media_action_previous">Zurück</string>
+    <string name="media_action_play">Wiedergabe</string>
+    <string name="media_action_pause">Pause</string>
+    <string name="media_action_next">Weiter</string>
+    <string name="media_session_aa_status_placeholder">Verbunden</string>
+    <string name="sync_media_session_aa_metadata">AA-Now-Playing in der Mediensitzung</string>
+    <string name="sync_media_session_aa_metadata_description">Titel, Interpret, Dauer und Albumcover vom Telefon in der System-Mediensitzung und in der Medienbenachrichtigung anzeigen</string>
 </resources>

@@ -456,4 +456,11 @@
     <string name="audio_latency_multiplier">Mnożnik opóźnienia dźwięku</string>
     <string name="audio_latency_multiplier_description">Dostosuj rozmiar bufora audio (Niższy = mniejsze opóźnienie, Wyższy = mniej zacinania)</string>
     <string name="audio_queue_capacity">Pojemność kolejki audio (Backpressure)</string>
+    <string name="media_action_previous">Poprzedni</string>
+    <string name="media_action_play">Odtwórz</string>
+    <string name="media_action_pause">Pauza</string>
+    <string name="media_action_next">Następny</string>
+    <string name="media_session_aa_status_placeholder">Połączono</string>
+    <string name="sync_media_session_aa_metadata">Aktualny utwór AA w sesji multimedialnej</string>
+    <string name="sync_media_session_aa_metadata_description">Pokazuj tytuł, wykonawcę, czas trwania i okładkę albumu z telefonu w systemowej sesji multimedialnej oraz powiadomieniu multimedialnym</string>
 </resources>

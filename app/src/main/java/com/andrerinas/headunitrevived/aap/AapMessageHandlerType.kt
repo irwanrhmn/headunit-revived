@@ -3,7 +3,7 @@ package com.andrerinas.headunitrevived.aap
 import android.content.Context
 import com.andrerinas.headunitrevived.aap.protocol.Channel
 import com.andrerinas.headunitrevived.decoder.MicRecorder
-import com.andrerinas.headunitrevived.main.BackgroundNotification
+import com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback
 import com.andrerinas.headunitrevived.utils.AppLog
 import com.andrerinas.headunitrevived.utils.Settings
 
@@ -13,11 +13,12 @@ internal class AapMessageHandlerType(
         private val aapAudio: AapAudio,
         private val aapVideo: AapVideo,
         settings: Settings,
-        backgroundNotification: BackgroundNotification,
-        context: Context) : AapMessageHandler {
+        context: Context,
+        onAaMediaMetadata: ((MediaPlayback.MediaMetaData) -> Unit)? = null,
+        onAaPlaybackStatus: ((MediaPlayback.MediaPlaybackStatus) -> Unit)? = null) : AapMessageHandler {
 
     private val aapControl: AapControl = AapControlGateway(transport, recorder, aapAudio, settings, context)
-    private val mediaPlayback = AapMediaPlayback(backgroundNotification)
+    private val mediaPlayback = AapMediaPlayback(onAaMediaMetadata, onAaPlaybackStatus)
     private val aapNavigation = AapNavigation(context, settings)
     private var videoPacketCount = 0
 

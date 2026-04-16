@@ -338,6 +338,9 @@
     <!-- Navigation notifications -->
     <string name="show_navigation_notifications">Уведомления навигации</string>
     <string name="show_navigation_notifications_description">Показывать «Через X метров Y» и текущую улицу в уведомлениях (для отладки)</string>
+    <string name="media_session_aa_status_placeholder">Подключено</string>
+    <string name="sync_media_session_aa_metadata">Текущий трек AA в медиасессии</string>
+    <string name="sync_media_session_aa_metadata_description">Показывать с телефона название, исполнителя, длительность и обложку в системной медиасессии и медиа-уведомлении</string>
     <string name="nav_notification_channel_name">Навигация</string>
     <string name="nav_notification_channel_description">Подсказки маршрута от Android Auto</string>
     <string name="nav_notification_title_format">Через %1$d м — %2$s</string>
@@ -456,4 +459,8 @@
     <string name="audio_latency_multiplier">Множитель задержки звука</string>
     <string name="audio_latency_multiplier_description">Настройка размера аудио-буфера (Меньше = меньше задержка, Больше = меньше заиканий)</string>
     <string name="audio_queue_capacity">Емкость аудио-очереди (Backpressure)</string>
+    <string name="media_action_previous">Предыдущий</string>
+    <string name="media_action_play">Воспроизвести</string>
+    <string name="media_action_pause">Пауза</string>
+    <string name="media_action_next">Следующий</string>
 </resources>
