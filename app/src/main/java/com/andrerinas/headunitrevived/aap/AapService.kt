@@ -1329,8 +1329,13 @@ class AapService : Service(), UsbReceiver.Listener {
         val usbManager = getSystemService(Context.USB_SERVICE) as UsbManager
         val permissionIntent = UsbReceiver.createPermissionPendingIntent(this)
         AppLog.i("Requesting USB permission for ${UsbDeviceCompat(device).uniqueName}")
-        Toast.makeText(this, getString(R.string.requesting_usb_permission), Toast.LENGTH_SHORT).show()
-        usbManager.requestPermission(device, permissionIntent)
+        try {
+            Toast.makeText(this, getString(R.string.requesting_usb_permission), Toast.LENGTH_SHORT).show()
+            usbManager.requestPermission(device, permissionIntent)
+        } catch (e: Exception) {
+            AppLog.e("Failed to request USB permission: ${e.message}. This device might not support USB permission dialogs.", e)
+            Toast.makeText(this, "System error: Failed to request USB permission dialog.", Toast.LENGTH_LONG).show()
+        }
     }
 
     /**
