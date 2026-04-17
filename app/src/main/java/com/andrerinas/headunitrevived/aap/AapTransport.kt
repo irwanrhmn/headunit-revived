@@ -32,6 +32,7 @@ import com.andrerinas.headunitrevived.utils.AppLog
 import com.andrerinas.headunitrevived.utils.Settings
 import com.andrerinas.headunitrevived.aap.AapService
 import com.andrerinas.headunitrevived.aap.protocol.proto.Control
+import com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback
 import javax.net.ssl.SSLEngineResult
 
 /**
@@ -49,6 +50,8 @@ import javax.net.ssl.SSLEngineResult
  * @param settings User preferences (SSL mode, key mappings, microphone sample rate, …).
  * @param notification Background notification handle; updated as connection state changes.
  * @param context Application context; used for broadcasts and system services.
+ * @param onAaMediaMetadata Optional callback when the phone sends media metadata (now-playing).
+ * @param onAaPlaybackStatus Optional callback when the phone sends playback status/position.
  * @param externalSsl Optional singleton [AapSslContext] whose internal [javax.net.ssl.SSLContext]
  *   (and its `ClientSessionContext` session cache) survives across [AapTransport] recreations.
  *   When provided on the Java-SSL path, JSSE can resume the previous TLS session on reconnect,
@@ -63,6 +66,8 @@ class AapTransport(
         internal val settings: Settings,
         private val notification: BackgroundNotification,
         private val context: Context,
+        private val onAaMediaMetadata: ((MediaPlayback.MediaMetaData) -> Unit)? = null,
+        private val onAaPlaybackStatus: ((MediaPlayback.MediaPlaybackStatus) -> Unit)? = null,
         private val externalSsl: AapSslContext? = null)
     : MicRecorder.Listener {
 
@@ -260,8 +265,9 @@ class AapTransport(
             aapAudio,
             aapVideo,
             settings,
-            notification,
-            context
+            context,
+            onAaMediaMetadata,
+            onAaPlaybackStatus
         )
         pollHandler?.sendEmptyMessage(MSG_POLL)
     }

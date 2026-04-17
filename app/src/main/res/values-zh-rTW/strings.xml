@@ -457,4 +457,11 @@
     <string name="audio_latency_multiplier">音訊延遲倍增器</string>
     <string name="audio_latency_multiplier_description">調整音訊緩衝區大小 (低 = 低延遲, 高 = 低斷斷續續)</string>
     <string name="audio_queue_capacity">音訊佇列容量 (Backpressure)</string>
+    <string name="media_action_previous">上一首</string>
+    <string name="media_action_play">播放</string>
+    <string name="media_action_pause">暫停</string>
+    <string name="media_action_next">下一首</string>
+    <string name="media_session_aa_status_placeholder">已連線</string>
+    <string name="sync_media_session_aa_metadata">在媒體工作階段顯示 AA 目前播放</string>
+    <string name="sync_media_session_aa_metadata_description">在系統媒體工作階段與媒體通知中顯示來自手機的歌曲名稱、演出者、時長與專輯封面</string>
 </resources>

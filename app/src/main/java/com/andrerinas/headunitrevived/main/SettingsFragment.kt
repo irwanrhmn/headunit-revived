@@ -41,6 +41,7 @@ class SettingsFragment : Fragment() {
     private var pendingMicSampleRate: Int? = null
     private var pendingUseGps: Boolean? = null
     private var pendingShowNavigationNotifications: Boolean? = null
+    private var pendingSyncMediaSessionAaMetadata: Boolean? = null
     private var pendingResolution: Int? = null
     private var pendingDpi: Int? = null
     private var pendingFullscreenMode: Settings.FullscreenMode? = null
@@ -100,6 +101,7 @@ class SettingsFragment : Fragment() {
         pendingMicSampleRate = settings.micSampleRate
         pendingUseGps = settings.useGpsForNavigation
         pendingShowNavigationNotifications = settings.showNavigationNotifications
+        pendingSyncMediaSessionAaMetadata = settings.syncMediaSessionWithAaMetadata
         pendingResolution = settings.resolutionId
         pendingDpi = settings.dpiPixelDensity
         pendingFullscreenMode = settings.fullscreenMode
@@ -227,6 +229,7 @@ class SettingsFragment : Fragment() {
         pendingMicSampleRate?.let { settings.micSampleRate = it }
         pendingUseGps?.let { settings.useGpsForNavigation = it }
         pendingShowNavigationNotifications?.let { settings.showNavigationNotifications = it }
+        pendingSyncMediaSessionAaMetadata?.let { settings.syncMediaSessionWithAaMetadata = it }
         pendingResolution?.let { settings.resolutionId = it }
         pendingDpi?.let { settings.dpiPixelDensity = it }
         pendingFullscreenMode?.let { settings.fullscreenMode = it }
@@ -309,6 +312,7 @@ class SettingsFragment : Fragment() {
         val anyChange = pendingMicSampleRate != settings.micSampleRate ||
                         pendingUseGps != settings.useGpsForNavigation ||
                         pendingShowNavigationNotifications != settings.showNavigationNotifications ||
+                        pendingSyncMediaSessionAaMetadata != settings.syncMediaSessionWithAaMetadata ||
                         pendingResolution != settings.resolutionId ||
                         pendingDpi != settings.dpiPixelDensity ||
                         pendingFullscreenMode != settings.fullscreenMode ||
@@ -952,6 +956,18 @@ class SettingsFragment : Fragment() {
             isChecked = pendingUseAacAudio!!,
             onCheckedChanged = { isChecked ->
                 pendingUseAacAudio = isChecked
+                checkChanges()
+                updateSettingsList()
+            }
+        ))
+
+        items.add(SettingItem.ToggleSettingEntry(
+            stableId = "syncMediaSessionAaMetadata",
+            nameResId = R.string.sync_media_session_aa_metadata,
+            descriptionResId = R.string.sync_media_session_aa_metadata_description,
+            isChecked = pendingSyncMediaSessionAaMetadata!!,
+            onCheckedChanged = { isChecked ->
+                pendingSyncMediaSessionAaMetadata = isChecked
                 checkChanges()
                 updateSettingsList()
             }

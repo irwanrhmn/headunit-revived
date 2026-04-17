@@ -457,4 +457,11 @@
     <string name="audio_latency_multiplier">مضاعف زمن انتقال الصوت</string>
     <string name="audio_latency_multiplier_description">ضبط حجم مخزن الصوت (أقل = تأخير أقل، أعلى = تقطع أقل)</string>
     <string name="audio_queue_capacity">سعة قائمة انتظار الصوت (Backpressure)</string>
+    <string name="media_action_previous">السابق</string>
+    <string name="media_action_play">تشغيل</string>
+    <string name="media_action_pause">إيقاف مؤقت</string>
+    <string name="media_action_next">التالي</string>
+    <string name="media_session_aa_status_placeholder">متصل</string>
+    <string name="sync_media_session_aa_metadata">المسار الجاري من AA في جلسة الوسائط</string>
+    <string name="sync_media_session_aa_metadata_description">عرض عنوان المسار والفنان والمدة وغلاف الألبوم من الهاتف في جلسة الوسائط بالنظام وإشعار الوسائط</string>
 </resources>

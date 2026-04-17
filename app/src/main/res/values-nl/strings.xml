@@ -457,4 +457,11 @@
     <string name="audio_latency_multiplier">Audiovertraging vermenigvuldiger</string>
     <string name="audio_latency_multiplier_description">Audio-buffergrootte aanpassen (Lager = minder vertraging, Hoger = minder stotteren)</string>
     <string name="audio_queue_capacity">Audio-wachtrijcapaciteit (Backpressure)</string>
+    <string name="media_action_previous">Vorige</string>
+    <string name="media_action_play">Afspelen</string>
+    <string name="media_action_pause">Pauze</string>
+    <string name="media_action_next">Volgende</string>
+    <string name="media_session_aa_status_placeholder">Verbonden</string>
+    <string name="sync_media_session_aa_metadata">Huidig AA-nummer in mediasessie</string>
+    <string name="sync_media_session_aa_metadata_description">Toon titel, artiest, duur en albumhoes van de telefoon in de mediasessie van het systeem en in de mediamelding</string>
 </resources>

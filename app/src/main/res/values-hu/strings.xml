@@ -456,4 +456,11 @@
     <string name="audio_latency_multiplier">Audio késleltetési szorzó</string>
     <string name="audio_latency_multiplier_description">Audió pufferméret beállítása (Alacsonyabb = kisebb késleltetés, Magasabb = kevesebb akadozás)</string>
     <string name="audio_queue_capacity">Audió sor kapacitása (Backpressure)</string>
+    <string name="media_action_previous">Előző</string>
+    <string name="media_action_play">Lejátszás</string>
+    <string name="media_action_pause">Szünet</string>
+    <string name="media_action_next">Következő</string>
+    <string name="media_session_aa_status_placeholder">Csatlakoztatva</string>
+    <string name="sync_media_session_aa_metadata">AA aktuális szám a médialejátszási munkamenetben</string>
+    <string name="sync_media_session_aa_metadata_description">A telefonról származó számcímet, előadót, időtartamot és borítót jelenítse meg a rendszer médialejátszási munkamenetében és médiás értesítésben</string>
 </resources>

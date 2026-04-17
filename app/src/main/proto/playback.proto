@@ -13,14 +13,14 @@ message MediaPlaybackStatus
 {
     enum State
     {
-        MEDIA_SERVICE_STATE_PAUSE = 0;
-        MEDIA_SERVICE_STATE_STOPPED = 1;
-        MEDIA_SERVICE_STATE_PLAYING = 3;
+        STOPPED = 1;
+        PLAYING = 2;
+        PAUSED = 3;
     }
 
     optional State state = 1;
-    optional string source = 2;
-    optional uint32 seconds = 3;
+    optional string media_source = 2;
+    optional uint32 playback_seconds = 3;
     optional bool shuffle = 4;
     optional bool repeat = 5;
     optional bool repeat_one = 6;
@@ -31,8 +31,8 @@ message MediaMetaData
     optional string song = 1;
     optional string artist = 2;
     optional string album = 3;
-    optional bytes albumart = 4;
+    optional bytes album_art = 4;
     optional string playlist = 5;
-    optional uint32 duration = 6;
-    optional uint32 rating = 7;
+    optional uint32 duration_seconds = 6;
+    optional int32 rating = 7;
 }

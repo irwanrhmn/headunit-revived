@@ -458,4 +458,11 @@
     <string name="audio_latency_multiplier">Multiplicator latență audio</string>
     <string name="audio_latency_multiplier_description">Ajustare dimensiune buffer audio (Mai mic = latență mai mică, Mai mare = mai puține întreruperi)</string>
     <string name="audio_queue_capacity">Capacitate coadă audio (Backpressure)</string>
+    <string name="media_action_previous">Anterior</string>
+    <string name="media_action_play">Redare</string>
+    <string name="media_action_pause">Pauză</string>
+    <string name="media_action_next">Următor</string>
+    <string name="media_session_aa_status_placeholder">Conectat</string>
+    <string name="sync_media_session_aa_metadata">Piesa curentă AA în sesiunea media</string>
+    <string name="sync_media_session_aa_metadata_description">Afișează titlul piesei, artistul, durata și coperta albumului de pe telefon în sesiunea media a sistemului și în notificarea media</string>
 </resources>

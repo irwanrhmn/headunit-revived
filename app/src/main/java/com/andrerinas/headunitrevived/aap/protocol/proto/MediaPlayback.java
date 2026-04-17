@@ -136,32 +136,32 @@ public final class MediaPlayback {
     com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback.MediaPlaybackStatus.State getState();
 
     /**
-     * <code>optional string source = 2;</code>
-     * @return Whether the source field is set.
+     * <code>optional string media_source = 2;</code>
+     * @return Whether the mediaSource field is set.
      */
-    boolean hasSource();
+    boolean hasMediaSource();
     /**
-     * <code>optional string source = 2;</code>
-     * @return The source.
+     * <code>optional string media_source = 2;</code>
+     * @return The mediaSource.
      */
-    java.lang.String getSource();
+    java.lang.String getMediaSource();
     /**
-     * <code>optional string source = 2;</code>
-     * @return The bytes for source.
+     * <code>optional string media_source = 2;</code>
+     * @return The bytes for mediaSource.
      */
     com.google.protobuf.ByteString
-        getSourceBytes();
+        getMediaSourceBytes();
 
     /**
-     * <code>optional uint32 seconds = 3;</code>
-     * @return Whether the seconds field is set.
+     * <code>optional uint32 playback_seconds = 3;</code>
+     * @return Whether the playbackSeconds field is set.
      */
-    boolean hasSeconds();
+    boolean hasPlaybackSeconds();
     /**
-     * <code>optional uint32 seconds = 3;</code>
-     * @return The seconds.
+     * <code>optional uint32 playback_seconds = 3;</code>
+     * @return The playbackSeconds.
      */
-    int getSeconds();
+    int getPlaybackSeconds();
 
     /**
      * <code>optional bool shuffle = 4;</code>
@@ -209,8 +209,8 @@ public final class MediaPlayback {
       super(builder);
     }
     private MediaPlaybackStatus() {
-      state_ = 0;
-      source_ = "";
+      state_ = 1;
+      mediaSource_ = "";
     }
 
     @java.lang.Override
@@ -239,31 +239,31 @@ public final class MediaPlayback {
     public enum State
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>MEDIA_SERVICE_STATE_PAUSE = 0;</code>
+       * <code>STOPPED = 1;</code>
        */
-      MEDIA_SERVICE_STATE_PAUSE(0),
+      STOPPED(1),
       /**
-       * <code>MEDIA_SERVICE_STATE_STOPPED = 1;</code>
+       * <code>PLAYING = 2;</code>
        */
-      MEDIA_SERVICE_STATE_STOPPED(1),
+      PLAYING(2),
       /**
-       * <code>MEDIA_SERVICE_STATE_PLAYING = 3;</code>
+       * <code>PAUSED = 3;</code>
        */
-      MEDIA_SERVICE_STATE_PLAYING(3),
+      PAUSED(3),
       ;
 
       /**
-       * <code>MEDIA_SERVICE_STATE_PAUSE = 0;</code>
+       * <code>STOPPED = 1;</code>
        */
-      public static final int MEDIA_SERVICE_STATE_PAUSE_VALUE = 0;
+      public static final int STOPPED_VALUE = 1;
       /**
-       * <code>MEDIA_SERVICE_STATE_STOPPED = 1;</code>
+       * <code>PLAYING = 2;</code>
        */
-      public static final int MEDIA_SERVICE_STATE_STOPPED_VALUE = 1;
+      public static final int PLAYING_VALUE = 2;
       /**
-       * <code>MEDIA_SERVICE_STATE_PLAYING = 3;</code>
+       * <code>PAUSED = 3;</code>
        */
-      public static final int MEDIA_SERVICE_STATE_PLAYING_VALUE = 3;
+      public static final int PAUSED_VALUE = 3;
 
 
       public final int getNumber() {
@@ -286,9 +286,9 @@ public final class MediaPlayback {
        */
       public static State forNumber(int value) {
         switch (value) {
-          case 0: return MEDIA_SERVICE_STATE_PAUSE;
-          case 1: return MEDIA_SERVICE_STATE_STOPPED;
-          case 3: return MEDIA_SERVICE_STATE_PLAYING;
+          case 1: return STOPPED;
+          case 2: return PLAYING;
+          case 3: return PAUSED;
           default: return null;
         }
       }
@@ -340,7 +340,7 @@ public final class MediaPlayback {
 
     private int bitField0_;
     public static final int STATE_FIELD_NUMBER = 1;
-    private int state_ = 0;
+    private int state_ = 1;
     /**
      * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlaybackStatus.State state = 1;</code>
      * @return Whether the state field is set.
@@ -354,27 +354,27 @@ public final class MediaPlayback {
      */
     @java.lang.Override public com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback.MediaPlaybackStatus.State getState() {
       com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback.MediaPlaybackStatus.State result = com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback.MediaPlaybackStatus.State.forNumber(state_);
-      return result == null ? com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback.MediaPlaybackStatus.State.MEDIA_SERVICE_STATE_PAUSE : result;
+      return result == null ? com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback.MediaPlaybackStatus.State.STOPPED : result;
     }
 
-    public static final int SOURCE_FIELD_NUMBER = 2;
+    public static final int MEDIA_SOURCE_FIELD_NUMBER = 2;
     @SuppressWarnings("serial")
-    private volatile java.lang.Object source_ = "";
+    private volatile java.lang.Object mediaSource_ = "";
     /**
-     * <code>optional string source = 2;</code>
-     * @return Whether the source field is set.
+     * <code>optional string media_source = 2;</code>
+     * @return Whether the mediaSource field is set.
      */
     @java.lang.Override
-    public boolean hasSource() {
+    public boolean hasMediaSource() {
       return ((bitField0_ & 0x00000002) != 0);
     }
     /**
-     * <code>optional string source = 2;</code>
-     * @return The source.
+     * <code>optional string media_source = 2;</code>
+     * @return The mediaSource.
      */
     @java.lang.Override
-    public java.lang.String getSource() {
-      java.lang.Object ref = source_;
+    public java.lang.String getMediaSource() {
+      java.lang.Object ref = mediaSource_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
@@ -382,47 +382,47 @@ public final class MediaPlayback {
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          source_ = s;
+          mediaSource_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>optional string source = 2;</code>
-     * @return The bytes for source.
+     * <code>optional string media_source = 2;</code>
+     * @return The bytes for mediaSource.
      */
     @java.lang.Override
     public com.google.protobuf.ByteString
-        getSourceBytes() {
-      java.lang.Object ref = source_;
+        getMediaSourceBytes() {
+      java.lang.Object ref = mediaSource_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        source_ = b;
+        mediaSource_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    public static final int SECONDS_FIELD_NUMBER = 3;
-    private int seconds_ = 0;
+    public static final int PLAYBACK_SECONDS_FIELD_NUMBER = 3;
+    private int playbackSeconds_ = 0;
     /**
-     * <code>optional uint32 seconds = 3;</code>
-     * @return Whether the seconds field is set.
+     * <code>optional uint32 playback_seconds = 3;</code>
+     * @return Whether the playbackSeconds field is set.
      */
     @java.lang.Override
-    public boolean hasSeconds() {
+    public boolean hasPlaybackSeconds() {
       return ((bitField0_ & 0x00000004) != 0);
     }
     /**
-     * <code>optional uint32 seconds = 3;</code>
-     * @return The seconds.
+     * <code>optional uint32 playback_seconds = 3;</code>
+     * @return The playbackSeconds.
      */
     @java.lang.Override
-    public int getSeconds() {
-      return seconds_;
+    public int getPlaybackSeconds() {
+      return playbackSeconds_;
     }
 
     public static final int SHUFFLE_FIELD_NUMBER = 4;
@@ -500,10 +500,10 @@ public final class MediaPlayback {
         output.writeEnum(1, state_);
       }
       if (((bitField0_ & 0x00000002) != 0)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, source_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, mediaSource_);
       }
       if (((bitField0_ & 0x00000004) != 0)) {
-        output.writeUInt32(3, seconds_);
+        output.writeUInt32(3, playbackSeconds_);
       }
       if (((bitField0_ & 0x00000008) != 0)) {
         output.writeBool(4, shuffle_);
@@ -528,11 +528,11 @@ public final class MediaPlayback {
           .computeEnumSize(1, state_);
       }
       if (((bitField0_ & 0x00000002) != 0)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, source_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, mediaSource_);
       }
       if (((bitField0_ & 0x00000004) != 0)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, seconds_);
+          .computeUInt32Size(3, playbackSeconds_);
       }
       if (((bitField0_ & 0x00000008) != 0)) {
         size += com.google.protobuf.CodedOutputStream
@@ -565,15 +565,15 @@ public final class MediaPlayback {
       if (hasState()) {
         if (state_ != other.state_) return false;
       }
-      if (hasSource() != other.hasSource()) return false;
-      if (hasSource()) {
-        if (!getSource()
-            .equals(other.getSource())) return false;
+      if (hasMediaSource() != other.hasMediaSource()) return false;
+      if (hasMediaSource()) {
+        if (!getMediaSource()
+            .equals(other.getMediaSource())) return false;
       }
-      if (hasSeconds() != other.hasSeconds()) return false;
-      if (hasSeconds()) {
-        if (getSeconds()
-            != other.getSeconds()) return false;
+      if (hasPlaybackSeconds() != other.hasPlaybackSeconds()) return false;
+      if (hasPlaybackSeconds()) {
+        if (getPlaybackSeconds()
+            != other.getPlaybackSeconds()) return false;
       }
       if (hasShuffle() != other.hasShuffle()) return false;
       if (hasShuffle()) {
@@ -605,13 +605,13 @@ public final class MediaPlayback {
         hash = (37 * hash) + STATE_FIELD_NUMBER;
         hash = (53 * hash) + state_;
       }
-      if (hasSource()) {
-        hash = (37 * hash) + SOURCE_FIELD_NUMBER;
-        hash = (53 * hash) + getSource().hashCode();
+      if (hasMediaSource()) {
+        hash = (37 * hash) + MEDIA_SOURCE_FIELD_NUMBER;
+        hash = (53 * hash) + getMediaSource().hashCode();
       }
-      if (hasSeconds()) {
-        hash = (37 * hash) + SECONDS_FIELD_NUMBER;
-        hash = (53 * hash) + getSeconds();
+      if (hasPlaybackSeconds()) {
+        hash = (37 * hash) + PLAYBACK_SECONDS_FIELD_NUMBER;
+        hash = (53 * hash) + getPlaybackSeconds();
       }
       if (hasShuffle()) {
         hash = (37 * hash) + SHUFFLE_FIELD_NUMBER;
@@ -759,9 +759,9 @@ public final class MediaPlayback {
       public Builder clear() {
         super.clear();
         bitField0_ = 0;
-        state_ = 0;
-        source_ = "";
-        seconds_ = 0;
+        state_ = 1;
+        mediaSource_ = "";
+        playbackSeconds_ = 0;
         shuffle_ = false;
         repeat_ = false;
         repeatOne_ = false;
@@ -804,11 +804,11 @@ public final class MediaPlayback {
           to_bitField0_ |= 0x00000001;
         }
         if (((from_bitField0_ & 0x00000002) != 0)) {
-          result.source_ = source_;
+          result.mediaSource_ = mediaSource_;
           to_bitField0_ |= 0x00000002;
         }
         if (((from_bitField0_ & 0x00000004) != 0)) {
-          result.seconds_ = seconds_;
+          result.playbackSeconds_ = playbackSeconds_;
           to_bitField0_ |= 0x00000004;
         }
         if (((from_bitField0_ & 0x00000008) != 0)) {
@@ -873,13 +873,13 @@ public final class MediaPlayback {
         if (other.hasState()) {
           setState(other.getState());
         }
-        if (other.hasSource()) {
-          source_ = other.source_;
+        if (other.hasMediaSource()) {
+          mediaSource_ = other.mediaSource_;
           bitField0_ |= 0x00000002;
           onChanged();
         }
-        if (other.hasSeconds()) {
-          setSeconds(other.getSeconds());
+        if (other.hasPlaybackSeconds()) {
+          setPlaybackSeconds(other.getPlaybackSeconds());
         }
         if (other.hasShuffle()) {
           setShuffle(other.getShuffle());
@@ -929,12 +929,12 @@ public final class MediaPlayback {
                 break;
               } // case 8
               case 18: {
-                source_ = input.readBytes();
+                mediaSource_ = input.readBytes();
                 bitField0_ |= 0x00000002;
                 break;
               } // case 18
               case 24: {
-                seconds_ = input.readUInt32();
+                playbackSeconds_ = input.readUInt32();
                 bitField0_ |= 0x00000004;
                 break;
               } // case 24
@@ -970,7 +970,7 @@ public final class MediaPlayback {
       }
       private int bitField0_;
 
-      private int state_ = 0;
+      private int state_ = 1;
       /**
        * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlaybackStatus.State state = 1;</code>
        * @return Whether the state field is set.
@@ -985,7 +985,7 @@ public final class MediaPlayback {
       @java.lang.Override
       public com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback.MediaPlaybackStatus.State getState() {
         com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback.MediaPlaybackStatus.State result = com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback.MediaPlaybackStatus.State.forNumber(state_);
-        return result == null ? com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback.MediaPlaybackStatus.State.MEDIA_SERVICE_STATE_PAUSE : result;
+        return result == null ? com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback.MediaPlaybackStatus.State.STOPPED : result;
       }
       /**
        * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlaybackStatus.State state = 1;</code>
@@ -1007,31 +1007,31 @@ public final class MediaPlayback {
        */
       public Builder clearState() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        state_ = 0;
+        state_ = 1;
         onChanged();
         return this;
       }
 
-      private java.lang.Object source_ = "";
+      private java.lang.Object mediaSource_ = "";
       /**
-       * <code>optional string source = 2;</code>
-       * @return Whether the source field is set.
+       * <code>optional string media_source = 2;</code>
+       * @return Whether the mediaSource field is set.
        */
-      public boolean hasSource() {
+      public boolean hasMediaSource() {
         return ((bitField0_ & 0x00000002) != 0);
       }
       /**
-       * <code>optional string source = 2;</code>
-       * @return The source.
+       * <code>optional string media_source = 2;</code>
+       * @return The mediaSource.
        */
-      public java.lang.String getSource() {
-        java.lang.Object ref = source_;
+      public java.lang.String getMediaSource() {
+        java.lang.Object ref = mediaSource_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
-            source_ = s;
+            mediaSource_ = s;
           }
           return s;
         } else {
@@ -1039,95 +1039,95 @@ public final class MediaPlayback {
         }
       }
       /**
-       * <code>optional string source = 2;</code>
-       * @return The bytes for source.
+       * <code>optional string media_source = 2;</code>
+       * @return The bytes for mediaSource.
        */
       public com.google.protobuf.ByteString
-          getSourceBytes() {
-        java.lang.Object ref = source_;
+          getMediaSourceBytes() {
+        java.lang.Object ref = mediaSource_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          source_ = b;
+          mediaSource_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string source = 2;</code>
-       * @param value The source to set.
+       * <code>optional string media_source = 2;</code>
+       * @param value The mediaSource to set.
        * @return This builder for chaining.
        */
-      public Builder setSource(
+      public Builder setMediaSource(
           java.lang.String value) {
         if (value == null) { throw new NullPointerException(); }
-        source_ = value;
+        mediaSource_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string source = 2;</code>
+       * <code>optional string media_source = 2;</code>
        * @return This builder for chaining.
        */
-      public Builder clearSource() {
-        source_ = getDefaultInstance().getSource();
+      public Builder clearMediaSource() {
+        mediaSource_ = getDefaultInstance().getMediaSource();
         bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
       /**
-       * <code>optional string source = 2;</code>
-       * @param value The bytes for source to set.
+       * <code>optional string media_source = 2;</code>
+       * @param value The bytes for mediaSource to set.
        * @return This builder for chaining.
        */
-      public Builder setSourceBytes(
+      public Builder setMediaSourceBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) { throw new NullPointerException(); }
-        source_ = value;
+        mediaSource_ = value;
         bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
 
-      private int seconds_ ;
+      private int playbackSeconds_ ;
       /**
-       * <code>optional uint32 seconds = 3;</code>
-       * @return Whether the seconds field is set.
+       * <code>optional uint32 playback_seconds = 3;</code>
+       * @return Whether the playbackSeconds field is set.
        */
       @java.lang.Override
-      public boolean hasSeconds() {
+      public boolean hasPlaybackSeconds() {
         return ((bitField0_ & 0x00000004) != 0);
       }
       /**
-       * <code>optional uint32 seconds = 3;</code>
-       * @return The seconds.
+       * <code>optional uint32 playback_seconds = 3;</code>
+       * @return The playbackSeconds.
        */
       @java.lang.Override
-      public int getSeconds() {
-        return seconds_;
+      public int getPlaybackSeconds() {
+        return playbackSeconds_;
       }
       /**
-       * <code>optional uint32 seconds = 3;</code>
-       * @param value The seconds to set.
+       * <code>optional uint32 playback_seconds = 3;</code>
+       * @param value The playbackSeconds to set.
        * @return This builder for chaining.
        */
-      public Builder setSeconds(int value) {
+      public Builder setPlaybackSeconds(int value) {
 
-        seconds_ = value;
+        playbackSeconds_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
       /**
-       * <code>optional uint32 seconds = 3;</code>
+       * <code>optional uint32 playback_seconds = 3;</code>
        * @return This builder for chaining.
        */
-      public Builder clearSeconds() {
+      public Builder clearPlaybackSeconds() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        seconds_ = 0;
+        playbackSeconds_ = 0;
         onChanged();
         return this;
       }
@@ -1371,15 +1371,15 @@ public final class MediaPlayback {
         getAlbumBytes();
 
     /**
-     * <code>optional bytes albumart = 4;</code>
-     * @return Whether the albumart field is set.
+     * <code>optional bytes album_art = 4;</code>
+     * @return Whether the albumArt field is set.
      */
-    boolean hasAlbumart();
+    boolean hasAlbumArt();
     /**
-     * <code>optional bytes albumart = 4;</code>
-     * @return The albumart.
+     * <code>optional bytes album_art = 4;</code>
+     * @return The albumArt.
      */
-    com.google.protobuf.ByteString getAlbumart();
+    com.google.protobuf.ByteString getAlbumArt();
 
     /**
      * <code>optional string playlist = 5;</code>
@@ -1399,23 +1399,23 @@ public final class MediaPlayback {
         getPlaylistBytes();
 
     /**
-     * <code>optional uint32 duration = 6;</code>
-     * @return Whether the duration field is set.
+     * <code>optional uint32 duration_seconds = 6;</code>
+     * @return Whether the durationSeconds field is set.
      */
-    boolean hasDuration();
+    boolean hasDurationSeconds();
     /**
-     * <code>optional uint32 duration = 6;</code>
-     * @return The duration.
+     * <code>optional uint32 duration_seconds = 6;</code>
+     * @return The durationSeconds.
      */
-    int getDuration();
+    int getDurationSeconds();
 
     /**
-     * <code>optional uint32 rating = 7;</code>
+     * <code>optional int32 rating = 7;</code>
      * @return Whether the rating field is set.
      */
     boolean hasRating();
     /**
-     * <code>optional uint32 rating = 7;</code>
+     * <code>optional int32 rating = 7;</code>
      * @return The rating.
      */
     int getRating();
@@ -1436,7 +1436,7 @@ public final class MediaPlayback {
       song_ = "";
       artist_ = "";
       album_ = "";
-      albumart_ = com.google.protobuf.ByteString.EMPTY;
+      albumArt_ = com.google.protobuf.ByteString.EMPTY;
       playlist_ = "";
     }
 
@@ -1608,23 +1608,23 @@ public final class MediaPlayback {
       }
     }
 
-    public static final int ALBUMART_FIELD_NUMBER = 4;
-    private com.google.protobuf.ByteString albumart_ = com.google.protobuf.ByteString.EMPTY;
+    public static final int ALBUM_ART_FIELD_NUMBER = 4;
+    private com.google.protobuf.ByteString albumArt_ = com.google.protobuf.ByteString.EMPTY;
     /**
-     * <code>optional bytes albumart = 4;</code>
-     * @return Whether the albumart field is set.
+     * <code>optional bytes album_art = 4;</code>
+     * @return Whether the albumArt field is set.
      */
     @java.lang.Override
-    public boolean hasAlbumart() {
+    public boolean hasAlbumArt() {
       return ((bitField0_ & 0x00000008) != 0);
     }
     /**
-     * <code>optional bytes albumart = 4;</code>
-     * @return The albumart.
+     * <code>optional bytes album_art = 4;</code>
+     * @return The albumArt.
      */
     @java.lang.Override
-    public com.google.protobuf.ByteString getAlbumart() {
-      return albumart_;
+    public com.google.protobuf.ByteString getAlbumArt() {
+      return albumArt_;
     }
 
     public static final int PLAYLIST_FIELD_NUMBER = 5;
@@ -1676,29 +1676,29 @@ public final class MediaPlayback {
       }
     }
 
-    public static final int DURATION_FIELD_NUMBER = 6;
-    private int duration_ = 0;
+    public static final int DURATION_SECONDS_FIELD_NUMBER = 6;
+    private int durationSeconds_ = 0;
     /**
-     * <code>optional uint32 duration = 6;</code>
-     * @return Whether the duration field is set.
+     * <code>optional uint32 duration_seconds = 6;</code>
+     * @return Whether the durationSeconds field is set.
      */
     @java.lang.Override
-    public boolean hasDuration() {
+    public boolean hasDurationSeconds() {
       return ((bitField0_ & 0x00000020) != 0);
     }
     /**
-     * <code>optional uint32 duration = 6;</code>
-     * @return The duration.
+     * <code>optional uint32 duration_seconds = 6;</code>
+     * @return The durationSeconds.
      */
     @java.lang.Override
-    public int getDuration() {
-      return duration_;
+    public int getDurationSeconds() {
+      return durationSeconds_;
     }
 
     public static final int RATING_FIELD_NUMBER = 7;
     private int rating_ = 0;
     /**
-     * <code>optional uint32 rating = 7;</code>
+     * <code>optional int32 rating = 7;</code>
      * @return Whether the rating field is set.
      */
     @java.lang.Override
@@ -1706,7 +1706,7 @@ public final class MediaPlayback {
       return ((bitField0_ & 0x00000040) != 0);
     }
     /**
-     * <code>optional uint32 rating = 7;</code>
+     * <code>optional int32 rating = 7;</code>
      * @return The rating.
      */
     @java.lang.Override
@@ -1738,16 +1738,16 @@ public final class MediaPlayback {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, album_);
       }
       if (((bitField0_ & 0x00000008) != 0)) {
-        output.writeBytes(4, albumart_);
+        output.writeBytes(4, albumArt_);
       }
       if (((bitField0_ & 0x00000010) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, playlist_);
       }
       if (((bitField0_ & 0x00000020) != 0)) {
-        output.writeUInt32(6, duration_);
+        output.writeUInt32(6, durationSeconds_);
       }
       if (((bitField0_ & 0x00000040) != 0)) {
-        output.writeUInt32(7, rating_);
+        output.writeInt32(7, rating_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1769,18 +1769,18 @@ public final class MediaPlayback {
       }
       if (((bitField0_ & 0x00000008) != 0)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, albumart_);
+          .computeBytesSize(4, albumArt_);
       }
       if (((bitField0_ & 0x00000010) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, playlist_);
       }
       if (((bitField0_ & 0x00000020) != 0)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(6, duration_);
+          .computeUInt32Size(6, durationSeconds_);
       }
       if (((bitField0_ & 0x00000040) != 0)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(7, rating_);
+          .computeInt32Size(7, rating_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -1812,20 +1812,20 @@ public final class MediaPlayback {
         if (!getAlbum()
             .equals(other.getAlbum())) return false;
       }
-      if (hasAlbumart() != other.hasAlbumart()) return false;
-      if (hasAlbumart()) {
-        if (!getAlbumart()
-            .equals(other.getAlbumart())) return false;
+      if (hasAlbumArt() != other.hasAlbumArt()) return false;
+      if (hasAlbumArt()) {
+        if (!getAlbumArt()
+            .equals(other.getAlbumArt())) return false;
       }
       if (hasPlaylist() != other.hasPlaylist()) return false;
       if (hasPlaylist()) {
         if (!getPlaylist()
             .equals(other.getPlaylist())) return false;
       }
-      if (hasDuration() != other.hasDuration()) return false;
-      if (hasDuration()) {
-        if (getDuration()
-            != other.getDuration()) return false;
+      if (hasDurationSeconds() != other.hasDurationSeconds()) return false;
+      if (hasDurationSeconds()) {
+        if (getDurationSeconds()
+            != other.getDurationSeconds()) return false;
       }
       if (hasRating() != other.hasRating()) return false;
       if (hasRating()) {
@@ -1855,17 +1855,17 @@ public final class MediaPlayback {
         hash = (37 * hash) + ALBUM_FIELD_NUMBER;
         hash = (53 * hash) + getAlbum().hashCode();
       }
-      if (hasAlbumart()) {
-        hash = (37 * hash) + ALBUMART_FIELD_NUMBER;
-        hash = (53 * hash) + getAlbumart().hashCode();
+      if (hasAlbumArt()) {
+        hash = (37 * hash) + ALBUM_ART_FIELD_NUMBER;
+        hash = (53 * hash) + getAlbumArt().hashCode();
       }
       if (hasPlaylist()) {
         hash = (37 * hash) + PLAYLIST_FIELD_NUMBER;
         hash = (53 * hash) + getPlaylist().hashCode();
       }
-      if (hasDuration()) {
-        hash = (37 * hash) + DURATION_FIELD_NUMBER;
-        hash = (53 * hash) + getDuration();
+      if (hasDurationSeconds()) {
+        hash = (37 * hash) + DURATION_SECONDS_FIELD_NUMBER;
+        hash = (53 * hash) + getDurationSeconds();
       }
       if (hasRating()) {
         hash = (37 * hash) + RATING_FIELD_NUMBER;
@@ -2005,9 +2005,9 @@ public final class MediaPlayback {
         song_ = "";
         artist_ = "";
         album_ = "";
-        albumart_ = com.google.protobuf.ByteString.EMPTY;
+        albumArt_ = com.google.protobuf.ByteString.EMPTY;
         playlist_ = "";
-        duration_ = 0;
+        durationSeconds_ = 0;
         rating_ = 0;
         return this;
       }
@@ -2056,7 +2056,7 @@ public final class MediaPlayback {
           to_bitField0_ |= 0x00000004;
         }
         if (((from_bitField0_ & 0x00000008) != 0)) {
-          result.albumart_ = albumart_;
+          result.albumArt_ = albumArt_;
           to_bitField0_ |= 0x00000008;
         }
         if (((from_bitField0_ & 0x00000010) != 0)) {
@@ -2064,7 +2064,7 @@ public final class MediaPlayback {
           to_bitField0_ |= 0x00000010;
         }
         if (((from_bitField0_ & 0x00000020) != 0)) {
-          result.duration_ = duration_;
+          result.durationSeconds_ = durationSeconds_;
           to_bitField0_ |= 0x00000020;
         }
         if (((from_bitField0_ & 0x00000040) != 0)) {
@@ -2133,16 +2133,16 @@ public final class MediaPlayback {
           bitField0_ |= 0x00000004;
           onChanged();
         }
-        if (other.hasAlbumart()) {
-          setAlbumart(other.getAlbumart());
+        if (other.hasAlbumArt()) {
+          setAlbumArt(other.getAlbumArt());
         }
         if (other.hasPlaylist()) {
           playlist_ = other.playlist_;
           bitField0_ |= 0x00000010;
           onChanged();
         }
-        if (other.hasDuration()) {
-          setDuration(other.getDuration());
+        if (other.hasDurationSeconds()) {
+          setDurationSeconds(other.getDurationSeconds());
         }
         if (other.hasRating()) {
           setRating(other.getRating());
@@ -2189,7 +2189,7 @@ public final class MediaPlayback {
                 break;
               } // case 26
               case 34: {
-                albumart_ = input.readBytes();
+                albumArt_ = input.readBytes();
                 bitField0_ |= 0x00000008;
                 break;
               } // case 34
@@ -2199,12 +2199,12 @@ public final class MediaPlayback {
                 break;
               } // case 42
               case 48: {
-                duration_ = input.readUInt32();
+                durationSeconds_ = input.readUInt32();
                 bitField0_ |= 0x00000020;
                 break;
               } // case 48
               case 56: {
-                rating_ = input.readUInt32();
+                rating_ = input.readInt32();
                 bitField0_ |= 0x00000040;
                 break;
               } // case 56
@@ -2465,42 +2465,42 @@ public final class MediaPlayback {
         return this;
       }
 
-      private com.google.protobuf.ByteString albumart_ = com.google.protobuf.ByteString.EMPTY;
+      private com.google.protobuf.ByteString albumArt_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>optional bytes albumart = 4;</code>
-       * @return Whether the albumart field is set.
+       * <code>optional bytes album_art = 4;</code>
+       * @return Whether the albumArt field is set.
        */
       @java.lang.Override
-      public boolean hasAlbumart() {
+      public boolean hasAlbumArt() {
         return ((bitField0_ & 0x00000008) != 0);
       }
       /**
-       * <code>optional bytes albumart = 4;</code>
-       * @return The albumart.
+       * <code>optional bytes album_art = 4;</code>
+       * @return The albumArt.
        */
       @java.lang.Override
-      public com.google.protobuf.ByteString getAlbumart() {
-        return albumart_;
+      public com.google.protobuf.ByteString getAlbumArt() {
+        return albumArt_;
       }
       /**
-       * <code>optional bytes albumart = 4;</code>
-       * @param value The albumart to set.
+       * <code>optional bytes album_art = 4;</code>
+       * @param value The albumArt to set.
        * @return This builder for chaining.
        */
-      public Builder setAlbumart(com.google.protobuf.ByteString value) {
+      public Builder setAlbumArt(com.google.protobuf.ByteString value) {
         if (value == null) { throw new NullPointerException(); }
-        albumart_ = value;
+        albumArt_ = value;
         bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
-       * <code>optional bytes albumart = 4;</code>
+       * <code>optional bytes album_art = 4;</code>
        * @return This builder for chaining.
        */
-      public Builder clearAlbumart() {
+      public Builder clearAlbumArt() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        albumart_ = getDefaultInstance().getAlbumart();
+        albumArt_ = getDefaultInstance().getAlbumArt();
         onChanged();
         return this;
       }
@@ -2585,49 +2585,49 @@ public final class MediaPlayback {
         return this;
       }
 
-      private int duration_ ;
+      private int durationSeconds_ ;
       /**
-       * <code>optional uint32 duration = 6;</code>
-       * @return Whether the duration field is set.
+       * <code>optional uint32 duration_seconds = 6;</code>
+       * @return Whether the durationSeconds field is set.
        */
       @java.lang.Override
-      public boolean hasDuration() {
+      public boolean hasDurationSeconds() {
         return ((bitField0_ & 0x00000020) != 0);
       }
       /**
-       * <code>optional uint32 duration = 6;</code>
-       * @return The duration.
+       * <code>optional uint32 duration_seconds = 6;</code>
+       * @return The durationSeconds.
        */
       @java.lang.Override
-      public int getDuration() {
-        return duration_;
+      public int getDurationSeconds() {
+        return durationSeconds_;
       }
       /**
-       * <code>optional uint32 duration = 6;</code>
-       * @param value The duration to set.
+       * <code>optional uint32 duration_seconds = 6;</code>
+       * @param value The durationSeconds to set.
        * @return This builder for chaining.
        */
-      public Builder setDuration(int value) {
+      public Builder setDurationSeconds(int value) {
 
-        duration_ = value;
+        durationSeconds_ = value;
         bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
       /**
-       * <code>optional uint32 duration = 6;</code>
+       * <code>optional uint32 duration_seconds = 6;</code>
        * @return This builder for chaining.
        */
-      public Builder clearDuration() {
+      public Builder clearDurationSeconds() {
         bitField0_ = (bitField0_ & ~0x00000020);
-        duration_ = 0;
+        durationSeconds_ = 0;
         onChanged();
         return this;
       }
 
       private int rating_ ;
       /**
-       * <code>optional uint32 rating = 7;</code>
+       * <code>optional int32 rating = 7;</code>
        * @return Whether the rating field is set.
        */
       @java.lang.Override
@@ -2635,7 +2635,7 @@ public final class MediaPlayback {
         return ((bitField0_ & 0x00000040) != 0);
       }
       /**
-       * <code>optional uint32 rating = 7;</code>
+       * <code>optional int32 rating = 7;</code>
        * @return The rating.
        */
       @java.lang.Override
@@ -2643,7 +2643,7 @@ public final class MediaPlayback {
         return rating_;
       }
       /**
-       * <code>optional uint32 rating = 7;</code>
+       * <code>optional int32 rating = 7;</code>
        * @param value The rating to set.
        * @return This builder for chaining.
        */
@@ -2655,7 +2655,7 @@ public final class MediaPlayback {
         return this;
       }
       /**
-       * <code>optional uint32 rating = 7;</code>
+       * <code>optional int32 rating = 7;</code>
        * @return This builder for chaining.
        */
       public Builder clearRating() {
@@ -2748,21 +2748,20 @@ public final class MediaPlayback {
   static {
     java.lang.String[] descriptorData = {
       "\n\016playback.proto\0221com.andrerinas.headuni" +
-      "trevived.aap.protocol.proto\"\262\002\n\023MediaPla" +
+      "trevived.aap.protocol.proto\"\206\002\n\023MediaPla" +
       "ybackStatus\022[\n\005state\030\001 \001(\0162L.com.andreri" +
       "nas.headunitrevived.aap.protocol.proto.M" +
-      "ediaPlaybackStatus.State\022\016\n\006source\030\002 \001(\t" +
-      "\022\017\n\007seconds\030\003 \001(\r\022\017\n\007shuffle\030\004 \001(\010\022\016\n\006re" +
-      "peat\030\005 \001(\010\022\022\n\nrepeat_one\030\006 \001(\010\"h\n\005State\022" +
-      "\035\n\031MEDIA_SERVICE_STATE_PAUSE\020\000\022\037\n\033MEDIA_" +
-      "SERVICE_STATE_STOPPED\020\001\022\037\n\033MEDIA_SERVICE" +
-      "_STATE_PLAYING\020\003\"\202\001\n\rMediaMetaData\022\014\n\004so" +
-      "ng\030\001 \001(\t\022\016\n\006artist\030\002 \001(\t\022\r\n\005album\030\003 \001(\t\022" +
-      "\020\n\010albumart\030\004 \001(\014\022\020\n\010playlist\030\005 \001(\t\022\020\n\010d" +
-      "uration\030\006 \001(\r\022\016\n\006rating\030\007 \001(\r*j\n\007MsgType" +
-      "\022\033\n\025MSG_PLAYBACK_METADATA\020\201\200\002\022 \n\032MSG_PLA" +
-      "YBACK_STARTRESPONSE\020\202\200\002\022 \n\032MSG_PLAYBACK_" +
-      "METADATASTART\020\203\200\002B\017B\rMediaPlayback"
+      "ediaPlaybackStatus.State\022\024\n\014media_source" +
+      "\030\002 \001(\t\022\030\n\020playback_seconds\030\003 \001(\r\022\017\n\007shuf" +
+      "fle\030\004 \001(\010\022\016\n\006repeat\030\005 \001(\010\022\022\n\nrepeat_one\030" +
+      "\006 \001(\010\"-\n\005State\022\013\n\007STOPPED\020\001\022\013\n\007PLAYING\020\002" +
+      "\022\n\n\006PAUSED\020\003\"\213\001\n\rMediaMetaData\022\014\n\004song\030\001" +
+      " \001(\t\022\016\n\006artist\030\002 \001(\t\022\r\n\005album\030\003 \001(\t\022\021\n\ta" +
+      "lbum_art\030\004 \001(\014\022\020\n\010playlist\030\005 \001(\t\022\030\n\020dura" +
+      "tion_seconds\030\006 \001(\r\022\016\n\006rating\030\007 \001(\005*j\n\007Ms" +
+      "gType\022\033\n\025MSG_PLAYBACK_METADATA\020\201\200\002\022 \n\032MS" +
+      "G_PLAYBACK_STARTRESPONSE\020\202\200\002\022 \n\032MSG_PLAY" +
+      "BACK_METADATASTART\020\203\200\002B\017B\rMediaPlayback"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -2773,13 +2772,13 @@ public final class MediaPlayback {
     internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_MediaPlaybackStatus_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_MediaPlaybackStatus_descriptor,
-        new java.lang.String[] { "State", "Source", "Seconds", "Shuffle", "Repeat", "RepeatOne", });
+        new java.lang.String[] { "State", "MediaSource", "PlaybackSeconds", "Shuffle", "Repeat", "RepeatOne", });
     internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_MediaMetaData_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_MediaMetaData_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_MediaMetaData_descriptor,
-        new java.lang.String[] { "Song", "Artist", "Album", "Albumart", "Playlist", "Duration", "Rating", });
+        new java.lang.String[] { "Song", "Artist", "Album", "AlbumArt", "Playlist", "DurationSeconds", "Rating", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
