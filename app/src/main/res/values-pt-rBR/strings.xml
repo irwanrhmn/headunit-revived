@@ -287,6 +287,7 @@
     <string name="success">Sucesso</string>
     <string name="failed">Falha</string>
     <string name="failed_start_android_auto">Falha ao iniciar Android Auto</string>
+    <string name="failed_self_mode_android10">O modo Self-mode provavelmente está bloqueado pelo Google no Android 10 (AA 16.4+). Veja o README.</string>
     <string name="android_auto_starting">Android Auto está iniciando…</string>
     <string name="connection_interrupted">Conexão perdida</string>
     <string name="connection_interrupted_detail">Tentando novamente…</string>
@@ -446,6 +447,7 @@
     </string-array>
 
     <string name="select_nearby_device">Selecionar dispositivo próximo</string>
+    <string name="nearby_device_found">Dispositivo próximo encontrado</string>
     <string name="connecting_to_nearby">Conectando a %s…</string>
 
     <string name="exit_dialog_title">Sair do Android Auto</string>
@@ -463,4 +465,5 @@
     <string name="media_session_aa_status_placeholder">Conectado</string>
     <string name="sync_media_session_aa_metadata">Faixa atual do AA na sessão de mídia</string>
     <string name="sync_media_session_aa_metadata_description">Mostrar título, artista, duração e capa do álbum do telefone na sessão de mídia do sistema e na notificação de mídia</string>
+    <string name="error_usb_permission_failed">Erro do sistema: Falha ao solicitar a caixa de diálogo de permissão USB.</string>
 </resources>

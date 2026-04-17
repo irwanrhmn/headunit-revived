@@ -138,7 +138,7 @@ object SystemUI {
                     val insetL = rect.left
                     val insetR = size.x - rect.right
                     
-                    AppLog.d("Legacy SystemUI: Detected Insets L$insetL T$insetT R$insetR B$insetB")
+                    AppLog.d("[UI_DEBUG] Legacy SystemUI: Detected Insets L$insetL T$insetT R$insetR B$insetB")
                     HeadUnitScreenConfig.updateInsets(manualL + insetL, manualT + insetT, manualR + insetR, manualB + insetB)
                     onInsetsChanged?.invoke()
                     root.viewTreeObserver.removeGlobalOnLayoutListener(this)

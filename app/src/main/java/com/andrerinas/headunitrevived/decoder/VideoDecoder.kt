@@ -130,9 +130,7 @@ class VideoDecoder(private val settings: Settings) {
             legacyFrameBuffer = null
             codecBufferInfo = null
             codecConfigured = false
-            vps = null
-            sps = null
-            pps = null
+            // Keep VPS/SPS/PPS cached so we can re-inject them on restart
             lastFrameRenderedMs = 0L
             AppLog.i("Decoder stopped: $reason")
         }
@@ -278,7 +276,6 @@ class VideoDecoder(private val settings: Settings) {
                 val nalType = nalFirstByte and 0x1F
                 if (nalType == 7) { // SPS
                     sps = nalData
-                    codecConfigured = true
                     try {
                         val offsetInNal = if (sps!![2].toInt() == 1) 3 else 4
                         SpsParser.parse(sps!!, offsetInNal, sps!!.size - offsetInNal)?.let {
@@ -290,11 +287,17 @@ class VideoDecoder(private val settings: Settings) {
                         }
                     } catch (e: Exception) { AppLog.e("Failed to parse SPS data", e) }
                 } else if (nalType == 8) pps = nalData // PPS
+                
+                // H.264 requires at least SPS to start
+                if (sps != null) codecConfigured = true
             } else {
                 val nalType = (nalFirstByte and 0x7E) shr 1
-                if (nalType == 32) { vps = nalData; codecConfigured = true }
+                if (nalType == 32) vps = nalData
                 else if (nalType == 33) sps = nalData
                 else if (nalType == 34) pps = nalData
+                
+                // H.265 requires VPS and SPS to start reliably
+                if (vps != null && sps != null) codecConfigured = true
             }
         }
     }
@@ -408,9 +411,10 @@ class VideoDecoder(private val settings: Settings) {
             
             val capacity = inputBuffer.capacity()
             
-            // Set BUFFER_FLAG_CODEC_CONFIG only until the first frame is rendered.
-            // This initializes hardware decoders while reducing logcat spam once the stream is active.
-            val flags = if (lastFrameRenderedMs == 0L && buffer.hasArray() && isCodecConfigData(buffer.array(), buffer.position(), buffer.remaining())) {
+            // Always set BUFFER_FLAG_CODEC_CONFIG for config data (VPS/SPS/PPS).
+            // Some decoders (Rockchip/Allwinner) require this flag for every config packet
+            // even after the stream has already started.
+            val flags = if (buffer.hasArray() && isCodecConfigData(buffer.array(), buffer.position(), buffer.remaining())) {
                 MediaCodec.BUFFER_FLAG_CODEC_CONFIG
             } else 0
 

@@ -13,6 +13,7 @@ import com.andrerinas.headunitrevived.ssl.ConscryptInitializer
 import com.andrerinas.headunitrevived.utils.AppLog
 import com.andrerinas.headunitrevived.utils.AppThemeManager
 import com.andrerinas.headunitrevived.utils.Settings
+import android.os.SystemClock
 import java.io.File
 
 class App : Application() {
@@ -89,6 +90,7 @@ class App : Application() {
     companion object {
         const val defaultChannel = "headunit_service_v2"
         const val bootStartChannel = "headunit_boot_start"
+        val appStartTime = SystemClock.elapsedRealtime()
         var appThemeManager: AppThemeManager? = null
 
         fun get(context: Context): App {

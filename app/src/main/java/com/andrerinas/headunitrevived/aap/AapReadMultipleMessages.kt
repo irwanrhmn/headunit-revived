@@ -13,11 +13,11 @@ internal class AapReadMultipleMessages(
         handler: AapMessageHandler)
     : AapRead.Base(connection, ssl, handler) {
 
-    // Increase buffers to 2MB to handle large 1080p/4K I-frames
-    private val fifo = ByteBuffer.allocate(2 * 1024 * 1024) 
+    // Increase buffers to 4MB to handle large 1080p/4K/HEVC I-frames
+    private val fifo = ByteBuffer.allocate(4 * 1024 * 1024) 
     private val recvBuffer = ByteArray(Messages.DEF_BUFFER_LENGTH)
     private val recvHeader = AapMessageIncoming.EncryptedHeader()
-    private val msgBuffer = ByteArray(2 * 1024 * 1024) 
+    private val msgBuffer = ByteArray(4 * 1024 * 1024) 
     private val skipBuffer = ByteArray(4)
 
     override fun doRead(connection: AccessoryConnection): Int {

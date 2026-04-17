@@ -23,7 +23,7 @@
     </style>
 
     <style name="SplashTheme" parent="AppTheme">
-        <item name="android:windowBackground">@color/color_projection_blue</item>
+        <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
     <style name="SplashTheme.Fullscreen" parent="SplashTheme">
@@ -36,7 +36,7 @@
         <item name="colorSecondary">@color/brand_teal</item>
         <item name="colorOnSecondary">@android:color/white</item>
         <item name="android:colorAccent">@color/brand_teal</item>
-        <item name="android:background">@color/setting_background_color</item>
+        <item name="android:background">?attr/colorSurface</item>
         <item name="android:textColorPrimary">@color/adaptive_text_color</item>
         <item name="buttonBarPositiveButtonStyle">@style/DialogButton.Positive</item>
         <item name="buttonBarNegativeButtonStyle">@style/DialogButton.Negative</item>

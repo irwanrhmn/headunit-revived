@@ -614,6 +614,8 @@ class AapService : Service(), UsbReceiver.Listener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
                 nearbyManager = NearbyManager(this, serviceScope) { socket ->
+                    val settings = App.provide(this).settings
+                    settings.saveLastConnection(Settings.CONNECTION_TYPE_NEARBY)
                     serviceScope.launch(Dispatchers.IO) {
                         commManager.connect(socket)
                     }
@@ -627,8 +629,9 @@ class AapService : Service(), UsbReceiver.Listener {
         wifiDirectManager?.setCredentialsListener { ssid, psk, ip, bssid ->
             val settings = App.provide(this).settings
             if (settings.wifiConnectionMode == 3) {
-                AppLog.i("AapService: Received WiFi credentials from manager (SSID=$ssid, IP=$ip). Updating NativeAaHandshakeManager.")
+                AppLog.i("AapService: Received WiFi credentials from manager (SSID=$ssid, IP=$ip). Updating and Triggering Poke.")
                 nativeAaHandshakeManager?.updateWifiCredentials(ssid, psk, ip, bssid)
+                nativeAaHandshakeManager?.triggerPoke()
             } else {
                 AppLog.d("AapService: WiFi credentials received, but not in Native AA mode. Skipping HandshakeManager update.")
             }
@@ -889,6 +892,19 @@ class AapService : Service(), UsbReceiver.Listener {
         mediaSession?.isActive = false
         updateMediaSessionState(false)
         serviceScope.launch(Dispatchers.IO) {
+            nearbyManager?.stop() // Disconnect Nearby tunnel
+            
+            // [FIX] Reset Native AA manager so it's ready for a fresh start/poke
+            val settings = App.provide(this@AapService).settings
+            if (settings.wifiConnectionMode == 3) {
+                AppLog.i("AapService: Native AA Mode disconnected. Resetting manager and group in 1.5s...")
+                nativeAaHandshakeManager?.stop()
+                serviceScope.launch {
+                    delay(1500) // Give hardware time to settle before re-initializing P2P
+                    initWifiMode(force = true) 
+                }
+            }
+
             App.provide(this@AapService).audioDecoder.stop()
             App.provide(this@AapService).videoDecoder.stop("AapService::onDisconnect")
         }
@@ -912,16 +928,23 @@ class AapService : Service(), UsbReceiver.Listener {
             return
         }
 
+        val settings = App.provide(this).settings
+
         if (wirelessServer != null) {
             AppLog.i("AapService: Disconnected. Restarting discovery loop in 2s...")
             serviceScope.launch {
                 delay(2000)
-                if (!commManager.isConnected) startDiscovery()
+                if (!commManager.isConnected) {
+                    if (settings.wifiConnectionMode == 2 && settings.helperConnectionStrategy == 2) {
+                        nearbyManager?.start()
+                    } else {
+                        startDiscovery()
+                    }
+                }
             }
             return
         }
 
-        val settings = App.provide(this).settings
         val lastType = settings.lastConnectionType
 
         // USB auto-reconnect: try again after a delay to give dongles time to re-enumerate.
@@ -1506,8 +1529,13 @@ class AapService : Service(), UsbReceiver.Listener {
         val usbManager = getSystemService(Context.USB_SERVICE) as UsbManager
         val permissionIntent = UsbReceiver.createPermissionPendingIntent(this)
         AppLog.i("Requesting USB permission for ${UsbDeviceCompat(device).uniqueName}")
-        Toast.makeText(this, getString(R.string.requesting_usb_permission), Toast.LENGTH_SHORT).show()
-        usbManager.requestPermission(device, permissionIntent)
+        try {
+            Toast.makeText(this, getString(R.string.requesting_usb_permission), Toast.LENGTH_SHORT).show()
+            usbManager.requestPermission(device, permissionIntent)
+        } catch (e: Exception) {
+            AppLog.e("Failed to request USB permission: ${e.message}. This device might not support USB permission dialogs.", e)
+            Toast.makeText(this, getString(R.string.error_usb_permission_failed), Toast.LENGTH_LONG).show()
+        }
     }
 
     /**
@@ -1994,13 +2022,13 @@ class AapService : Service(), UsbReceiver.Listener {
         selfMode = true
         startWirelessServer()
 
-        serviceScope.launch(kotlinx.coroutines.Dispatchers.Main) {
+        serviceScope.launch(Dispatchers.Main) {
             val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && connectivityManager.activeNetwork == null) {
                 // Wait up to 1 second for the Dummy VPN to become the active network
                 for (i in 1..10) {
                     if (connectivityManager.activeNetwork != null) break
-                    kotlinx.coroutines.delay(100)
+                    delay(100)
                 }
             }
 
@@ -2027,20 +2055,28 @@ class AapService : Service(), UsbReceiver.Listener {
             } catch (e: Exception) {
                 AppLog.w("Activity launch failed (${e.message}). Attempting Broadcast fallback...")
                 try {
-                    val receiverIntent = Intent().apply {
-                        setClassName(
-                            "com.google.android.projection.gearhead",
-                            "com.google.android.apps.auto.wireless.setup.receiver.WirelessStartupReceiver"
-                        )
-                        action = "com.google.android.apps.auto.wireless.setup.receiver.wirelessstartup.START"
-                        putExtra("ip_address", "127.0.0.1")
-                        putExtra("projection_port", 5288)
-                        networkToUse?.let { putExtra("PARAM_SERVICE_WIFI_NETWORK", it) }
-                        fakeWifiInfo?.let { putExtra("wifi_info", it) }
-                        addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
+
+                    AppLog.w("WirelessStartupActivity not found (AA 16.4+ detected).")
+                    if (Build.VERSION.SDK_INT <= 29) {
+                        // On Android 10, if Activity is gone, Broadcast will definitely be blocked by Gearhead's version check.
+                        AppLog.e("Self-mode blocked by Google on Android 10 (AA 16.4+). Skipping broadcast fallback.")
+                        Toast.makeText(this@AapService, getString(R.string.failed_self_mode_android10), Toast.LENGTH_LONG).show()
+                    } else {
+                        val receiverIntent = Intent().apply {
+                            setClassName(
+                                "com.google.android.projection.gearhead",
+                                "com.google.android.apps.auto.wireless.setup.receiver.WirelessStartupReceiver"
+                            )
+                            action = "com.google.android.apps.auto.wireless.setup.receiver.wirelessstartup.START"
+                            putExtra("ip_address", "127.0.0.1")
+                            putExtra("projection_port", 5288)
+                            networkToUse?.let { putExtra("PARAM_SERVICE_WIFI_NETWORK", it) }
+                            fakeWifiInfo?.let { putExtra("wifi_info", it) }
+                            addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
+                        }
+                        sendBroadcast(receiverIntent)
+                        AppLog.i("Broadcast fallback sent successfully.")
                     }
-                    sendBroadcast(receiverIntent)
-                    AppLog.i("Broadcast fallback sent successfully.")
                 } catch (e2: Exception) {
                     AppLog.e("Both Activity and Broadcast triggers failed", e2)
                     Toast.makeText(this@AapService, getString(R.string.failed_start_android_auto), Toast.LENGTH_SHORT).show()
@@ -2075,6 +2111,8 @@ class AapService : Service(), UsbReceiver.Listener {
             wifiInfo
         } catch (e: Exception) { null }
     }
+
+
 
     // -------------------------------------------------------------------------
     // WirelessServer

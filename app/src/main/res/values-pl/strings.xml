@@ -287,6 +287,7 @@
     <string name="success">Sukces</string>
     <string name="failed">Niepowodzenie</string>
     <string name="failed_start_android_auto">Uruchomienie Android Auto nie powiodło się</string>
+    <string name="failed_self_mode_android10">Tryb Self-mode jest prawdopodobnie blokowany przez Google na Android 10 (AA 16.4+). Zobacz README.</string>
     <string name="android_auto_starting">Android Auto uruchamia się…</string>
     <string name="connection_interrupted">Utracono połączenie</string>
     <string name="connection_interrupted_detail">Ponawianie próby…</string>
@@ -446,6 +447,7 @@
     </string-array>
 
     <string name="select_nearby_device">Wybierz urządzenie w pobliżu</string>
+    <string name="nearby_device_found">Znaleziono urządzenie w pobliżu</string>
     <string name="connecting_to_nearby">Łączenie z %s…</string>
 
     <string name="exit_dialog_title">Wyjdź z Android Auto</string>
@@ -463,4 +465,5 @@
     <string name="media_session_aa_status_placeholder">Połączono</string>
     <string name="sync_media_session_aa_metadata">Aktualny utwór AA w sesji multimedialnej</string>
     <string name="sync_media_session_aa_metadata_description">Pokazuj tytuł, wykonawcę, czas trwania i okładkę albumu z telefonu w systemowej sesji multimedialnej oraz powiadomieniu multimedialnym</string>
+    <string name="error_usb_permission_failed">Błąd systemu: Nie udało się wywołać okna uprawnień USB.</string>
 </resources>

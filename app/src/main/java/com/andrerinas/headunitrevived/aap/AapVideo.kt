@@ -31,6 +31,15 @@ internal class AapVideo(private val videoDecoder: VideoDecoder, private val sett
         isFrameCorrupt = true
     }
 
+    private fun findStartCode(buf: ByteArray, offset: Int): Int {
+        if (offset + 3 > buf.size) return -1
+        if (buf[offset].toInt() == 0 && buf[offset + 1].toInt() == 0) {
+            if (buf[offset + 2].toInt() == 1) return 3 // 3-byte start code
+            if (offset + 4 <= buf.size && buf[offset + 2].toInt() == 0 && buf[offset + 3].toInt() == 1) return 4 // 4-byte start code
+        }
+        return -1
+    }
+
     fun process(message: AapMessage): Boolean {
 
         val flags = message.flags.toInt()
@@ -42,13 +51,17 @@ internal class AapVideo(private val videoDecoder: VideoDecoder, private val sett
                 // Single fragment frame - corruption only affects this frame
                 isFrameCorrupt = false
                 messageBuffer.clear()
+                
                 // Timestamp Indication (Offset 10)
-                if (len > 14 && buf[10].toInt() == 0 && buf[11].toInt() == 0 && buf[12].toInt() == 0 && buf[13].toInt() == 1) {
+                val sc10 = findStartCode(buf, 10)
+                if (len > 10 + sc10 && sc10 > 0) {
                     videoDecoder.decode(buf, 10, len - 10, settings.forceSoftwareDecoding, settings.videoCodec)
                     return true
                 }
+                
                 // Media Indication or Config (Offset 2)
-                if (len > 6 && buf[2].toInt() == 0 && buf[3].toInt() == 0 && buf[4].toInt() == 0 && buf[5].toInt() == 1) {
+                val sc2 = findStartCode(buf, 2)
+                if (len > 2 + sc2 && sc2 > 0) {
                     videoDecoder.decode(buf, 2, len - 2, settings.forceSoftwareDecoding, settings.videoCodec)
                     return true
                 }
@@ -60,12 +73,14 @@ internal class AapVideo(private val videoDecoder: VideoDecoder, private val sett
                 messageBuffer.clear()
 
                 // Timestamp Indication (Offset 10)
-                if (len > 14 && buf[10].toInt() == 0 && buf[11].toInt() == 0 && buf[12].toInt() == 0 && buf[13].toInt() == 1) {
+                val sc10 = findStartCode(buf, 10)
+                if (len > 10 + sc10 && sc10 > 0) {
                     messageBuffer.put(message.data, 10, message.size - 10)
                     return true
                 }
                 // Media Indication (Offset 2)
-                if (len > 6 && buf[2].toInt() == 0 && buf[3].toInt() == 0 && buf[4].toInt() == 0 && buf[5].toInt() == 1) {
+                val sc2 = findStartCode(buf, 2)
+                if (len > 2 + sc2 && sc2 > 0) {
                     messageBuffer.put(message.data, 2, message.size - 2)
                     return true
                 }

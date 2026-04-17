@@ -302,6 +302,7 @@
     <string name="success">Successo</string>
     <string name="failed">Fallito</string>
     <string name="failed_start_android_auto">Avvio di Android Auto fallito</string>
+    <string name="failed_self_mode_android10">La modalità Self è probabilmente bloccata da Google su Android 10 (AA 16.4+). Vedere il README.</string>
     <string name="android_auto_starting">Android Auto si sta avviando…</string>
     <string name="connection_interrupted">Connessione persa</string>
     <string name="connection_interrupted_detail">Riprovo…</string>
@@ -452,6 +453,7 @@
     </string-array>
 
     <string name="select_nearby_device">Seleziona dispositivo nelle vicinanze</string>
+    <string name="nearby_device_found">Dispositivo nelle vicinanze trovato</string>
     <string name="connecting_to_nearby">Connessione a %s…</string>
 
     <string name="exit_dialog_title">Esci da Android Auto</string>
@@ -469,4 +471,5 @@
     <string name="media_session_aa_status_placeholder">Connesso</string>
     <string name="sync_media_session_aa_metadata">Brano AA corrente nella sessione multimediale</string>
     <string name="sync_media_session_aa_metadata_description">Mostra titolo, artista, durata e copertina dal telefono nella sessione multimediale di sistema e nella notifica multimediale</string>
+    <string name="error_usb_permission_failed">Errore di sistema: Impossibile richiedere la finestra di dialogo del permesso USB.</string>
 </resources>

@@ -11,12 +11,12 @@ object AudioConfigs {
 
     fun stream(channel: Int) : Int
     {
-//        when(channel) {
-//            Channel.ID_AUD -> return AudioManager.STREAM_MUSIC
-//            Channel.ID_AU1 -> return AudioManager.STREAM_SYSTEM
-//            Channel.ID_AU2 -> return AudioManager.STREAM_VOICE_CALL
-//        }
-        return AudioManager.STREAM_MUSIC
+        return when(channel) {
+            Channel.ID_AUD -> AudioManager.STREAM_MUSIC
+            Channel.ID_AU1 -> AudioManager.STREAM_VOICE_CALL
+            Channel.ID_AU2 -> AudioManager.STREAM_NOTIFICATION
+            else -> AudioManager.STREAM_MUSIC
+        }
     }
 
     fun get(channel: Int): Media.AudioConfiguration {

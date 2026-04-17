@@ -212,6 +212,10 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
+            Settings.CONNECTION_TYPE_NEARBY -> {
+                AppLog.i("Auto-connect: Last session was via Google Nearby. AapService will handle discovery.")
+                // No manual connect(ip) needed, NearbyManager in AapService manages this automatically on start.
+            }
         }
     }
 
@@ -441,14 +445,44 @@ class HomeFragment : Fragment() {
         val searchingText = dialogView.findViewById<TextView>(R.id.searchingText)
         val connectingContainer = dialogView.findViewById<View>(R.id.connectingContainer)
         val connectingText = dialogView.findViewById<TextView>(R.id.connectingText)
+        val connectionProgress = dialogView.findViewById<ProgressBar>(R.id.connectionProgress)
 
-        val listAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1)
+        // Ensure the loading spinner is visible in both Light and Dark modes by forcing our brand color.
+        val brandTeal = ContextCompat.getColor(requireContext(), R.color.brand_teal)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            connectionProgress.indeterminateTintList = ColorStateList.valueOf(brandTeal)
+            connectionProgress.indeterminateTintMode = android.graphics.PorterDuff.Mode.SRC_IN
+        } else {
+            @Suppress("DEPRECATION")
+            connectionProgress.indeterminateDrawable?.setColorFilter(brandTeal, android.graphics.PorterDuff.Mode.SRC_IN)
+        }
+
+        // Custom adapter to handle rounded backgrounds like in USB/Network lists
+        val listAdapter = object : ArrayAdapter<NearbyManager.DiscoveredEndpoint>(requireContext(), R.layout.list_item_nearby) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_item_nearby, parent, false)
+                val endpoint = getItem(position)
+                view.findViewById<TextView>(R.id.deviceName).text = endpoint?.name ?: "Unknown"
+
+                // Apply rounded backgrounds based on position
+                val isTop = position == 0
+                val isBottom = position == count - 1
+                val bgRes = when {
+                    isTop && isBottom -> R.drawable.bg_setting_single
+                    isTop -> R.drawable.bg_setting_top
+                    isBottom -> R.drawable.bg_setting_bottom
+                    else -> R.drawable.bg_setting_middle
+                }
+                view.setBackgroundResource(bgRes)
+                return view
+            }
+        }
         deviceListView.adapter = listAdapter
 
         var collectJob: Job? = null
 
         val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.DarkAlertDialog)
-            .setTitle(getString(R.string.select_nearby_device))
+            .setTitle(getString(R.string.searching)) // Initial title
             .setView(dialogView)
             .setNegativeButton(R.string.cancel, null)
             .setOnDismissListener { 
@@ -487,10 +521,17 @@ class HomeFragment : Fragment() {
         collectJob = viewLifecycleOwner.lifecycleScope.launch {
             NearbyManager.discoveredEndpoints.collect { endpoints ->
                 listAdapter.clear()
-                endpoints.forEach { listAdapter.add(it.name) }
+                listAdapter.addAll(endpoints)
                 listAdapter.notifyDataSetChanged()
-                searchingText.text = if (endpoints.isEmpty()) getString(R.string.searching) + "…"
-                    else getString(R.string.select_nearby_device) + " (${endpoints.size})"
+                
+                if (endpoints.isEmpty()) {
+                    dialog.setTitle(getString(R.string.searching))
+                    searchingText.visibility = View.GONE
+                } else {
+                    dialog.setTitle(getString(R.string.nearby_device_found))
+                    searchingText.visibility = View.VISIBLE
+                    searchingText.text = getString(R.string.select_nearby_device) + " (${endpoints.size})"
+                }
             }
         }
     }

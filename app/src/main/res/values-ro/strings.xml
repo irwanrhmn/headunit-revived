@@ -298,6 +298,7 @@
     <string name="success">Succes</string>
     <string name="failed">Eșuat</string>
     <string name="failed_start_android_auto">Pornirea Android Auto a eșuat</string>
+    <string name="failed_self_mode_android10">Modul Self-mode este probabil blocat de Google pe Android 10 (AA 16.4+). Vezi README.</string>
     <string name="android_auto_starting">Android Auto pornește…</string>
     <string name="connection_interrupted">Conexiune pierdută</string>
     <string name="connection_interrupted_detail">Se reîncearcă…</string>
@@ -446,6 +447,7 @@
     </string-array>
 
     <string name="select_nearby_device">Selectează dispozitiv în apropiere</string>
+    <string name="nearby_device_found">Dispozitiv în apropiere găsit</string>
     <string name="connecting_to_nearby">Conectare la %s…</string>
 
     <string name="exit_dialog_title">Ieșire din Android Auto</string>
@@ -463,4 +465,5 @@
     <string name="media_session_aa_status_placeholder">Conectat</string>
     <string name="sync_media_session_aa_metadata">Piesa curentă AA în sesiunea media</string>
     <string name="sync_media_session_aa_metadata_description">Afișează titlul piesei, artistul, durata și coperta albumului de pe telefon în sesiunea media a sistemului și în notificarea media</string>
+    <string name="error_usb_permission_failed">Eroare de sistem: Nu s-a putut solicita caseta de dialog pentru permisiunea USB.</string>
 </resources>

@@ -301,6 +301,7 @@
     <string name="success">Erfolg</string>
     <string name="failed">Fehlgeschlagen</string>
     <string name="failed_start_android_auto">Start von Android Auto fehlgeschlagen</string>
+    <string name="failed_self_mode_android10">Self-mode wird wahrscheinlich von Google auf Android 10 (AA 16.4+) blockiert. Siehe README.</string>
     <string name="android_auto_starting">Android Auto startet…</string>
     <string name="connection_interrupted">Verbindung verloren</string>
     <string name="connection_interrupted_detail">Erneuter Versuch…</string>
@@ -450,6 +451,7 @@
     </string-array>
 
     <string name="select_nearby_device">Nearby-Gerät auswählen</string>
+    <string name="nearby_device_found">Nearby-Gerät gefunden</string>
     <string name="connecting_to_nearby">Verbinde mit %s…</string>
 
     <string name="exit_dialog_title">Android Auto beenden</string>
@@ -467,4 +469,5 @@
     <string name="media_session_aa_status_placeholder">Verbunden</string>
     <string name="sync_media_session_aa_metadata">AA-Now-Playing in der Mediensitzung</string>
     <string name="sync_media_session_aa_metadata_description">Titel, Interpret, Dauer und Albumcover vom Telefon in der System-Mediensitzung und in der Medienbenachrichtigung anzeigen</string>
+    <string name="error_usb_permission_failed">Systemfehler: Anforderung des USB-Berechtigungsdialogs fehlgeschlagen.</string>
 </resources>

@@ -492,6 +492,7 @@ class Settings(context: Context) {
     companion object {
         const val CONNECTION_TYPE_WIFI = "wifi"
         const val CONNECTION_TYPE_USB = "usb"
+        const val CONNECTION_TYPE_NEARBY = "nearby"
 
         /** SharedPreferences key; also used by [AapService] for change listener. */
         const val KEY_SYNC_MEDIA_SESSION_AA_METADATA = "sync-media-session-aa-metadata"
@@ -750,5 +751,9 @@ class Settings(context: Context) {
     var helperConnectionStrategy: Int
         get() = prefs.getInt("helper-connection-strategy", 0)
         set(value) = prefs.edit().putInt("helper-connection-strategy", value).apply()
+
+    var lastNearbyDeviceName: String
+        get() = prefs.getString("last-nearby-device-name", "")!!
+        set(value) = prefs.edit().putString("last-nearby-device-name", value).apply()
 
 }

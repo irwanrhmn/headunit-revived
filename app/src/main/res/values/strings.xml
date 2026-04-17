@@ -302,6 +302,7 @@
     <string name="success">Success</string>
     <string name="failed">Failed</string>
     <string name="failed_start_android_auto">Failed to start Android Auto</string>
+    <string name="failed_self_mode_android10">Self-mode is likely blocked by Google on Android 10 (AA 16.4+).</string>
     <string name="android_auto_starting">Android Auto is starting…</string>
     <string name="connection_interrupted">Connection lost</string>
     <string name="connection_interrupted_detail">Retrying…</string>
@@ -456,6 +457,7 @@
     </string-array>
 
     <string name="select_nearby_device">Select Nearby Device</string>
+    <string name="nearby_device_found">Nearby Device Found</string>
     <string name="connecting_to_nearby">Connecting to %s…</string>
 
     <string name="exit_dialog_title">Exit Android Auto</string>
@@ -470,4 +472,5 @@
     <string name="media_action_play">Play</string>
     <string name="media_action_pause">Pause</string>
     <string name="media_action_next">Next</string>
+    <string name="error_usb_permission_failed">System error: Failed to request USB permission dialog.</string>
 </resources>

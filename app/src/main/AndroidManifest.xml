@@ -73,7 +73,6 @@
             android:configChanges="uiMode|orientation|screenSize|screenLayout|smallestScreenSize"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
-            android:taskAffinity=".projection"
             android:screenOrientation="sensor"
             android:supportsPictureInPicture="true"
             android:exported="true"
@@ -96,32 +95,40 @@
                 android:resource="@xml/usb_device_filter" />
         </activity>
 
-        <activity
-            android:name=".main.SplashActivity"
-            android:exported="true"
-            android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <activity
             android:name=".main.MainActivity"
             android:configChanges="keyboardHidden|uiMode"
             android:launchMode="singleTask"
             android:screenOrientation="sensor"
-            android:theme="@style/AppTheme"
+            android:theme="@style/SplashTheme"
             android:exported="true">
 
+            <!-- Primary Launcher Filter -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- Navigation Role Registration (allows selecting as default nav app) -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.APP_MAPS" />
                 <category android:name="android.intent.category.APP_NAVIGATION" />
             </intent-filter>
 
-            <!-- Navigation Intent Filters -->
+            <!-- Navigation Intent Filter (handles system navigate actions) -->
+            <intent-filter>
+                <action android:name="android.intent.action.NAVIGATE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+
+            <!-- Navigation Intent Filters & Deep Links -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -151,15 +158,6 @@
                 <data android:scheme="http" android:host="maps.google.com" />
                 <data android:scheme="https" android:host="maps.google.com" />
             </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.NAVIGATE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
         </activity>
 
         <activity

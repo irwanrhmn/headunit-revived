@@ -286,6 +286,7 @@
     <string name="success">Sikeres</string>
     <string name="failed">Sikertelen</string>
     <string name="failed_start_android_auto">Az Android Auto indítása sikertelen</string>
+    <string name="failed_self_mode_android10">Az Önálló módot (Self-mode) valószínűleg blokkolja a Google az Android 10-en (AA 16.4+). Lásd a README-t.</string>
     <string name="android_auto_starting">Az Android Auto indul…</string>
     <string name="connection_interrupted">Kapcsolat elveszett</string>
     <string name="connection_interrupted_detail">Újrapróbálkozás…</string>
@@ -444,6 +445,7 @@
     </string-array>
 
     <string name="select_nearby_device">Válasszon közeli eszközt</string>
+    <string name="nearby_device_found">Közeli eszköz található</string>
     <string name="connecting_to_nearby">Csatlakozás: %s…</string>
 
     <string name="exit_dialog_title">Kilépés az Android Auto-ból</string>
@@ -461,4 +463,5 @@
     <string name="media_session_aa_status_placeholder">Csatlakoztatva</string>
     <string name="sync_media_session_aa_metadata">AA aktuális szám a médialejátszási munkamenetben</string>
     <string name="sync_media_session_aa_metadata_description">A telefonról származó számcímet, előadót, időtartamot és borítót jelenítse meg a rendszer médialejátszási munkamenetében és médiás értesítésben</string>
+    <string name="error_usb_permission_failed">Rendszerhiba: Nem sikerült lekérni az USB engedélykérő ablakot.</string>
 </resources>

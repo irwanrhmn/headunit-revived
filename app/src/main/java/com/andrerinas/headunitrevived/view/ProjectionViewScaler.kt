@@ -25,8 +25,10 @@ object ProjectionViewScaler {
             val lp = view.layoutParams
             var paramsChanged = false
             
+            // NOTE: For legacy forcedScale (SurfaceView), the 'stretchToFill' setting logic
+            // is historically inverted compared to its name.
             if (settings.stretchToFill) {
-                // Mode A: Preserve aspect ratio using Adjusted dimensions
+                // stretchToFill = TRUE results in Aspect Ratio preservation (Centered with bars)
                 val targetW = HeadUnitScreenConfig.getAdjustedWidth()
                 val targetH = HeadUnitScreenConfig.getAdjustedHeight()
 
@@ -53,7 +55,7 @@ object ProjectionViewScaler {
                 view.translationX = 0f
                 view.translationY = 0f
 
-                AppLog.i("FORCED & STRETCH On: Resized view to ${targetW}x${targetH} (centered)")
+                AppLog.i("[UI_DEBUG] FORCED & STRETCH On: Resized view to ${targetW}x${targetH} (centered)")
             } else {
                 // Mode B: Stretch to fill the usable area exactly (ignores aspect ratio)
                 if (lp.width != usableW || lp.height != usableH) {
@@ -79,7 +81,7 @@ object ProjectionViewScaler {
                 view.translationX = 0f
                 view.translationY = 0f
 
-                AppLog.i("FORCED & STRETCH Off: Resized view to match screen exactly: ${usableW}x${usableH}")
+                AppLog.i("[UI_DEBUG] FORCED & STRETCH Off: Resized view to match screen exactly: ${usableW}x${usableH}")
             }
         } else {
             // Modern way / TextureView: Use View scaling properties on a full-screen view
@@ -117,7 +119,7 @@ object ProjectionViewScaler {
                 view.scaleX = finalScaleX
                 view.scaleY = finalScaleY
             }
-            AppLog.i("Normal Scale. scaleX: $finalScaleX, scaleY: $finalScaleY")
+            AppLog.i("[UI_DEBUG] Normal Scale. scaleX: $finalScaleX, scaleY: $finalScaleY")
         }
     }
 }

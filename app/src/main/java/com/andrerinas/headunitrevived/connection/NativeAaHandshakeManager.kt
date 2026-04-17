@@ -84,7 +84,10 @@ class NativeAaHandshakeManager(
                     val socket = aaServerSocket?.accept()
                     if (socket != null) {
                         AppLog.i("NativeAA: Connection accepted from ${socket.remoteDevice.name}")
-                        handleHandshake(socket)
+                        // [FIX] Launch handshake in a separate coroutine so the server can accept the next connection!
+                        scope.launch(Dispatchers.IO + CoroutineName("NativeAa-Handshake-${socket.remoteDevice.address}")) {
+                            handleHandshake(socket)
+                        }
                     }
                 }
             } catch (e: IOException) {
@@ -114,13 +117,21 @@ class NativeAaHandshakeManager(
             }
         }
 
-        // Active Poke logic: Wake up the phone if it's already paired but not looking for HU
+    }
+
+    /**
+     * Wakes up the phone by attempting a brief connection to the A2DP profile.
+     * This acts as a signal for the phone to start looking for the headunit.
+     */
+    fun triggerPoke() {
+        val adapter = BluetoothAdapter.getDefaultAdapter() ?: return
         val settings = com.andrerinas.headunitrevived.App.provide(context).settings
         val lastMac = settings.autoStartBluetoothDeviceMac
-        
+
         scope.launch(Dispatchers.IO + CoroutineName("NativeAa-Wakeup")) {
-            delay(2000) // Give the servers time to start
-            
+            AppLog.d("NativeAA: triggerPoke() delay starting (2s)...")
+            delay(2000) // Small safety delay before connecting
+
             val devicesToPoke = if (lastMac.isNotEmpty()) {
                 listOf(adapter.getRemoteDevice(lastMac))
             } else {
@@ -140,8 +151,8 @@ class NativeAaHandshakeManager(
                     val socket = device.createRfcommSocketToServiceRecord(A2DP_SOURCE_UUID)
                     AppLog.i("NativeAA: Calling socket.connect() for ${device.name}...")
                     socket.connect()
-                    AppLog.i("NativeAA: Successfully poked ${device.name}. Keeping socket alive for 20s...")
-                    delay(20000)
+                    AppLog.i("NativeAA: Successfully poked ${device.name}. Keeping socket alive for 15s...")
+                    delay(15000)
                     socket.close()
                     AppLog.i("NativeAA: Poke socket for ${device.name} closed.")
                 } catch (e: Exception) {
@@ -237,12 +248,12 @@ class NativeAaHandshakeManager(
                 AppLog.i("NativeAA: Sending WifiInfoResponse (Type 3) with full credentials...")
                 sendWifiSecurityResponse(output, ssid, psk, bssid)
                 AppLog.i("NativeAA: Handshake completed successfully on Bluetooth side.")
-                AppLog.i("NativeAA: Handshake completed! Keeping Bluetooth socket alive indefinitely...")
-
-                // Instead of closing after 20 seconds, keep the socket open indefinitely.
-                while (isRunning && isActive) {
-                    delay(1000)
+                // Instead of closing after 20 seconds, keep the socket open indefinitely
+                // as long as the phone remains connected.
+                while (isRunning && isActive && socket.isConnected) {
+                    delay(2000)
                 }
+                AppLog.i("NativeAA: Handshake coroutine finishing (isRunning=$isRunning, isConnected=${socket.isConnected})")
             } else {
                 AppLog.w("NativeAA: Unexpected response type from phone: ${response.type}. Expected Type 2.")
             }

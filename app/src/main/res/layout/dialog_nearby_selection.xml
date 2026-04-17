@@ -3,7 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="16dp">
 
     <!-- Device List Container -->
     <LinearLayout
@@ -25,7 +28,10 @@
         <ListView
             android:id="@+id/deviceList"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="320dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:clipToPadding="false"
             android:divider="@null" />
     </LinearLayout>
 
@@ -40,9 +46,11 @@
         android:padding="24dp">
 
         <ProgressBar
+            android:id="@+id/connectionProgress"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:indeterminateTint="@color/brand_teal" />
+            android:indeterminateTint="@color/brand_teal"
+            android:indeterminateTintMode="src_in" />
 
         <TextView
             android:id="@+id/connectingText"

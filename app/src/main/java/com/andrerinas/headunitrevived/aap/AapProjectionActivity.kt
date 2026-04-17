@@ -581,12 +581,12 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
     }
 
     override fun onSurfaceCreated(surface: android.view.Surface) {
-        AppLog.i("[AapProjectionActivity] onSurfaceCreated")
+        AppLog.i("[UI_DEBUG] [AapProjectionActivity] onSurfaceCreated")
         // Decoder configuration is now in onSurfaceChanged
     }
 
     override fun onSurfaceChanged(surface: android.view.Surface, width: Int, height: Int) {
-        AppLog.i("[AapProjectionActivity] onSurfaceChanged. Actual surface dimensions: width=$width, height=$height")
+        AppLog.i("[UI_DEBUG] [AapProjectionActivity] onSurfaceChanged. Actual surface dimensions: width=$width, height=$height")
         isSurfaceSet = true
         
         videoDecoder.setSurface(surface)
@@ -648,22 +648,75 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
         val action = TouchEvent.motionEventToAction(event) ?: return
         val ts = SystemClock.elapsedRealtime()
 
-        val horizontalCorrection = HeadUnitScreenConfig.getHorizontalCorrection()
-        val verticalCorrection = HeadUnitScreenConfig.getVerticalCorrection()
+        val videoW = HeadUnitScreenConfig.getNegotiatedWidth()
+        val videoH = HeadUnitScreenConfig.getNegotiatedHeight()
 
-        if (horizontalCorrection <= 0 || verticalCorrection <= 0) {
-            AppLog.w("sendTouchEvent: Ignoring touch, screen config not ready yet.")
+        if (videoW <= 0 || videoH <= 0 || projectionView !is View) {
+            AppLog.w("sendTouchEvent: Ignoring touch, screen config or view not ready.")
             return
+        }
+
+        val view = projectionView as View
+        // Use the container's "Anchor" dimensions (full touch surface) as the reference, 
+        // not the potentially resized projectionView's dimensions.
+        val viewW = HeadUnitScreenConfig.getUsableWidth().toFloat()
+        val viewH = HeadUnitScreenConfig.getUsableHeight().toFloat()
+
+        if (viewW <= 0 || viewH <= 0) return
+
+        val marginW = HeadUnitScreenConfig.getWidthMargin().toFloat()
+        val marginH = HeadUnitScreenConfig.getHeightMargin().toFloat()
+
+        val uiW = videoW - marginW
+        val uiH = videoH - marginH
+
+        // Logic check: When forcedScale is active, the visual behavior of 'stretchToFill' 
+        // is inverted (True = Aspect Ratio Centered, False = Stretched to Screen).
+        // We adjust the touch mapping to match this visual reality.
+        val isStretch = if (HeadUnitScreenConfig.forcedScale) {
+            !settings.stretchToFill 
+        } else {
+            settings.stretchToFill
         }
 
         val pointerData = mutableListOf<Triple<Int, Int, Int>>()
         repeat(event.pointerCount) { pointerIndex ->
             val pointerId = event.getPointerId(pointerIndex)
-            val x = event.getX(pointerIndex)
-            val y = event.getY(pointerIndex)
+            val px = event.getX(pointerIndex)
+            val py = event.getY(pointerIndex)
+            
+            var videoX = 0f
+            var videoY = 0f
 
-            val correctedX = (x * horizontalCorrection).toInt()
-            val correctedY = (y * verticalCorrection).toInt()
+            if (isStretch) {
+                videoX = (px / viewW) * uiW
+                videoY = (py / viewH) * uiH
+            } else {
+                val uiRatio = uiW / uiH
+                val viewRatio = viewW / viewH
+
+                var displayedUiW = viewW
+                var displayedUiH = viewH
+
+                if (viewRatio > uiRatio) {
+                    displayedUiW = viewH * uiRatio
+                } else {
+                    displayedUiH = viewW / uiRatio
+                }
+
+                val uiLeft = (viewW - displayedUiW) / 2f
+                val uiTop = (viewH - displayedUiH) / 2f
+
+                val localX = px - uiLeft
+                val localY = py - uiTop
+
+                videoX = (localX / displayedUiW) * uiW
+                videoY = (localY / displayedUiH) * uiH
+            }
+
+            // Clamp to negotiated bounds to prevent out-of-bounds touches
+            val correctedX = videoX.toInt().coerceIn(0, videoW)
+            val correctedY = videoY.toInt().coerceIn(0, videoH)
 
             pointerData.add(Triple(pointerId, correctedX, correctedY))
         }

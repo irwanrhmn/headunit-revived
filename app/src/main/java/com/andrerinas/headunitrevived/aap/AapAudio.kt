@@ -116,7 +116,7 @@ internal class AapAudio(
 
         if (audioDecoder.getTrack(channel) == null) {
             val config = AudioConfigs.get(channel)
-            val stream = AudioManager.STREAM_MUSIC
+            val stream = AudioConfigs.stream(channel)
 
             val offset = when (channel) {
                 Channel.ID_AUD -> settings.mediaVolumeOffset
@@ -126,8 +126,15 @@ internal class AapAudio(
             }
             val gain = (1.0f + (offset / 100.0f)).coerceIn(0.0f, 2.0f)
 
-            AppLog.i("AudioDecoder.start: channel=$channel, stream=$stream, gain=$gain, sampleRate=${config.sampleRate}, numberOfBits=${config.numberOfBits}, numberOfChannels=${config.numberOfChannels}, isAac=${settings.useAacAudio}, latencyMultiplier=${settings.audioLatencyMultiplier}, queueCapacity=${settings.audioQueueCapacity}")
-            audioDecoder.start(channel, stream, config.sampleRate, config.numberOfBits, config.numberOfChannels, settings.useAacAudio, gain, settings.audioLatencyMultiplier, settings.audioQueueCapacity)
+            // Voice and Navigation benefit from lower latency. Cap the multiplier for those channels.
+            val effectiveMultiplier = if (channel == Channel.ID_AUD) {
+                settings.audioLatencyMultiplier
+            } else {
+                settings.audioLatencyMultiplier.coerceAtMost(4)
+            }
+
+            AppLog.i("AudioDecoder.start: channel=$channel, stream=$stream, gain=$gain, sampleRate=${config.sampleRate}, numberOfBits=${config.numberOfBits}, numberOfChannels=${config.numberOfChannels}, isAac=${settings.useAacAudio}, latencyMultiplier=$effectiveMultiplier, queueCapacity=${settings.audioQueueCapacity}")
+            audioDecoder.start(channel, stream, config.sampleRate, config.numberOfBits, config.numberOfChannels, settings.useAacAudio, gain, effectiveMultiplier, settings.audioQueueCapacity)
         }
 
         audioDecoder.decode(channel, buf, start, length)

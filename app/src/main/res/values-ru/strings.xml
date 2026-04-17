@@ -287,6 +287,7 @@
     <string name="success">Успешно</string>
     <string name="failed">Ошибка</string>
     <string name="failed_start_android_auto">Не удалось запустить Android Auto</string>
+    <string name="failed_self_mode_android10">Автономный режим (Self-mode), вероятно, заблокирован Google на Android 10 (AA 16.4+). См. README.</string>
     <string name="android_auto_starting">Запуск Android Auto…</string>
     <string name="connection_interrupted">Соединение потеряно</string>
     <string name="connection_interrupted_detail">Повторное подключение…</string>
@@ -449,6 +450,7 @@
     </string-array>
 
     <string name="select_nearby_device">Выберите устройство поблизости</string>
+    <string name="nearby_device_found">Устройство поблизости найдено</string>
     <string name="connecting_to_nearby">Подключение к %s…</string>
 
     <string name="exit_dialog_title">Выйти из Android Auto</string>
@@ -463,4 +465,5 @@
     <string name="media_action_play">Воспроизвести</string>
     <string name="media_action_pause">Пауза</string>
     <string name="media_action_next">Следующий</string>
+    <string name="error_usb_permission_failed">Системная ошибка: Не удалось запросить диалоговое окно разрешения USB.</string>
 </resources>

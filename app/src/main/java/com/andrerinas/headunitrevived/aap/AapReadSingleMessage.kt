@@ -7,8 +7,8 @@ internal class AapReadSingleMessage(connection: AccessoryConnection, ssl: AapSsl
     : AapRead.Base(connection, ssl, handler) {
 
     private val recvHeader = AapMessageIncoming.EncryptedHeader()
-    // Increase to 2MB to handle large 1080p/4K I-frames
-    private val msgBuffer = ByteArray(2 * 1024 * 1024) 
+    // Increase to 4MB to handle large 1080p/4K/HEVC I-frames
+    private val msgBuffer = ByteArray(4 * 1024 * 1024) 
     private val fragmentSizeBuffer = ByteArray(4)
 
     override fun doRead(connection: AccessoryConnection): Int {

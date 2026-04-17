@@ -6,14 +6,24 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
 import com.andrerinas.headunitrevived.utils.AppLog
+import com.andrerinas.headunitrevived.utils.Settings
 import com.google.android.gms.nearby.Nearby
-import com.google.android.gms.nearby.connection.*
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
+import com.google.android.gms.nearby.connection.ConnectionInfo
+import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback
+import com.google.android.gms.nearby.connection.ConnectionResolution
+import com.google.android.gms.nearby.connection.ConnectionsStatusCodes
+import com.google.android.gms.nearby.connection.DiscoveredEndpointInfo
+import com.google.android.gms.nearby.connection.DiscoveryOptions
+import com.google.android.gms.nearby.connection.EndpointDiscoveryCallback
+import com.google.android.gms.nearby.connection.Payload
+import com.google.android.gms.nearby.connection.PayloadCallback
+import com.google.android.gms.nearby.connection.PayloadTransferUpdate
+import com.google.android.gms.nearby.connection.Strategy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 import java.net.Socket
 
 /**
@@ -37,9 +47,11 @@ class NearbyManager(
     private val SERVICE_ID = "com.andrerinas.hurev"
     private val STRATEGY = Strategy.P2P_POINT_TO_POINT
     private var isRunning = false
+    private var isConnecting = false
     private var activeNearbySocket: NearbySocket? = null
     private var activeEndpointId: String? = null
     private var activePipes: Array<android.os.ParcelFileDescriptor>? = null
+    private val settings = Settings(context)
 
     fun start() {
         if (!hasRequiredPermissions()) {
@@ -77,11 +89,18 @@ class NearbyManager(
     }
 
     fun stop() {
-        if (!isRunning) return
-        AppLog.i("NearbyManager: Stopping discovery...")
+        AppLog.i("NearbyManager: Stopping discovery and disconnecting from any active endpoint...")
         isRunning = false
+        isConnecting = false
         connectionsClient.stopDiscovery()
-        connectionsClient.stopAllEndpoints()
+        activeEndpointId?.let {
+            connectionsClient.disconnectFromEndpoint(it)
+            activeEndpointId = null
+        }
+        activeNearbySocket?.close()
+        activeNearbySocket = null
+        activePipes?.forEach { try { it.close() } catch (e: Exception) {} }
+        activePipes = null
         _discoveredEndpoints.value = emptyList()
     }
 
@@ -90,11 +109,17 @@ class NearbyManager(
      * Called from HomeFragment when user taps a device in the list.
      */
     fun connectToEndpoint(endpointId: String) {
-        AppLog.i("NearbyManager: Requesting connection to $endpointId...")
+        if (isConnecting) {
+            AppLog.w("NearbyManager: Already connecting, ignoring request for $endpointId")
+            return
+        }
+        AppLog.i("NearbyManager: Requesting connection to endpoint: $endpointId")
+        isConnecting = true
         
         connectionsClient.requestConnection(android.os.Build.MODEL, endpointId, connectionLifecycleCallback)
             .addOnFailureListener { e -> 
                 AppLog.e("NearbyManager: Failed to request connection: ${e.message}") 
+                isConnecting = false
             }
     }
 
@@ -120,6 +145,19 @@ class NearbyManager(
                 current.add(DiscoveredEndpoint(endpointId, info.endpointName))
                 _discoveredEndpoints.value = current
             }
+
+            // Auto-connect logic
+            val autoConnectMode = settings.autoConnectLastSession
+            AppLog.i("NearbyManager: Auto-connect check: Enabled=$autoConnectMode, isConnecting=$isConnecting, activeEndpointId=$activeEndpointId")
+            
+            if (autoConnectMode && !isConnecting && activeEndpointId == null) {
+                val lastDevice = settings.lastNearbyDeviceName
+                AppLog.i("NearbyManager: Comparing found '${info.endpointName}' with last known '$lastDevice'")
+                if (lastDevice.isNotEmpty() && lastDevice == info.endpointName) {
+                    AppLog.i("NearbyManager: MATCH! Auto-connecting to known device '$lastDevice'...")
+                    connectToEndpoint(endpointId)
+                }
+            }
         }
 
         override fun onEndpointLost(endpointId: String) {
@@ -135,8 +173,11 @@ class NearbyManager(
             AppLog.i("NearbyManager: Connection INITIATED with $endpointId (${info.endpointName}). Token: ${info.authenticationToken}")
             AppLog.i("NearbyManager: Automatically ACCEPTING connection...")
             
+            // Save last connected device name for auto-reconnect
+            AppLog.i("NearbyManager: Saving '${info.endpointName}' as last connected device candidate.")
+            settings.lastNearbyDeviceName = info.endpointName
+
             // Stop discovery as soon as it finds the target.
-            // Stopping it here ensures we aren't scanning while doing the initial AA handshake.
             isRunning = false
             connectionsClient.stopDiscovery()
             
@@ -148,9 +189,15 @@ class NearbyManager(
             val status = result.status
             AppLog.i("NearbyManager: Connection RESULT for $endpointId: StatusCode=${status.statusCode} (${status.statusMessage})")
             
+            if (status.statusCode != ConnectionsStatusCodes.STATUS_OK) {
+                isConnecting = false
+            }
+
             when (status.statusCode) {
                 ConnectionsStatusCodes.STATUS_OK -> {
+                    isConnecting = false
                     activeEndpointId = endpointId
+                    
                     val socket = NearbySocket()
                     activeNearbySocket = socket
 
@@ -197,6 +244,10 @@ class NearbyManager(
 
         override fun onDisconnected(endpointId: String) {
             AppLog.i("NearbyManager: DISCONNECTED from $endpointId")
+            if (activeEndpointId == endpointId) {
+                activeEndpointId = null
+                isConnecting = false
+            }
         }
     }
 

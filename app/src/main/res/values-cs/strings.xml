@@ -287,6 +287,7 @@
     <string name="success">Úspěch</string>
     <string name="failed">Selhalo</string>
     <string name="failed_start_android_auto">Spuštění Android Auto selhalo</string>
+    <string name="failed_self_mode_android10">Režim Self-mode je pravděpodobně blokován společností Google v systému Android 10 (AA 16.4+). Viz README.</string>
     <string name="android_auto_starting">Android Auto se spouští…</string>
     <string name="connection_interrupted">Spojení ztraceno</string>
     <string name="connection_interrupted_detail">Opětovné připojování…</string>
@@ -445,6 +446,7 @@
     </string-array>
 
     <string name="select_nearby_device">Vybrat zařízení v okolí</string>
+    <string name="nearby_device_found">Nalezeno zařízení v okolí</string>
     <string name="connecting_to_nearby">Připojování k %s…</string>
 
     <string name="exit_dialog_title">Ukončit Android Auto</string>
@@ -462,4 +464,5 @@
     <string name="media_session_aa_status_placeholder">Připojeno</string>
     <string name="sync_media_session_aa_metadata">Aktuální skladba AA v mediální relaci</string>
     <string name="sync_media_session_aa_metadata_description">Zobrazovat název skladby, interpreta, délku a obal alba z telefonu v systémové mediální relaci a mediálním oznámení</string>
+    <string name="error_usb_permission_failed">Systémová chyba: Nepodařilo se vyžádat dialogové okno pro povolení USB.</string>
 </resources>

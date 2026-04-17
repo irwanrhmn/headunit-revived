@@ -15,7 +15,7 @@ object HeadUnitScreenConfig {
     private var scaleFactor: Float = 1.0f
     private var isSmallScreen: Boolean = true
     private var isPortraitScaled: Boolean = false
-    private var isInitialized: Boolean = false // New flag
+    private var isInitialized: Boolean = false
     
     // Flag to determine if the projection should stretch and ignore aspect ratio
     private var stretchToFill: Boolean = false 
@@ -43,19 +43,23 @@ object HeadUnitScreenConfig {
 
 
     fun init(context: Context, displayMetrics: DisplayMetrics, settings: Settings) {
-        // Read user preference for stretching the screen from the app's Settings
         stretchToFill = settings.stretchToFill
-        // Only allow forcedScale if viewMode is SURFACE (0)
         forcedScale = settings.forcedScale && settings.viewMode == Settings.ViewMode.SURFACE
 
-        val screenWidth: Int
-        val screenHeight: Int
+        val realW: Int
+        val realH: Int
+        val usableW: Int
+        val usableH: Int
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) { // API 30+
             val windowManager = context.getSystemService(android.view.WindowManager::class.java)
             val bounds = windowManager.currentWindowMetrics.bounds
-            screenWidth = bounds.width()
-            screenHeight = bounds.height()
+            // On API 30+, bounds on an Activity context often return the usable area.
+            // We use the displayMetrics as a fallback for the physical area.
+            realW = displayMetrics.widthPixels
+            realH = displayMetrics.heightPixels
+            usableW = bounds.width()
+            usableH = bounds.height()
         } else { // Older APIs
             @Suppress("DEPRECATION")
             val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as android.view.WindowManager
@@ -63,22 +67,44 @@ object HeadUnitScreenConfig {
             val size = android.graphics.Point()
             @Suppress("DEPRECATION")
             display.getRealSize(size)
-            screenWidth = size.x
-            screenHeight = size.y
+            realW = size.x
+            realH = size.y
+            
+            @Suppress("DEPRECATION")
+            display.getSize(size)
+            usableW = size.x
+            usableH = size.y
         }
 
-        // Only update if dimensions or settings changed (and we are already initialized)
-        if (isInitialized && realScreenWidthPx == screenWidth && realScreenHeightPx == screenHeight && this::currentSettings.isInitialized && currentSettings == settings) {
+        // Only update if dimensions or settings changed
+        if (isInitialized && realScreenWidthPx == realW && realScreenHeightPx == realH && this::currentSettings.isInitialized && currentSettings == settings) {
             return
         }
 
         isInitialized = true
         currentSettings = settings
 
-        realScreenWidthPx = screenWidth
-        realScreenHeightPx = screenHeight
+        // Determine if we are planning to hide the bars (Immersive)
+        val immersive = settings.fullscreenMode == Settings.FullscreenMode.IMMERSIVE || 
+                        settings.fullscreenMode == Settings.FullscreenMode.IMMERSIVE_WITH_NOTCH
+
+        // THE ANCHOR: 
+        // If we are immersive, our "World" is the physical screen. 
+        // If we are NOT, our "World" is limited to the usable window area (no lying to AA).
+        realScreenWidthPx = if (immersive) realW else usableW
+        realScreenHeightPx = if (immersive) realH else usableH
+        
         density = displayMetrics.density
         densityDpi = displayMetrics.densityDpi
+
+        // Initial Insets: For non-immersive, the bars are already baked into the anchor (realSize = 736),
+        // so we start with 0 system insets and just add manual settings.
+        systemInsetLeft = settings.insetLeft
+        systemInsetTop = settings.insetTop
+        systemInsetRight = settings.insetRight
+        systemInsetBottom = settings.insetBottom
+        
+        AppLog.i("[UI_DEBUG] HeadUnitScreenConfig: Honest Init | Mode: ${settings.fullscreenMode} | Anchor: ${realScreenWidthPx}x${realScreenHeightPx} | Seeded Insets: L$systemInsetLeft T$systemInsetTop R$systemInsetRight B$systemInsetBottom")
         
         recalculate()
     }
@@ -148,7 +174,7 @@ object HeadUnitScreenConfig {
         }
 
         // 2. Perform scaling calculations (now safe because negotiatedResolutionType is set)
-        AppLog.i("CarScreen: usable area ${screenWidthPx}x${screenHeightPx}, using $negotiatedResolutionType")
+        AppLog.i("[UI_DEBUG] CarScreen: usable area ${screenWidthPx}x${screenHeightPx}, using $negotiatedResolutionType")
 
         if (screenHeightPx > screenWidthPx) {
             isSmallScreen = screenWidthPx <= 1080 && screenHeightPx <= 1920
@@ -171,7 +197,7 @@ object HeadUnitScreenConfig {
             }
         }
         
-        AppLog.i("CarScreen isSmallScreen: $isSmallScreen, scaleFactor: $scaleFactor, scales: scaleX: ${getScaleX()}, scaleY: ${getScaleY()}")
+        AppLog.i("[UI_DEBUG] CarScreen isSmallScreen: $isSmallScreen, scaleFactor: $scaleFactor, margins: w=${getWidthMargin()}, h=${getHeightMargin()}")
     }
 
     fun getAdjustedHeight(): Int {
