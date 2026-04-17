@@ -465,4 +465,5 @@
     <string name="media_action_play">Воспроизвести</string>
     <string name="media_action_pause">Пауза</string>
     <string name="media_action_next">Следующий</string>
+    <string name="error_usb_permission_failed">Системная ошибка: Не удалось запросить диалоговое окно разрешения USB.</string>
 </resources>

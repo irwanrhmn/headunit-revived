@@ -469,4 +469,5 @@
     <string name="media_session_aa_status_placeholder">Verbunden</string>
     <string name="sync_media_session_aa_metadata">AA-Now-Playing in der Mediensitzung</string>
     <string name="sync_media_session_aa_metadata_description">Titel, Interpret, Dauer und Albumcover vom Telefon in der System-Mediensitzung und in der Medienbenachrichtigung anzeigen</string>
+    <string name="error_usb_permission_failed">Systemfehler: Anforderung des USB-Berechtigungsdialogs fehlgeschlagen.</string>
 </resources>

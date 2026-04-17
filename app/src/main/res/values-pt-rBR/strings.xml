@@ -465,4 +465,5 @@
     <string name="media_session_aa_status_placeholder">Conectado</string>
     <string name="sync_media_session_aa_metadata">Faixa atual do AA na sessão de mídia</string>
     <string name="sync_media_session_aa_metadata_description">Mostrar título, artista, duração e capa do álbum do telefone na sessão de mídia do sistema e na notificação de mídia</string>
+    <string name="error_usb_permission_failed">Erro do sistema: Falha ao solicitar a caixa de diálogo de permissão USB.</string>
 </resources>

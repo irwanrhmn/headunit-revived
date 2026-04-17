@@ -629,8 +629,9 @@ class AapService : Service(), UsbReceiver.Listener {
         wifiDirectManager?.setCredentialsListener { ssid, psk, ip, bssid ->
             val settings = App.provide(this).settings
             if (settings.wifiConnectionMode == 3) {
-                AppLog.i("AapService: Received WiFi credentials from manager (SSID=$ssid, IP=$ip). Updating NativeAaHandshakeManager.")
+                AppLog.i("AapService: Received WiFi credentials from manager (SSID=$ssid, IP=$ip). Updating and Triggering Poke.")
                 nativeAaHandshakeManager?.updateWifiCredentials(ssid, psk, ip, bssid)
+                nativeAaHandshakeManager?.triggerPoke()
             } else {
                 AppLog.d("AapService: WiFi credentials received, but not in Native AA mode. Skipping HandshakeManager update.")
             }

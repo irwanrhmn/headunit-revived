@@ -1,6 +1,11 @@
 # Changelog
-### v.2.2.1-beta1
-- Enhanced: Video-Codec
+### v.2.2.1
+- **Fixed a fatal error in UBS conncetions since 2.2.0. This is important so releasing this version while not fixing all planned issues**
+- Google Nearby Connection is now auto connecting if auto connect is enabled
+- UI: Added Error Message for Android 10 and below for selfmode
+- New Approach for scaling and touch to prevent offset
+- Fixing App appears multiple times in App-Drawer
+- Fixing Routines and intents not working
 
 ### v.2.2.0
 - Added: Native AA. 🎉  Warning! This will only work on a limited amount of headunits! Most Android devices do not support connecting 2 Android devices via Bluetooth which is essential for this to work.

@@ -464,4 +464,5 @@
     <string name="media_session_aa_status_placeholder">Připojeno</string>
     <string name="sync_media_session_aa_metadata">Aktuální skladba AA v mediální relaci</string>
     <string name="sync_media_session_aa_metadata_description">Zobrazovat název skladby, interpreta, délku a obal alba z telefonu v systémové mediální relaci a mediálním oznámení</string>
+    <string name="error_usb_permission_failed">Systémová chyba: Nepodařilo se vyžádat dialogové okno pro povolení USB.</string>
 </resources>

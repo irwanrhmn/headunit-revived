@@ -471,4 +471,5 @@
     <string name="media_session_aa_status_placeholder">Connesso</string>
     <string name="sync_media_session_aa_metadata">Brano AA corrente nella sessione multimediale</string>
     <string name="sync_media_session_aa_metadata_description">Mostra titolo, artista, durata e copertina dal telefono nella sessione multimediale di sistema e nella notifica multimediale</string>
+    <string name="error_usb_permission_failed">Errore di sistema: Impossibile richiedere la finestra di dialogo del permesso USB.</string>
 </resources>

@@ -117,13 +117,21 @@ class NativeAaHandshakeManager(
             }
         }
 
-        // Active Poke logic: Wake up the phone if it's already paired but not looking for HU
+    }
+
+    /**
+     * Wakes up the phone by attempting a brief connection to the A2DP profile.
+     * This acts as a signal for the phone to start looking for the headunit.
+     */
+    fun triggerPoke() {
+        val adapter = BluetoothAdapter.getDefaultAdapter() ?: return
         val settings = com.andrerinas.headunitrevived.App.provide(context).settings
         val lastMac = settings.autoStartBluetoothDeviceMac
-        
+
         scope.launch(Dispatchers.IO + CoroutineName("NativeAa-Wakeup")) {
-            delay(2000) // Give the servers time to start
-            
+            AppLog.d("NativeAA: triggerPoke() delay starting (2s)...")
+            delay(2000) // Small safety delay before connecting
+
             val devicesToPoke = if (lastMac.isNotEmpty()) {
                 listOf(adapter.getRemoteDevice(lastMac))
             } else {
@@ -143,8 +151,8 @@ class NativeAaHandshakeManager(
                     val socket = device.createRfcommSocketToServiceRecord(A2DP_SOURCE_UUID)
                     AppLog.i("NativeAA: Calling socket.connect() for ${device.name}...")
                     socket.connect()
-                    AppLog.i("NativeAA: Successfully poked ${device.name}. Keeping socket alive for 20s...")
-                    delay(20000)
+                    AppLog.i("NativeAA: Successfully poked ${device.name}. Keeping socket alive for 15s...")
+                    delay(15000)
                     socket.close()
                     AppLog.i("NativeAA: Poke socket for ${device.name} closed.")
                 } catch (e: Exception) {

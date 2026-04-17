@@ -472,4 +472,5 @@
     <string name="media_session_aa_status_placeholder">接続済み</string>
     <string name="sync_media_session_aa_metadata">メディアセッションにAAの再生中トラックを表示</string>
     <string name="sync_media_session_aa_metadata_description">スマートフォンの曲名、アーティスト、再生時間、アルバムアートをシステムのメディアセッションとメディア通知に表示します</string>
+    <string name="error_usb_permission_failed">システムエラー: USBパーミッションダイアログの要求に失敗しました。</string>
 </resources>

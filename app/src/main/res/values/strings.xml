@@ -472,4 +472,5 @@
     <string name="media_action_play">Play</string>
     <string name="media_action_pause">Pause</string>
     <string name="media_action_next">Next</string>
+    <string name="error_usb_permission_failed">System error: Failed to request USB permission dialog.</string>
 </resources>
