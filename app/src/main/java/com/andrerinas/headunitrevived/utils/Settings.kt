@@ -85,6 +85,13 @@ class Settings(context: Context) {
             prefs.edit().putBoolean("show-navigation-notifications", value).apply()
         }
 
+    /** Mirror phone now-playing (title, artist, duration, art) in the system media session. */
+    var syncMediaSessionWithAaMetadata: Boolean
+        get() = prefs.getBoolean(KEY_SYNC_MEDIA_SESSION_AA_METADATA, true)
+        set(value) {
+            prefs.edit().putBoolean(KEY_SYNC_MEDIA_SESSION_AA_METADATA, value).apply()
+        }
+
     var nightMode: NightMode
         get() {
             val value = prefs.getInt("night-mode", 0)
@@ -485,6 +492,9 @@ class Settings(context: Context) {
     companion object {
         const val CONNECTION_TYPE_WIFI = "wifi"
         const val CONNECTION_TYPE_USB = "usb"
+
+        /** SharedPreferences key; also used by [AapService] for change listener. */
+        const val KEY_SYNC_MEDIA_SESSION_AA_METADATA = "sync-media-session-aa-metadata"
 
         const val AUTO_CONNECT_LAST_SESSION = "last-session"
         const val AUTO_CONNECT_SELF_MODE = "self-mode"

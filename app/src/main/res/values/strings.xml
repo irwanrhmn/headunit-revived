@@ -344,6 +344,9 @@
     <!-- Navigation notifications (from any AA nav app) -->
     <string name="show_navigation_notifications">Navigation notifications</string>
     <string name="show_navigation_notifications_description">Show \"In X meters do Y\" and current street in notifications (for debugging)</string>
+    <string name="media_session_aa_status_placeholder">Connected</string>
+    <string name="sync_media_session_aa_metadata">AA now playing on media session</string>
+    <string name="sync_media_session_aa_metadata_description">Show track title, artist, duration and album art from the phone in the system media session and media notification</string>
     <string name="nav_notification_channel_name">Navigation</string>
     <string name="nav_notification_channel_description">Turn-by-turn navigation updates from Android Auto</string>
     <string name="nav_notification_title_format">In %1$d m — %2$s</string>
@@ -463,4 +466,8 @@
     <string name="audio_latency_multiplier">Audio Latency Multiplier</string>
     <string name="audio_latency_multiplier_description">Adjust audio buffer size (Lower = Less Lag, Higher = Less Stutter)</string>
     <string name="audio_queue_capacity">Audio Queue Capacity (Backpressure)</string>
+    <string name="media_action_previous">Previous</string>
+    <string name="media_action_play">Play</string>
+    <string name="media_action_pause">Pause</string>
+    <string name="media_action_next">Next</string>
 </resources>

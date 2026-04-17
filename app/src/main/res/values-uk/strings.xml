@@ -456,4 +456,11 @@
     <string name="audio_latency_multiplier">Множник затримки аудіо</string>
     <string name="audio_latency_multiplier_description">Налаштування розміру аудіо-буфера (Менше = менше затримка, Більше = менше заїкань)</string>
     <string name="audio_queue_capacity">Ємність аудіо-черги (Backpressure)</string>
+    <string name="media_action_previous">Попередній</string>
+    <string name="media_action_play">Відтворити</string>
+    <string name="media_action_pause">Пауза</string>
+    <string name="media_action_next">Наступний</string>
+    <string name="media_session_aa_status_placeholder">Підключено</string>
+    <string name="sync_media_session_aa_metadata">Поточний трек AA у медіасесії</string>
+    <string name="sync_media_session_aa_metadata_description">Показувати з телефона назву треку, виконавця, тривалість і обкладинку в системній медіасесії та медіа-сповіщенні</string>
 </resources>

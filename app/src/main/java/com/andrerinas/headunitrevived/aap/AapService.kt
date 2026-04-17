@@ -9,6 +9,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.net.wifi.WifiManager
@@ -32,6 +33,7 @@ import com.andrerinas.headunitrevived.app.BootCompleteReceiver
 import com.andrerinas.headunitrevived.main.MainActivity
 import com.andrerinas.headunitrevived.R
 import com.andrerinas.headunitrevived.aap.protocol.messages.NightModeEvent
+import com.andrerinas.headunitrevived.aap.protocol.proto.MediaPlayback
 import com.andrerinas.headunitrevived.connection.CommManager
 import com.andrerinas.headunitrevived.connection.NetworkDiscovery
 import com.andrerinas.headunitrevived.connection.WifiDirectManager
@@ -49,6 +51,8 @@ import com.andrerinas.headunitrevived.utils.LogExporter
 import com.andrerinas.headunitrevived.utils.NightModeManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.SystemClock
 import java.util.concurrent.atomic.AtomicBoolean
 import android.app.NotificationManager
@@ -64,7 +68,9 @@ import com.andrerinas.headunitrevived.utils.SilentAudioPlayer
 import com.andrerinas.headunitrevived.connection.CarKeyReceiver
 import com.andrerinas.headunitrevived.connection.NativeAaHandshakeManager
 import com.andrerinas.headunitrevived.connection.NearbyManager
+import com.andrerinas.headunitrevived.main.BackgroundNotification
 import com.andrerinas.headunitrevived.utils.Settings
+import com.andrerinas.headunitrevived.utils.protoUint32ToLong
 import java.net.ServerSocket
 
 /**
@@ -101,6 +107,25 @@ class AapService : Service(), UsbReceiver.Listener {
     private var mediaSession: MediaSessionCompat? = null
     private var permanentFocusRequest: android.media.AudioFocusRequest? = null
     private var lastMediaButtonClickTime = 0L
+
+    private var lastAaMediaMetadata: MediaPlayback.MediaMetaData? = null
+    private var lastAaPlaybackPositionMs: Long = 0L
+    private var lastAaPlaybackIsPlaying: Boolean? = null
+    private var mediaSessionIsPlaying = false
+    private var mediaMetadataDecodeJob: Job? = null
+    /** Decoded on a background thread in [scheduleApplyAaMediaMetadata]; reused for notification updates on position ticks. */
+    private var cachedAaAlbumArtBitmap: Bitmap? = null
+    private var settingsPrefs: SharedPreferences? = null
+    private val mediaNotification by lazy { BackgroundNotification(this) }
+
+    private val settingsPreferenceListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == Settings.KEY_SYNC_MEDIA_SESSION_AA_METADATA) {
+                serviceScope.launch(Dispatchers.Main) {
+                    refreshMediaSessionMetadataForPrefsChange()
+                }
+            }
+        }
 
     /**
      * Set to `true` before calling [stopSelf] or entering [onDestroy] to suppress any
@@ -166,6 +191,7 @@ class AapService : Service(), UsbReceiver.Listener {
     private val commManager get() = App.provide(this).commManager
 
     fun updateMediaSessionState(isPlaying: Boolean) {
+        mediaSessionIsPlaying = isPlaying
         var actions = PlaybackStateCompat.ACTION_STOP or
                 PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
                 PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
@@ -183,11 +209,153 @@ class AapService : Service(), UsbReceiver.Listener {
 
         mediaSession?.setPlaybackState(
             PlaybackStateCompat.Builder()
-                .setState(state, 0, 1.0f)
+                .setState(state, lastAaPlaybackPositionMs, if (isPlaying) 1.0f else 0.0f)
                 .setActions(actions)
                 .build()
         )
-        AppLog.d("MediaSession: State updated to ${if (isPlaying) "PLAYING" else "STOPPED"}")
+        AppLog.d(
+            "MediaSession: State updated to ${if (isPlaying) "PLAYING" else "STOPPED"}, positionMs=$lastAaPlaybackPositionMs"
+        )
+    }
+
+    private fun applyPlaceholderMediaMetadata() {
+        mediaSession?.setMetadata(
+            MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, getString(R.string.video))
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getString(R.string.media_session_aa_status_placeholder))
+                .build()
+        )
+    }
+
+    private fun refreshMediaSessionMetadataForPrefsChange() {
+        if (isDestroying) return
+        val sync = App.provide(this).settings.syncMediaSessionWithAaMetadata
+        if (!sync) {
+            applyPlaceholderMediaMetadata()
+            cachedAaAlbumArtBitmap = null
+            mediaNotification.cancel()
+        } else {
+            val last = lastAaMediaMetadata
+            if (last != null) {
+                scheduleApplyAaMediaMetadata(last)
+            } else {
+                applyPlaceholderMediaMetadata()
+                cachedAaAlbumArtBitmap = null
+                mediaNotification.cancel()
+            }
+        }
+    }
+
+    private fun onAaMediaMetadataFromPhone(meta: MediaPlayback.MediaMetaData) {
+        if (isDestroying) return
+        lastAaMediaMetadata = meta
+        if (!App.provide(this).settings.syncMediaSessionWithAaMetadata) return
+        // Avoid showing a previous track's art with new title/artist until decode finishes.
+        cachedAaAlbumArtBitmap = null
+        scheduleApplyAaMediaMetadata(meta)
+    }
+
+    private fun onAaPlaybackStatusFromPhone(status: MediaPlayback.MediaPlaybackStatus) {
+        if (isDestroying) return
+        if (status.hasPlaybackSeconds()) {
+            lastAaPlaybackPositionMs = status.playbackSeconds.protoUint32ToLong() * 1000L
+        }
+        val isPlayingFromStatus = resolveIsPlayingFromStatus(status)
+        lastAaPlaybackIsPlaying = isPlayingFromStatus
+        mediaSessionIsPlaying = isPlayingFromStatus
+
+        if (!App.provide(this).settings.syncMediaSessionWithAaMetadata) return
+        updateMediaSessionState(isPlayingFromStatus)
+        lastAaMediaMetadata?.let { updateMediaNotification(it) }
+    }
+
+    private fun resolveIsPlayingFromStatus(status: MediaPlayback.MediaPlaybackStatus): Boolean {
+        if (!status.hasState()) return lastAaPlaybackIsPlaying ?: mediaSessionIsPlaying
+        return when (val s = status.state) {
+            MediaPlayback.MediaPlaybackStatus.State.PLAYING -> true
+            MediaPlayback.MediaPlaybackStatus.State.STOPPED,
+            MediaPlayback.MediaPlaybackStatus.State.PAUSED -> false
+        }
+    }
+
+    private fun updateMediaNotification(meta: MediaPlayback.MediaMetaData) {
+        if (!App.provide(this).settings.syncMediaSessionWithAaMetadata) return
+        mediaNotification.notify(
+            metadata = meta,
+            playbackSeconds = lastAaPlaybackPositionMs / 1000L,
+            isPlaying = lastAaPlaybackIsPlaying ?: mediaSessionIsPlaying,
+            albumArtBitmap = cachedAaAlbumArtBitmap
+        )
+    }
+
+    private fun scheduleApplyAaMediaMetadata(meta: MediaPlayback.MediaMetaData) {
+        mediaMetadataDecodeJob?.cancel()
+        mediaMetadataDecodeJob = serviceScope.launch(Dispatchers.Default) {
+            val bytes = if (meta.hasAlbumArt() && !meta.albumArt.isEmpty) meta.albumArt.toByteArray() else null
+            val bitmap = bytes?.let { decodeAlbumArt(it) }
+            if (!isActive) return@launch
+            withContext(Dispatchers.Main) {
+                if (isDestroying) return@withContext
+                if (!App.provide(this@AapService).settings.syncMediaSessionWithAaMetadata) return@withContext
+                // Drop stale decode results if newer metadata arrived while we were decoding.
+                if (lastAaMediaMetadata !== meta) return@withContext
+                cachedAaAlbumArtBitmap = bitmap
+                applyAaMediaMetadataToSession(meta, bitmap)
+                updateMediaNotification(meta)
+            }
+        }
+    }
+
+    private fun decodeAlbumArt(bytes: ByteArray): Bitmap? {
+        if (bytes.isEmpty()) return null
+        return try {
+            val opts = BitmapFactory.Options()
+            opts.inJustDecodeBounds = true
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size, opts)
+            if (opts.outWidth <= 0 || opts.outHeight <= 0) {
+                opts.inJustDecodeBounds = false
+                opts.inSampleSize = 1
+                return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, opts)
+            }
+            var sampleSize = 1
+            val maxDim = 720
+            while (opts.outWidth / sampleSize > maxDim || opts.outHeight / sampleSize > maxDim) {
+                sampleSize *= 2
+            }
+            opts.inJustDecodeBounds = false
+            opts.inSampleSize = sampleSize
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size, opts)
+        } catch (_: OutOfMemoryError) {
+            null
+        }
+    }
+
+    private fun applyAaMediaMetadataToSession(meta: MediaPlayback.MediaMetaData, albumArt: Bitmap?) {
+        val session = mediaSession ?: return
+        val title = when {
+            meta.hasSong() && meta.song.isNotBlank() -> meta.song
+            else -> getString(R.string.video)
+        }
+        val artist = when {
+            meta.hasArtist() && meta.artist.isNotBlank() -> meta.artist
+            else -> getString(R.string.media_session_aa_status_placeholder)
+        }
+        val b = MediaMetadataCompat.Builder()
+            .putString(MediaMetadataCompat.METADATA_KEY_TITLE, title)
+            .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artist)
+        if (meta.hasAlbum() && meta.album.isNotBlank()) {
+            b.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, meta.album)
+        }
+        if (meta.hasDurationSeconds()) {
+            val durationSec = meta.durationSeconds.protoUint32ToLong()
+            if (durationSec > 0L) {
+                b.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, durationSec * 1000L)
+            }
+        }
+        if (albumArt != null) {
+            b.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt)
+        }
+        session.setMetadata(b.build())
     }
 
     // Receives ACTION_REQUEST_NIGHT_MODE_UPDATE broadcasts sent by the key-binding handler
@@ -429,6 +597,12 @@ class AapService : Service(), UsbReceiver.Listener {
         mediaSession?.isActive = true
         updateMediaSessionState(false) // Set initial PlaybackState so system knows our actions
 
+        commManager.onAaMediaMetadata = { meta -> onAaMediaMetadataFromPhone(meta) }
+        commManager.onAaPlaybackStatus = { status -> onAaPlaybackStatusFromPhone(status) }
+        settingsPrefs = getSharedPreferences("settings", MODE_PRIVATE).also { prefs ->
+            prefs.registerOnSharedPreferenceChangeListener(settingsPreferenceListener)
+        }
+
         LogExporter.startCapture(this, LogExporter.LogLevel.DEBUG)
         AppLog.i("Auto-started continuous log capture")
 
@@ -594,6 +768,7 @@ class AapService : Service(), UsbReceiver.Listener {
         // Reactivate the existing MediaSession (created in onCreate, kept alive across disconnects)
         mediaSession?.isActive = true
         updateMediaSessionState(true)
+        applyPlaceholderMediaMetadata()
 
         // Link audio focus state changes to our MediaSession state
         commManager.onAudioFocusStateChanged = { isPlaying ->
@@ -677,11 +852,8 @@ class AapService : Service(), UsbReceiver.Listener {
                 }
             })
             setPlaybackToLocal(android.media.AudioManager.STREAM_MUSIC)
-            setMetadata(MediaMetadataCompat.Builder()
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Android Auto")
-                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "Connected")
-                .build())
         }
+        applyPlaceholderMediaMetadata()
     }
 
     /**
@@ -702,6 +874,14 @@ class AapService : Service(), UsbReceiver.Listener {
         } catch (e: Exception) {}
 
         if (!isDestroying) updateNotification()
+        mediaMetadataDecodeJob?.cancel()
+        mediaMetadataDecodeJob = null
+        lastAaMediaMetadata = null
+        lastAaPlaybackPositionMs = 0L
+        lastAaPlaybackIsPlaying = null
+        cachedAaAlbumArtBitmap = null
+        mediaNotification.cancel()
+        applyPlaceholderMediaMetadata()
         // Keep MediaSession alive across disconnect/reconnect cycles.
         // Only deactivate it — do NOT release it. A released session can no longer
         // receive media button events, which means the keymap stops working until
@@ -1095,6 +1275,13 @@ class AapService : Service(), UsbReceiver.Listener {
     override fun onDestroy() {
         AppLog.i("AapService destroying... (wakeLock held=${bootWakeLock?.isHeld == true})")
         isDestroying = true
+        mediaMetadataDecodeJob?.cancel()
+        cachedAaAlbumArtBitmap = null
+        mediaNotification.cancel()
+        commManager.onAaMediaMetadata = null
+        commManager.onAaPlaybackStatus = null
+        settingsPrefs?.unregisterOnSharedPreferenceChangeListener(settingsPreferenceListener)
+        settingsPrefs = null
         nativeAaHandshakeManager?.stop()
         releaseBootWakeLock()
 
