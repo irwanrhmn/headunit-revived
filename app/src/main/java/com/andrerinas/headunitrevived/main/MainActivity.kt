@@ -126,8 +126,14 @@ class MainActivity : BaseActivity() {
 
         requestPermissions()
         viewModel.register()
-        handleIntent(intent)
+        handleLaunchIntent(intent)
         setupWifiDirectInfo()
+
+        ContextCompat.registerReceiver(
+            this, finishReceiver,
+            android.content.IntentFilter("com.andrerinas.headunitrevived.ACTION_FINISH_ACTIVITIES"),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     private fun showSplashWithDelay(delayMs: Long) {
@@ -165,21 +171,15 @@ class MainActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        ContextCompat.registerReceiver(
-            this, finishReceiver,
-            android.content.IntentFilter("com.andrerinas.headunitrevived.ACTION_FINISH_ACTIVITIES"),
-            ContextCompat.RECEIVER_NOT_EXPORTED
-        )
     }
 
     override fun onStop() {
         super.onStop()
-        try { unregisterReceiver(finishReceiver) } catch (e: Exception) {}
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        handleIntent(intent)
+        handleLaunchIntent(intent)
     }
 
     private fun logLaunchSource() {
@@ -205,15 +205,37 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun handleIntent(intent: Intent?) {
+    private fun handleLaunchIntent(intent: Intent?) {
         if (intent == null) return
 
-        AppLog.i("MainActivity received intent: ${intent.action}, data: ${intent.data}")
+        AppLog.i("MainActivity: Processing launch intent: ${intent.action}, data: ${intent.data}")
+
+        val intentData = intent.data
+        val intentAction = intent.action
+
+        if (intentAction == "com.andrerinas.headunitrevived.ACTION_EXIT") {
+            AppLog.i("MainActivity: Received exit action")
+            val exitIntent = Intent(this, AapService::class.java).apply {
+                this.action = AapService.ACTION_STOP_SERVICE
+            }
+            ContextCompat.startForegroundService(this, exitIntent)
+            finishAffinity()
+            return
+        }
+
+        if (intentAction == AapService.ACTION_START_SELF_MODE || 
+           (intentData?.scheme == "headunit" && intentData.host == "selfmode")) {
+            AppLog.i("MainActivity: Forced self-mode start requested")
+            HomeFragment.forceSelfModeLaunch = true
+            val selfModeIntent = Intent(this, AapService::class.java).apply {
+                this.action = AapService.ACTION_START_SELF_MODE
+            }
+            ContextCompat.startForegroundService(this, selfModeIntent)
+        }
 
         if (intent.action == Intent.ACTION_VIEW) {
-            val data = intent.data
-            if (data?.scheme == "headunit" && data.host == "connect") {
-                val ip = data.getQueryParameter("ip")
+            if (intentData?.scheme == "headunit" && intentData.host == "connect") {
+                val ip = intentData.getQueryParameter("ip")
                 if (!ip.isNullOrEmpty()) {
                     AppLog.i("Received connect intent for IP: $ip")
                     ContextCompat.startForegroundService(this, Intent(this, AapService::class.java).apply {
@@ -227,32 +249,20 @@ class MainActivity : BaseActivity() {
                     }
                     ContextCompat.startForegroundService(this, autoIntent)
                 }
-            } else if (data?.scheme == "headunit" && data.host == "disconnect") {
+            } else if (intentData?.scheme == "headunit" && intentData.host == "disconnect") {
                 AppLog.i("Received disconnect intent")
                 val stopIntent = Intent(this, AapService::class.java).apply {
                     action = AapService.ACTION_DISCONNECT
                 }
                 ContextCompat.startForegroundService(this, stopIntent)
-            } else if (data?.scheme == "headunit" && data.host == "selfmode") {
-                AppLog.i("Received start-in-selfmode intent")
-                val selfModeIntent = Intent(this, AapService::class.java).apply {
-                    action = AapService.ACTION_START_SELF_MODE
-                }
-                ContextCompat.startForegroundService(this, selfModeIntent)
-            } else if (data?.scheme == "headunit" && data.host == "exit") {
-                AppLog.i("Received full exit intent")
+            } else if (intentData?.scheme == "headunit" && intentData.host == "exit") {
+                AppLog.i("Received full exit intent via deep link")
                 val exitIntent = Intent(this, AapService::class.java).apply {
                     action = AapService.ACTION_STOP_SERVICE
                 }
                 ContextCompat.startForegroundService(this, exitIntent)
-                finishAffinity() // Close all activities in this task
-            } else if (data?.scheme == "geo" || data?.scheme == "google.navigation" || data?.host == "maps.google.com") {
-                AppLog.i("Received navigation intent: $data")
-                // In the future, we could parse coordinates and send to AA via a custom message
-                // For now, we just ensure the app is opened (which it is by reaching this point)
+                finishAffinity()
             }
-        } else if (intent.action == "android.intent.action.NAVIGATE") {
-            AppLog.i("Received generic NAVIGATE intent")
         }
     }
 
@@ -348,6 +358,7 @@ class MainActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        try { unregisterReceiver(finishReceiver) } catch (e: Exception) {}
         if (isFinishing) {
             AppLog.i("MainActivity finishing, resetting auto-start flag.")
             HomeFragment.resetAutoStart()

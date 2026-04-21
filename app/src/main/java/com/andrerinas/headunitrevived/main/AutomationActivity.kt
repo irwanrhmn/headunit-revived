@@ -97,12 +97,15 @@ class AutomationActivity : AppCompatActivity() {
                 }
                 ContextCompat.startForegroundService(this, selfIntent)
             }
-            "com.andrerinas.headunitrevived.ACTION_STOP_SERVICE" -> {
+            "com.andrerinas.headunitrevived.ACTION_STOP_SERVICE",
+            "com.andrerinas.headunitrevived.ACTION_EXIT" -> {
                 val exitIntent = Intent(this, AapService::class.java).apply {
                     this.action = AapService.ACTION_STOP_SERVICE
                 }
                 ContextCompat.startForegroundService(this, exitIntent)
-                sendBroadcast(Intent("com.andrerinas.headunitrevived.ACTION_FINISH_ACTIVITIES"))
+                sendBroadcast(Intent("com.andrerinas.headunitrevived.ACTION_FINISH_ACTIVITIES").apply {
+                    setPackage(packageName)
+                })
             }
         }
     }

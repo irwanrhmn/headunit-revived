@@ -1347,9 +1347,12 @@ class AapService : Service(), UsbReceiver.Listener {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Handle stop before re-posting the notification to avoid a flash
         if (intent?.action == ACTION_STOP_SERVICE) {
-            AppLog.i("Stop action received.")
+            AppLog.i("Stop action received. Broadcasting finish request to activities.")
+            sendBroadcast(Intent("com.andrerinas.headunitrevived.ACTION_FINISH_ACTIVITIES").apply {
+                setPackage(packageName)
+            })
             isDestroying = true
-            if (commManager.isConnected) commManager.disconnect()
+            if (commManager.isConnected) commManager.disconnect(sendByeBye = true)
             stopForeground(true)
             stopSelf()
             return START_NOT_STICKY

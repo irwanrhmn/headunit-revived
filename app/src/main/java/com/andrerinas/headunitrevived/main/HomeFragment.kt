@@ -121,8 +121,9 @@ class HomeFragment : Fragment() {
                     }
                 }
                 Settings.AUTO_CONNECT_SELF_MODE -> {
-                    if (appSettings.autoStartSelfMode && !hasAutoStarted && !commManager.isConnected) {
+                    if ((appSettings.autoStartSelfMode || forceSelfModeLaunch) && !hasAutoStarted && !commManager.isConnected) {
                         hasAutoStarted = true
+                        forceSelfModeLaunch = false // Reset once processed
                         startSelfMode()
                     }
                 }
@@ -564,6 +565,7 @@ class HomeFragment : Fragment() {
 
     companion object {
         private var hasAutoStarted = false
+        var forceSelfModeLaunch = false
         fun resetAutoStart() {
             hasAutoStarted = false
         }

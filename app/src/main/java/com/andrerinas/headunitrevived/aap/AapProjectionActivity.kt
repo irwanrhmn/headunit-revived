@@ -167,6 +167,15 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
         }
     }
 
+    private val finishReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action == "com.andrerinas.headunitrevived.ACTION_FINISH_ACTIVITIES") {
+                AppLog.i("AapProjectionActivity: Received finish request. Closing.")
+                finish()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             enableEdgeToEdge()
@@ -279,6 +288,8 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
                 }
             }
         }
+        
+        ContextCompat.registerReceiver(this, finishReceiver, android.content.IntentFilter("com.andrerinas.headunitrevived.ACTION_FINISH_ACTIVITIES"), ContextCompat.RECEIVER_NOT_EXPORTED)
 
         AppLog.i("HeadUnit for Android Auto (tm) - Copyright 2011-2015 Michael A. Reid., since 2025 André Rinas All Rights Reserved...")
 
@@ -768,6 +779,7 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
 
     override fun onDestroy() {
         super.onDestroy()
+        try { unregisterReceiver(finishReceiver) } catch (e: Exception) {}
         AppLog.i("AapProjectionActivity.onDestroy called. isFinishing=$isFinishing")
         videoDecoder.dimensionsListener = null
     }
