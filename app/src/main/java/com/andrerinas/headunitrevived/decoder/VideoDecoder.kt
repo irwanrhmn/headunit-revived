@@ -48,6 +48,7 @@ class VideoDecoder(private val settings: Settings) {
     private var pps: ByteArray? = null
     private var codecConfigured = false
     private var currentCodecType = CodecType.H264
+    private var currentCodecName: String? = null
 
     // Reuse buffers for older API levels to minimize GC pressure
     private var inputBuffers: Array<ByteBuffer>? = null
@@ -310,6 +311,7 @@ class VideoDecoder(private val settings: Settings) {
             startTime = System.nanoTime()
             val bestCodec = findBestCodec(mimeType, !forceSoftware)
                 ?: throw IllegalStateException("No decoder available for $mimeType")
+            this.currentCodecName = bestCodec
 
             codec = MediaCodec.createByCodecName(bestCodec)
             codecBufferInfo = MediaCodec.BufferInfo()
@@ -352,6 +354,16 @@ class VideoDecoder(private val settings: Settings) {
             AppLog.e("Failed to start decoder", e)
             codec = null; running = false
         }
+    }
+
+    /**
+     * Logic to identify chipsets that require constant flagging
+     */
+    private fun shouldAlwaysFlagConfig(): Boolean {
+        val name = currentCodecName?.lowercase(Locale.ROOT) ?: return false
+        return name.contains(".rk.") ||       // Rockchip
+                name.contains("allwinner") ||
+                name.contains(".tcc.")      // Telechips
     }
 
     /**
@@ -414,7 +426,8 @@ class VideoDecoder(private val settings: Settings) {
             // Always set BUFFER_FLAG_CODEC_CONFIG for config data (VPS/SPS/PPS).
             // Some decoders (Rockchip/Allwinner) require this flag for every config packet
             // even after the stream has already started.
-            val flags = if (buffer.hasArray() && isCodecConfigData(buffer.array(), buffer.position(), buffer.remaining())) {
+            val isConfig = buffer.hasArray() && isCodecConfigData(buffer.array(), buffer.position(), buffer.remaining())
+            val flags = if (isConfig && (shouldAlwaysFlagConfig() || !codecConfigured)) {
                 MediaCodec.BUFFER_FLAG_CODEC_CONFIG
             } else 0
 
