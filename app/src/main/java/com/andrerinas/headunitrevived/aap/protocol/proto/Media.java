@@ -6896,6 +6896,3052 @@ public final class Media {
 
   }
 
+  public interface InsetsOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.andrerinas.headunitrevived.aap.protocol.proto.Insets)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional int32 left = 1;</code>
+     * @return Whether the left field is set.
+     */
+    boolean hasLeft();
+    /**
+     * <code>optional int32 left = 1;</code>
+     * @return The left.
+     */
+    int getLeft();
+
+    /**
+     * <code>optional int32 top = 2;</code>
+     * @return Whether the top field is set.
+     */
+    boolean hasTop();
+    /**
+     * <code>optional int32 top = 2;</code>
+     * @return The top.
+     */
+    int getTop();
+
+    /**
+     * <code>optional int32 right = 3;</code>
+     * @return Whether the right field is set.
+     */
+    boolean hasRight();
+    /**
+     * <code>optional int32 right = 3;</code>
+     * @return The right.
+     */
+    int getRight();
+
+    /**
+     * <code>optional int32 bottom = 4;</code>
+     * @return Whether the bottom field is set.
+     */
+    boolean hasBottom();
+    /**
+     * <code>optional int32 bottom = 4;</code>
+     * @return The bottom.
+     */
+    int getBottom();
+  }
+  /**
+   * Protobuf type {@code com.andrerinas.headunitrevived.aap.protocol.proto.Insets}
+   */
+  public static final class Insets extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:com.andrerinas.headunitrevived.aap.protocol.proto.Insets)
+      InsetsOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use Insets.newBuilder() to construct.
+    private Insets(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private Insets() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new Insets();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_Insets_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_Insets_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.class, com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int LEFT_FIELD_NUMBER = 1;
+    private int left_ = 0;
+    /**
+     * <code>optional int32 left = 1;</code>
+     * @return Whether the left field is set.
+     */
+    @java.lang.Override
+    public boolean hasLeft() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional int32 left = 1;</code>
+     * @return The left.
+     */
+    @java.lang.Override
+    public int getLeft() {
+      return left_;
+    }
+
+    public static final int TOP_FIELD_NUMBER = 2;
+    private int top_ = 0;
+    /**
+     * <code>optional int32 top = 2;</code>
+     * @return Whether the top field is set.
+     */
+    @java.lang.Override
+    public boolean hasTop() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <code>optional int32 top = 2;</code>
+     * @return The top.
+     */
+    @java.lang.Override
+    public int getTop() {
+      return top_;
+    }
+
+    public static final int RIGHT_FIELD_NUMBER = 3;
+    private int right_ = 0;
+    /**
+     * <code>optional int32 right = 3;</code>
+     * @return Whether the right field is set.
+     */
+    @java.lang.Override
+    public boolean hasRight() {
+      return ((bitField0_ & 0x00000004) != 0);
+    }
+    /**
+     * <code>optional int32 right = 3;</code>
+     * @return The right.
+     */
+    @java.lang.Override
+    public int getRight() {
+      return right_;
+    }
+
+    public static final int BOTTOM_FIELD_NUMBER = 4;
+    private int bottom_ = 0;
+    /**
+     * <code>optional int32 bottom = 4;</code>
+     * @return Whether the bottom field is set.
+     */
+    @java.lang.Override
+    public boolean hasBottom() {
+      return ((bitField0_ & 0x00000008) != 0);
+    }
+    /**
+     * <code>optional int32 bottom = 4;</code>
+     * @return The bottom.
+     */
+    @java.lang.Override
+    public int getBottom() {
+      return bottom_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (((bitField0_ & 0x00000001) != 0)) {
+        output.writeInt32(1, left_);
+      }
+      if (((bitField0_ & 0x00000002) != 0)) {
+        output.writeInt32(2, top_);
+      }
+      if (((bitField0_ & 0x00000004) != 0)) {
+        output.writeInt32(3, right_);
+      }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        output.writeInt32(4, bottom_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, left_);
+      }
+      if (((bitField0_ & 0x00000002) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, top_);
+      }
+      if (((bitField0_ & 0x00000004) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, right_);
+      }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, bottom_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets)) {
+        return super.equals(obj);
+      }
+      com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets other = (com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets) obj;
+
+      if (hasLeft() != other.hasLeft()) return false;
+      if (hasLeft()) {
+        if (getLeft()
+            != other.getLeft()) return false;
+      }
+      if (hasTop() != other.hasTop()) return false;
+      if (hasTop()) {
+        if (getTop()
+            != other.getTop()) return false;
+      }
+      if (hasRight() != other.hasRight()) return false;
+      if (hasRight()) {
+        if (getRight()
+            != other.getRight()) return false;
+      }
+      if (hasBottom() != other.hasBottom()) return false;
+      if (hasBottom()) {
+        if (getBottom()
+            != other.getBottom()) return false;
+      }
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasLeft()) {
+        hash = (37 * hash) + LEFT_FIELD_NUMBER;
+        hash = (53 * hash) + getLeft();
+      }
+      if (hasTop()) {
+        hash = (37 * hash) + TOP_FIELD_NUMBER;
+        hash = (53 * hash) + getTop();
+      }
+      if (hasRight()) {
+        hash = (37 * hash) + RIGHT_FIELD_NUMBER;
+        hash = (53 * hash) + getRight();
+      }
+      if (hasBottom()) {
+        hash = (37 * hash) + BOTTOM_FIELD_NUMBER;
+        hash = (53 * hash) + getBottom();
+      }
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code com.andrerinas.headunitrevived.aap.protocol.proto.Insets}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.andrerinas.headunitrevived.aap.protocol.proto.Insets)
+        com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_Insets_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_Insets_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.class, com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder.class);
+      }
+
+      // Construct using com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.newBuilder()
+      private Builder() {
+
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        left_ = 0;
+        top_ = 0;
+        right_ = 0;
+        bottom_ = 0;
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_Insets_descriptor;
+      }
+
+      @java.lang.Override
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets getDefaultInstanceForType() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets build() {
+        com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets buildPartial() {
+        com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets result = new com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.left_ = left_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.top_ = top_;
+          to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.right_ = right_;
+          to_bitField0_ |= 0x00000004;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.bottom_ = bottom_;
+          to_bitField0_ |= 0x00000008;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets) {
+          return mergeFrom((com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets other) {
+        if (other == com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance()) return this;
+        if (other.hasLeft()) {
+          setLeft(other.getLeft());
+        }
+        if (other.hasTop()) {
+          setTop(other.getTop());
+        }
+        if (other.hasRight()) {
+          setRight(other.getRight());
+        }
+        if (other.hasBottom()) {
+          setBottom(other.getBottom());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                left_ = input.readInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 16: {
+                top_ = input.readInt32();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              case 24: {
+                right_ = input.readInt32();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 24
+              case 32: {
+                bottom_ = input.readInt32();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 32
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+      private int bitField0_;
+
+      private int left_ ;
+      /**
+       * <code>optional int32 left = 1;</code>
+       * @return Whether the left field is set.
+       */
+      @java.lang.Override
+      public boolean hasLeft() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <code>optional int32 left = 1;</code>
+       * @return The left.
+       */
+      @java.lang.Override
+      public int getLeft() {
+        return left_;
+      }
+      /**
+       * <code>optional int32 left = 1;</code>
+       * @param value The left to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLeft(int value) {
+
+        left_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 left = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLeft() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        left_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int top_ ;
+      /**
+       * <code>optional int32 top = 2;</code>
+       * @return Whether the top field is set.
+       */
+      @java.lang.Override
+      public boolean hasTop() {
+        return ((bitField0_ & 0x00000002) != 0);
+      }
+      /**
+       * <code>optional int32 top = 2;</code>
+       * @return The top.
+       */
+      @java.lang.Override
+      public int getTop() {
+        return top_;
+      }
+      /**
+       * <code>optional int32 top = 2;</code>
+       * @param value The top to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTop(int value) {
+
+        top_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 top = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTop() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        top_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int right_ ;
+      /**
+       * <code>optional int32 right = 3;</code>
+       * @return Whether the right field is set.
+       */
+      @java.lang.Override
+      public boolean hasRight() {
+        return ((bitField0_ & 0x00000004) != 0);
+      }
+      /**
+       * <code>optional int32 right = 3;</code>
+       * @return The right.
+       */
+      @java.lang.Override
+      public int getRight() {
+        return right_;
+      }
+      /**
+       * <code>optional int32 right = 3;</code>
+       * @param value The right to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRight(int value) {
+
+        right_ = value;
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 right = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRight() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        right_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int bottom_ ;
+      /**
+       * <code>optional int32 bottom = 4;</code>
+       * @return Whether the bottom field is set.
+       */
+      @java.lang.Override
+      public boolean hasBottom() {
+        return ((bitField0_ & 0x00000008) != 0);
+      }
+      /**
+       * <code>optional int32 bottom = 4;</code>
+       * @return The bottom.
+       */
+      @java.lang.Override
+      public int getBottom() {
+        return bottom_;
+      }
+      /**
+       * <code>optional int32 bottom = 4;</code>
+       * @param value The bottom to set.
+       * @return This builder for chaining.
+       */
+      public Builder setBottom(int value) {
+
+        bottom_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 bottom = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearBottom() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        bottom_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:com.andrerinas.headunitrevived.aap.protocol.proto.Insets)
+    }
+
+    // @@protoc_insertion_point(class_scope:com.andrerinas.headunitrevived.aap.protocol.proto.Insets)
+    private static final com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets();
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<Insets>
+        PARSER = new com.google.protobuf.AbstractParser<Insets>() {
+      @java.lang.Override
+      public Insets parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<Insets> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Insets> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface UiConfigOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+     * @return Whether the margins field is set.
+     */
+    boolean hasMargins();
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+     * @return The margins.
+     */
+    com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets getMargins();
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+     */
+    com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder getMarginsOrBuilder();
+
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+     * @return Whether the contentInsets field is set.
+     */
+    boolean hasContentInsets();
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+     * @return The contentInsets.
+     */
+    com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets getContentInsets();
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+     */
+    com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder getContentInsetsOrBuilder();
+
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+     * @return Whether the stableContentInsets field is set.
+     */
+    boolean hasStableContentInsets();
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+     * @return The stableContentInsets.
+     */
+    com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets getStableContentInsets();
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+     */
+    com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder getStableContentInsetsOrBuilder();
+
+    /**
+     * <code>optional int32 ui_theme = 4;</code>
+     * @return Whether the uiTheme field is set.
+     */
+    boolean hasUiTheme();
+    /**
+     * <code>optional int32 ui_theme = 4;</code>
+     * @return The uiTheme.
+     */
+    int getUiTheme();
+  }
+  /**
+   * Protobuf type {@code com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig}
+   */
+  public static final class UiConfig extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig)
+      UiConfigOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use UiConfig.newBuilder() to construct.
+    private UiConfig(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private UiConfig() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new UiConfig();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UiConfig_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UiConfig_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.class, com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int MARGINS_FIELD_NUMBER = 1;
+    private com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets margins_;
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+     * @return Whether the margins field is set.
+     */
+    @java.lang.Override
+    public boolean hasMargins() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+     * @return The margins.
+     */
+    @java.lang.Override
+    public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets getMargins() {
+      return margins_ == null ? com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance() : margins_;
+    }
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+     */
+    @java.lang.Override
+    public com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder getMarginsOrBuilder() {
+      return margins_ == null ? com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance() : margins_;
+    }
+
+    public static final int CONTENT_INSETS_FIELD_NUMBER = 2;
+    private com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets contentInsets_;
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+     * @return Whether the contentInsets field is set.
+     */
+    @java.lang.Override
+    public boolean hasContentInsets() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+     * @return The contentInsets.
+     */
+    @java.lang.Override
+    public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets getContentInsets() {
+      return contentInsets_ == null ? com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance() : contentInsets_;
+    }
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+     */
+    @java.lang.Override
+    public com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder getContentInsetsOrBuilder() {
+      return contentInsets_ == null ? com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance() : contentInsets_;
+    }
+
+    public static final int STABLE_CONTENT_INSETS_FIELD_NUMBER = 3;
+    private com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets stableContentInsets_;
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+     * @return Whether the stableContentInsets field is set.
+     */
+    @java.lang.Override
+    public boolean hasStableContentInsets() {
+      return ((bitField0_ & 0x00000004) != 0);
+    }
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+     * @return The stableContentInsets.
+     */
+    @java.lang.Override
+    public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets getStableContentInsets() {
+      return stableContentInsets_ == null ? com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance() : stableContentInsets_;
+    }
+    /**
+     * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+     */
+    @java.lang.Override
+    public com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder getStableContentInsetsOrBuilder() {
+      return stableContentInsets_ == null ? com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance() : stableContentInsets_;
+    }
+
+    public static final int UI_THEME_FIELD_NUMBER = 4;
+    private int uiTheme_ = 0;
+    /**
+     * <code>optional int32 ui_theme = 4;</code>
+     * @return Whether the uiTheme field is set.
+     */
+    @java.lang.Override
+    public boolean hasUiTheme() {
+      return ((bitField0_ & 0x00000008) != 0);
+    }
+    /**
+     * <code>optional int32 ui_theme = 4;</code>
+     * @return The uiTheme.
+     */
+    @java.lang.Override
+    public int getUiTheme() {
+      return uiTheme_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (((bitField0_ & 0x00000001) != 0)) {
+        output.writeMessage(1, getMargins());
+      }
+      if (((bitField0_ & 0x00000002) != 0)) {
+        output.writeMessage(2, getContentInsets());
+      }
+      if (((bitField0_ & 0x00000004) != 0)) {
+        output.writeMessage(3, getStableContentInsets());
+      }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        output.writeInt32(4, uiTheme_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getMargins());
+      }
+      if (((bitField0_ & 0x00000002) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, getContentInsets());
+      }
+      if (((bitField0_ & 0x00000004) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, getStableContentInsets());
+      }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, uiTheme_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig)) {
+        return super.equals(obj);
+      }
+      com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig other = (com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig) obj;
+
+      if (hasMargins() != other.hasMargins()) return false;
+      if (hasMargins()) {
+        if (!getMargins()
+            .equals(other.getMargins())) return false;
+      }
+      if (hasContentInsets() != other.hasContentInsets()) return false;
+      if (hasContentInsets()) {
+        if (!getContentInsets()
+            .equals(other.getContentInsets())) return false;
+      }
+      if (hasStableContentInsets() != other.hasStableContentInsets()) return false;
+      if (hasStableContentInsets()) {
+        if (!getStableContentInsets()
+            .equals(other.getStableContentInsets())) return false;
+      }
+      if (hasUiTheme() != other.hasUiTheme()) return false;
+      if (hasUiTheme()) {
+        if (getUiTheme()
+            != other.getUiTheme()) return false;
+      }
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasMargins()) {
+        hash = (37 * hash) + MARGINS_FIELD_NUMBER;
+        hash = (53 * hash) + getMargins().hashCode();
+      }
+      if (hasContentInsets()) {
+        hash = (37 * hash) + CONTENT_INSETS_FIELD_NUMBER;
+        hash = (53 * hash) + getContentInsets().hashCode();
+      }
+      if (hasStableContentInsets()) {
+        hash = (37 * hash) + STABLE_CONTENT_INSETS_FIELD_NUMBER;
+        hash = (53 * hash) + getStableContentInsets().hashCode();
+      }
+      if (hasUiTheme()) {
+        hash = (37 * hash) + UI_THEME_FIELD_NUMBER;
+        hash = (53 * hash) + getUiTheme();
+      }
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig)
+        com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfigOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UiConfig_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UiConfig_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.class, com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.Builder.class);
+      }
+
+      // Construct using com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getMarginsFieldBuilder();
+          getContentInsetsFieldBuilder();
+          getStableContentInsetsFieldBuilder();
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        margins_ = null;
+        if (marginsBuilder_ != null) {
+          marginsBuilder_.dispose();
+          marginsBuilder_ = null;
+        }
+        contentInsets_ = null;
+        if (contentInsetsBuilder_ != null) {
+          contentInsetsBuilder_.dispose();
+          contentInsetsBuilder_ = null;
+        }
+        stableContentInsets_ = null;
+        if (stableContentInsetsBuilder_ != null) {
+          stableContentInsetsBuilder_.dispose();
+          stableContentInsetsBuilder_ = null;
+        }
+        uiTheme_ = 0;
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UiConfig_descriptor;
+      }
+
+      @java.lang.Override
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig getDefaultInstanceForType() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig build() {
+        com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig buildPartial() {
+        com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig result = new com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.margins_ = marginsBuilder_ == null
+              ? margins_
+              : marginsBuilder_.build();
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.contentInsets_ = contentInsetsBuilder_ == null
+              ? contentInsets_
+              : contentInsetsBuilder_.build();
+          to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.stableContentInsets_ = stableContentInsetsBuilder_ == null
+              ? stableContentInsets_
+              : stableContentInsetsBuilder_.build();
+          to_bitField0_ |= 0x00000004;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.uiTheme_ = uiTheme_;
+          to_bitField0_ |= 0x00000008;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig) {
+          return mergeFrom((com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig other) {
+        if (other == com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.getDefaultInstance()) return this;
+        if (other.hasMargins()) {
+          mergeMargins(other.getMargins());
+        }
+        if (other.hasContentInsets()) {
+          mergeContentInsets(other.getContentInsets());
+        }
+        if (other.hasStableContentInsets()) {
+          mergeStableContentInsets(other.getStableContentInsets());
+        }
+        if (other.hasUiTheme()) {
+          setUiTheme(other.getUiTheme());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                input.readMessage(
+                    getMarginsFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 18: {
+                input.readMessage(
+                    getContentInsetsFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              case 26: {
+                input.readMessage(
+                    getStableContentInsetsFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+              case 32: {
+                uiTheme_ = input.readInt32();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 32
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+      private int bitField0_;
+
+      private com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets margins_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets, com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder, com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder> marginsBuilder_;
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+       * @return Whether the margins field is set.
+       */
+      public boolean hasMargins() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+       * @return The margins.
+       */
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets getMargins() {
+        if (marginsBuilder_ == null) {
+          return margins_ == null ? com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance() : margins_;
+        } else {
+          return marginsBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+       */
+      public Builder setMargins(com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets value) {
+        if (marginsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          margins_ = value;
+        } else {
+          marginsBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+       */
+      public Builder setMargins(
+          com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder builderForValue) {
+        if (marginsBuilder_ == null) {
+          margins_ = builderForValue.build();
+        } else {
+          marginsBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+       */
+      public Builder mergeMargins(com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets value) {
+        if (marginsBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) != 0) &&
+            margins_ != null &&
+            margins_ != com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance()) {
+            getMarginsBuilder().mergeFrom(value);
+          } else {
+            margins_ = value;
+          }
+        } else {
+          marginsBuilder_.mergeFrom(value);
+        }
+        if (margins_ != null) {
+          bitField0_ |= 0x00000001;
+          onChanged();
+        }
+        return this;
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+       */
+      public Builder clearMargins() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        margins_ = null;
+        if (marginsBuilder_ != null) {
+          marginsBuilder_.dispose();
+          marginsBuilder_ = null;
+        }
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+       */
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder getMarginsBuilder() {
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return getMarginsFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+       */
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder getMarginsOrBuilder() {
+        if (marginsBuilder_ != null) {
+          return marginsBuilder_.getMessageOrBuilder();
+        } else {
+          return margins_ == null ?
+              com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance() : margins_;
+        }
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets margins = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets, com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder, com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder> 
+          getMarginsFieldBuilder() {
+        if (marginsBuilder_ == null) {
+          marginsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets, com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder, com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder>(
+                  getMargins(),
+                  getParentForChildren(),
+                  isClean());
+          margins_ = null;
+        }
+        return marginsBuilder_;
+      }
+
+      private com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets contentInsets_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets, com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder, com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder> contentInsetsBuilder_;
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+       * @return Whether the contentInsets field is set.
+       */
+      public boolean hasContentInsets() {
+        return ((bitField0_ & 0x00000002) != 0);
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+       * @return The contentInsets.
+       */
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets getContentInsets() {
+        if (contentInsetsBuilder_ == null) {
+          return contentInsets_ == null ? com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance() : contentInsets_;
+        } else {
+          return contentInsetsBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+       */
+      public Builder setContentInsets(com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets value) {
+        if (contentInsetsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          contentInsets_ = value;
+        } else {
+          contentInsetsBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+       */
+      public Builder setContentInsets(
+          com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder builderForValue) {
+        if (contentInsetsBuilder_ == null) {
+          contentInsets_ = builderForValue.build();
+        } else {
+          contentInsetsBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+       */
+      public Builder mergeContentInsets(com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets value) {
+        if (contentInsetsBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) != 0) &&
+            contentInsets_ != null &&
+            contentInsets_ != com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance()) {
+            getContentInsetsBuilder().mergeFrom(value);
+          } else {
+            contentInsets_ = value;
+          }
+        } else {
+          contentInsetsBuilder_.mergeFrom(value);
+        }
+        if (contentInsets_ != null) {
+          bitField0_ |= 0x00000002;
+          onChanged();
+        }
+        return this;
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+       */
+      public Builder clearContentInsets() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        contentInsets_ = null;
+        if (contentInsetsBuilder_ != null) {
+          contentInsetsBuilder_.dispose();
+          contentInsetsBuilder_ = null;
+        }
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+       */
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder getContentInsetsBuilder() {
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return getContentInsetsFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+       */
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder getContentInsetsOrBuilder() {
+        if (contentInsetsBuilder_ != null) {
+          return contentInsetsBuilder_.getMessageOrBuilder();
+        } else {
+          return contentInsets_ == null ?
+              com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance() : contentInsets_;
+        }
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets content_insets = 2;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets, com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder, com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder> 
+          getContentInsetsFieldBuilder() {
+        if (contentInsetsBuilder_ == null) {
+          contentInsetsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets, com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder, com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder>(
+                  getContentInsets(),
+                  getParentForChildren(),
+                  isClean());
+          contentInsets_ = null;
+        }
+        return contentInsetsBuilder_;
+      }
+
+      private com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets stableContentInsets_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets, com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder, com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder> stableContentInsetsBuilder_;
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+       * @return Whether the stableContentInsets field is set.
+       */
+      public boolean hasStableContentInsets() {
+        return ((bitField0_ & 0x00000004) != 0);
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+       * @return The stableContentInsets.
+       */
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets getStableContentInsets() {
+        if (stableContentInsetsBuilder_ == null) {
+          return stableContentInsets_ == null ? com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance() : stableContentInsets_;
+        } else {
+          return stableContentInsetsBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+       */
+      public Builder setStableContentInsets(com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets value) {
+        if (stableContentInsetsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          stableContentInsets_ = value;
+        } else {
+          stableContentInsetsBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+       */
+      public Builder setStableContentInsets(
+          com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder builderForValue) {
+        if (stableContentInsetsBuilder_ == null) {
+          stableContentInsets_ = builderForValue.build();
+        } else {
+          stableContentInsetsBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+       */
+      public Builder mergeStableContentInsets(com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets value) {
+        if (stableContentInsetsBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) != 0) &&
+            stableContentInsets_ != null &&
+            stableContentInsets_ != com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance()) {
+            getStableContentInsetsBuilder().mergeFrom(value);
+          } else {
+            stableContentInsets_ = value;
+          }
+        } else {
+          stableContentInsetsBuilder_.mergeFrom(value);
+        }
+        if (stableContentInsets_ != null) {
+          bitField0_ |= 0x00000004;
+          onChanged();
+        }
+        return this;
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+       */
+      public Builder clearStableContentInsets() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        stableContentInsets_ = null;
+        if (stableContentInsetsBuilder_ != null) {
+          stableContentInsetsBuilder_.dispose();
+          stableContentInsetsBuilder_ = null;
+        }
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+       */
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder getStableContentInsetsBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getStableContentInsetsFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+       */
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder getStableContentInsetsOrBuilder() {
+        if (stableContentInsetsBuilder_ != null) {
+          return stableContentInsetsBuilder_.getMessageOrBuilder();
+        } else {
+          return stableContentInsets_ == null ?
+              com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.getDefaultInstance() : stableContentInsets_;
+        }
+      }
+      /**
+       * <code>optional .com.andrerinas.headunitrevived.aap.protocol.proto.Insets stable_content_insets = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets, com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder, com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder> 
+          getStableContentInsetsFieldBuilder() {
+        if (stableContentInsetsBuilder_ == null) {
+          stableContentInsetsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets, com.andrerinas.headunitrevived.aap.protocol.proto.Media.Insets.Builder, com.andrerinas.headunitrevived.aap.protocol.proto.Media.InsetsOrBuilder>(
+                  getStableContentInsets(),
+                  getParentForChildren(),
+                  isClean());
+          stableContentInsets_ = null;
+        }
+        return stableContentInsetsBuilder_;
+      }
+
+      private int uiTheme_ ;
+      /**
+       * <code>optional int32 ui_theme = 4;</code>
+       * @return Whether the uiTheme field is set.
+       */
+      @java.lang.Override
+      public boolean hasUiTheme() {
+        return ((bitField0_ & 0x00000008) != 0);
+      }
+      /**
+       * <code>optional int32 ui_theme = 4;</code>
+       * @return The uiTheme.
+       */
+      @java.lang.Override
+      public int getUiTheme() {
+        return uiTheme_;
+      }
+      /**
+       * <code>optional int32 ui_theme = 4;</code>
+       * @param value The uiTheme to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUiTheme(int value) {
+
+        uiTheme_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 ui_theme = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUiTheme() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        uiTheme_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig)
+    }
+
+    // @@protoc_insertion_point(class_scope:com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig)
+    private static final com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig();
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<UiConfig>
+        PARSER = new com.google.protobuf.AbstractParser<UiConfig>() {
+      @java.lang.Override
+      public UiConfig parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<UiConfig> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<UiConfig> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface UpdateUiConfigRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+     * @return Whether the uiConfig field is set.
+     */
+    boolean hasUiConfig();
+    /**
+     * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+     * @return The uiConfig.
+     */
+    com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig getUiConfig();
+    /**
+     * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+     */
+    com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfigOrBuilder getUiConfigOrBuilder();
+  }
+  /**
+   * Protobuf type {@code com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigRequest}
+   */
+  public static final class UpdateUiConfigRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigRequest)
+      UpdateUiConfigRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use UpdateUiConfigRequest.newBuilder() to construct.
+    private UpdateUiConfigRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private UpdateUiConfigRequest() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new UpdateUiConfigRequest();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigRequest_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest.class, com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int UI_CONFIG_FIELD_NUMBER = 1;
+    private com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig uiConfig_;
+    /**
+     * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+     * @return Whether the uiConfig field is set.
+     */
+    @java.lang.Override
+    public boolean hasUiConfig() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+     * @return The uiConfig.
+     */
+    @java.lang.Override
+    public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig getUiConfig() {
+      return uiConfig_ == null ? com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.getDefaultInstance() : uiConfig_;
+    }
+    /**
+     * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+     */
+    @java.lang.Override
+    public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfigOrBuilder getUiConfigOrBuilder() {
+      return uiConfig_ == null ? com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.getDefaultInstance() : uiConfig_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasUiConfig()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (((bitField0_ & 0x00000001) != 0)) {
+        output.writeMessage(1, getUiConfig());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getUiConfig());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest)) {
+        return super.equals(obj);
+      }
+      com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest other = (com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest) obj;
+
+      if (hasUiConfig() != other.hasUiConfig()) return false;
+      if (hasUiConfig()) {
+        if (!getUiConfig()
+            .equals(other.getUiConfig())) return false;
+      }
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasUiConfig()) {
+        hash = (37 * hash) + UI_CONFIG_FIELD_NUMBER;
+        hash = (53 * hash) + getUiConfig().hashCode();
+      }
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigRequest)
+        com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigRequest_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest.class, com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest.Builder.class);
+      }
+
+      // Construct using com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getUiConfigFieldBuilder();
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        uiConfig_ = null;
+        if (uiConfigBuilder_ != null) {
+          uiConfigBuilder_.dispose();
+          uiConfigBuilder_ = null;
+        }
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigRequest_descriptor;
+      }
+
+      @java.lang.Override
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest getDefaultInstanceForType() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest build() {
+        com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest buildPartial() {
+        com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest result = new com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.uiConfig_ = uiConfigBuilder_ == null
+              ? uiConfig_
+              : uiConfigBuilder_.build();
+          to_bitField0_ |= 0x00000001;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest) {
+          return mergeFrom((com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest other) {
+        if (other == com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest.getDefaultInstance()) return this;
+        if (other.hasUiConfig()) {
+          mergeUiConfig(other.getUiConfig());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        if (!hasUiConfig()) {
+          return false;
+        }
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                input.readMessage(
+                    getUiConfigFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+      private int bitField0_;
+
+      private com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig uiConfig_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig, com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.Builder, com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfigOrBuilder> uiConfigBuilder_;
+      /**
+       * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+       * @return Whether the uiConfig field is set.
+       */
+      public boolean hasUiConfig() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+       * @return The uiConfig.
+       */
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig getUiConfig() {
+        if (uiConfigBuilder_ == null) {
+          return uiConfig_ == null ? com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.getDefaultInstance() : uiConfig_;
+        } else {
+          return uiConfigBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+       */
+      public Builder setUiConfig(com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig value) {
+        if (uiConfigBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          uiConfig_ = value;
+        } else {
+          uiConfigBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+       */
+      public Builder setUiConfig(
+          com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.Builder builderForValue) {
+        if (uiConfigBuilder_ == null) {
+          uiConfig_ = builderForValue.build();
+        } else {
+          uiConfigBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+       */
+      public Builder mergeUiConfig(com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig value) {
+        if (uiConfigBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) != 0) &&
+            uiConfig_ != null &&
+            uiConfig_ != com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.getDefaultInstance()) {
+            getUiConfigBuilder().mergeFrom(value);
+          } else {
+            uiConfig_ = value;
+          }
+        } else {
+          uiConfigBuilder_.mergeFrom(value);
+        }
+        if (uiConfig_ != null) {
+          bitField0_ |= 0x00000001;
+          onChanged();
+        }
+        return this;
+      }
+      /**
+       * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+       */
+      public Builder clearUiConfig() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        uiConfig_ = null;
+        if (uiConfigBuilder_ != null) {
+          uiConfigBuilder_.dispose();
+          uiConfigBuilder_ = null;
+        }
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+       */
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.Builder getUiConfigBuilder() {
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return getUiConfigFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+       */
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfigOrBuilder getUiConfigOrBuilder() {
+        if (uiConfigBuilder_ != null) {
+          return uiConfigBuilder_.getMessageOrBuilder();
+        } else {
+          return uiConfig_ == null ?
+              com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.getDefaultInstance() : uiConfig_;
+        }
+      }
+      /**
+       * <code>required .com.andrerinas.headunitrevived.aap.protocol.proto.UiConfig ui_config = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig, com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.Builder, com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfigOrBuilder> 
+          getUiConfigFieldBuilder() {
+        if (uiConfigBuilder_ == null) {
+          uiConfigBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig, com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfig.Builder, com.andrerinas.headunitrevived.aap.protocol.proto.Media.UiConfigOrBuilder>(
+                  getUiConfig(),
+                  getParentForChildren(),
+                  isClean());
+          uiConfig_ = null;
+        }
+        return uiConfigBuilder_;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigRequest)
+    private static final com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest();
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<UpdateUiConfigRequest>
+        PARSER = new com.google.protobuf.AbstractParser<UpdateUiConfigRequest>() {
+      @java.lang.Override
+      public UpdateUiConfigRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<UpdateUiConfigRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<UpdateUiConfigRequest> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface UpdateUiConfigReplyOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigReply)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required uint32 status = 1;</code>
+     * @return Whether the status field is set.
+     */
+    boolean hasStatus();
+    /**
+     * <code>required uint32 status = 1;</code>
+     * @return The status.
+     */
+    int getStatus();
+  }
+  /**
+   * Protobuf type {@code com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigReply}
+   */
+  public static final class UpdateUiConfigReply extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigReply)
+      UpdateUiConfigReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use UpdateUiConfigReply.newBuilder() to construct.
+    private UpdateUiConfigReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private UpdateUiConfigReply() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new UpdateUiConfigReply();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigReply_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigReply_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply.class, com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int STATUS_FIELD_NUMBER = 1;
+    private int status_ = 0;
+    /**
+     * <code>required uint32 status = 1;</code>
+     * @return Whether the status field is set.
+     */
+    @java.lang.Override
+    public boolean hasStatus() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>required uint32 status = 1;</code>
+     * @return The status.
+     */
+    @java.lang.Override
+    public int getStatus() {
+      return status_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasStatus()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (((bitField0_ & 0x00000001) != 0)) {
+        output.writeUInt32(1, status_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(1, status_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply)) {
+        return super.equals(obj);
+      }
+      com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply other = (com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply) obj;
+
+      if (hasStatus() != other.hasStatus()) return false;
+      if (hasStatus()) {
+        if (getStatus()
+            != other.getStatus()) return false;
+      }
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasStatus()) {
+        hash = (37 * hash) + STATUS_FIELD_NUMBER;
+        hash = (53 * hash) + getStatus();
+      }
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigReply}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigReply)
+        com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReplyOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigReply_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigReply_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply.class, com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply.Builder.class);
+      }
+
+      // Construct using com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply.newBuilder()
+      private Builder() {
+
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        status_ = 0;
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigReply_descriptor;
+      }
+
+      @java.lang.Override
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply getDefaultInstanceForType() {
+        return com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply build() {
+        com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply buildPartial() {
+        com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply result = new com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.status_ = status_;
+          to_bitField0_ |= 0x00000001;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply) {
+          return mergeFrom((com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply other) {
+        if (other == com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply.getDefaultInstance()) return this;
+        if (other.hasStatus()) {
+          setStatus(other.getStatus());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        if (!hasStatus()) {
+          return false;
+        }
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                status_ = input.readUInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+      private int bitField0_;
+
+      private int status_ ;
+      /**
+       * <code>required uint32 status = 1;</code>
+       * @return Whether the status field is set.
+       */
+      @java.lang.Override
+      public boolean hasStatus() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <code>required uint32 status = 1;</code>
+       * @return The status.
+       */
+      @java.lang.Override
+      public int getStatus() {
+        return status_;
+      }
+      /**
+       * <code>required uint32 status = 1;</code>
+       * @param value The status to set.
+       * @return This builder for chaining.
+       */
+      public Builder setStatus(int value) {
+
+        status_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required uint32 status = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearStatus() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        status_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigReply)
+    }
+
+    // @@protoc_insertion_point(class_scope:com.andrerinas.headunitrevived.aap.protocol.proto.UpdateUiConfigReply)
+    private static final com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply();
+    }
+
+    public static com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<UpdateUiConfigReply>
+        PARSER = new com.google.protobuf.AbstractParser<UpdateUiConfigReply>() {
+      @java.lang.Override
+      public UpdateUiConfigReply parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<UpdateUiConfigReply> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<UpdateUiConfigReply> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.andrerinas.headunitrevived.aap.protocol.proto.Media.UpdateUiConfigReply getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_AudioConfiguration_descriptor;
   private static final 
@@ -6941,6 +9987,26 @@ public final class Media {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_Config_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_Insets_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_Insets_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UiConfig_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UiConfig_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigReply_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigReply_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -6977,32 +10043,44 @@ public final class Media {
       "ived.aap.protocol.proto.Config.ConfigSta" +
       "tus\022\023\n\013max_unacked\030\002 \002(\r\022\035\n\025configuratio" +
       "n_indices\030\003 \003(\r\"(\n\014ConfigStatus\022\n\n\006DEVIC" +
-      "E\020\001\022\014\n\010HEADUNIT\020\002*\372\003\n\007MsgType\022\026\n\022MEDIA_M" +
-      "ESSAGE_DATA\020\000\022\036\n\032MEDIA_MESSAGE_CODEC_CON" +
-      "FIG\020\001\022\031\n\023MEDIA_MESSAGE_SETUP\020\200\200\002\022\031\n\023MEDI" +
-      "A_MESSAGE_START\020\201\200\002\022\030\n\022MEDIA_MESSAGE_STO" +
-      "P\020\202\200\002\022\032\n\024MEDIA_MESSAGE_CONFIG\020\203\200\002\022\027\n\021MED" +
-      "IA_MESSAGE_ACK\020\204\200\002\022&\n MEDIA_MESSAGE_MICR" +
-      "OPHONE_REQUEST\020\205\200\002\022\'\n!MEDIA_MESSAGE_MICR" +
-      "OPHONE_RESPONSE\020\206\200\002\022\'\n!MEDIA_MESSAGE_VID" +
-      "EO_FOCUS_REQUEST\020\207\200\002\022,\n&MEDIA_MESSAGE_VI" +
-      "DEO_FOCUS_NOTIFICATION\020\210\200\002\022,\n&MEDIA_MESS" +
-      "AGE_UPDATE_UI_CONFIG_REQUEST\020\211\200\002\022*\n$MEDI" +
-      "A_MESSAGE_UPDATE_UI_CONFIG_REPLY\020\212\200\002\0220\n*" +
-      "MEDIA_MESSAGE_AUDIO_UNDERFLOW_NOTIFICATI" +
-      "ON\020\213\200\002*\335\001\n\016MediaCodecType\022\031\n\025MEDIA_CODEC" +
-      "_AUDIO_PCM\020\001\022\034\n\030MEDIA_CODEC_AUDIO_AAC_LC" +
-      "\020\002\022\035\n\031MEDIA_CODEC_VIDEO_H264_BP\020\003\022!\n\035MED" +
-      "IA_CODEC_AUDIO_AAC_LC_ADTS\020\004\022\031\n\025MEDIA_CO" +
-      "DEC_VIDEO_VP9\020\005\022\031\n\025MEDIA_CODEC_VIDEO_AV1" +
-      "\020\006\022\032\n\026MEDIA_CODEC_VIDEO_H265\020\007*s\n\017AudioS" +
-      "treamType\022\010\n\004NONE\020\000\022\n\n\006SPEECH\020\001\022\n\n\006SYSTE" +
-      "M\020\002\022\t\n\005MEDIA\020\003\022\t\n\005ALARM\020\004\022\014\n\010GUIDANCE\020\005\022" +
-      "\020\n\014ANNOUNCEMENT\020\006\022\010\n\004RING\020\007*\217\001\n\016VideoFoc" +
-      "usMode\022\031\n\025VIDEO_FOCUS_PROJECTED\020\001\022\026\n\022VID" +
-      "EO_FOCUS_NATIVE\020\002\022 \n\034VIDEO_FOCUS_NATIVE_" +
-      "TRANSIENT\020\003\022(\n$VIDEO_FOCUS_PROJECTED_NO_" +
-      "INPUT_FOCUS\020\004B\007B\005Media"
+      "E\020\001\022\014\n\010HEADUNIT\020\002\"B\n\006Insets\022\014\n\004left\030\001 \001(" +
+      "\005\022\013\n\003top\030\002 \001(\005\022\r\n\005right\030\003 \001(\005\022\016\n\006bottom\030" +
+      "\004 \001(\005\"\225\002\n\010UiConfig\022J\n\007margins\030\001 \001(\01329.co" +
+      "m.andrerinas.headunitrevived.aap.protoco" +
+      "l.proto.Insets\022Q\n\016content_insets\030\002 \001(\01329" +
+      ".com.andrerinas.headunitrevived.aap.prot" +
+      "ocol.proto.Insets\022X\n\025stable_content_inse" +
+      "ts\030\003 \001(\01329.com.andrerinas.headunitrevive" +
+      "d.aap.protocol.proto.Insets\022\020\n\010ui_theme\030" +
+      "\004 \001(\005\"g\n\025UpdateUiConfigRequest\022N\n\tui_con" +
+      "fig\030\001 \002(\0132;.com.andrerinas.headunitreviv" +
+      "ed.aap.protocol.proto.UiConfig\"%\n\023Update" +
+      "UiConfigReply\022\016\n\006status\030\001 \002(\r*\372\003\n\007MsgTyp" +
+      "e\022\026\n\022MEDIA_MESSAGE_DATA\020\000\022\036\n\032MEDIA_MESSA" +
+      "GE_CODEC_CONFIG\020\001\022\031\n\023MEDIA_MESSAGE_SETUP" +
+      "\020\200\200\002\022\031\n\023MEDIA_MESSAGE_START\020\201\200\002\022\030\n\022MEDIA" +
+      "_MESSAGE_STOP\020\202\200\002\022\032\n\024MEDIA_MESSAGE_CONFI" +
+      "G\020\203\200\002\022\027\n\021MEDIA_MESSAGE_ACK\020\204\200\002\022&\n MEDIA_" +
+      "MESSAGE_MICROPHONE_REQUEST\020\205\200\002\022\'\n!MEDIA_" +
+      "MESSAGE_MICROPHONE_RESPONSE\020\206\200\002\022\'\n!MEDIA" +
+      "_MESSAGE_VIDEO_FOCUS_REQUEST\020\207\200\002\022,\n&MEDI" +
+      "A_MESSAGE_VIDEO_FOCUS_NOTIFICATION\020\210\200\002\022," +
+      "\n&MEDIA_MESSAGE_UPDATE_UI_CONFIG_REQUEST" +
+      "\020\211\200\002\022*\n$MEDIA_MESSAGE_UPDATE_UI_CONFIG_R" +
+      "EPLY\020\212\200\002\0220\n*MEDIA_MESSAGE_AUDIO_UNDERFLO" +
+      "W_NOTIFICATION\020\213\200\002*\335\001\n\016MediaCodecType\022\031\n" +
+      "\025MEDIA_CODEC_AUDIO_PCM\020\001\022\034\n\030MEDIA_CODEC_" +
+      "AUDIO_AAC_LC\020\002\022\035\n\031MEDIA_CODEC_VIDEO_H264" +
+      "_BP\020\003\022!\n\035MEDIA_CODEC_AUDIO_AAC_LC_ADTS\020\004" +
+      "\022\031\n\025MEDIA_CODEC_VIDEO_VP9\020\005\022\031\n\025MEDIA_COD" +
+      "EC_VIDEO_AV1\020\006\022\032\n\026MEDIA_CODEC_VIDEO_H265" +
+      "\020\007*s\n\017AudioStreamType\022\010\n\004NONE\020\000\022\n\n\006SPEEC" +
+      "H\020\001\022\n\n\006SYSTEM\020\002\022\t\n\005MEDIA\020\003\022\t\n\005ALARM\020\004\022\014\n" +
+      "\010GUIDANCE\020\005\022\020\n\014ANNOUNCEMENT\020\006\022\010\n\004RING\020\007*" +
+      "\217\001\n\016VideoFocusMode\022\031\n\025VIDEO_FOCUS_PROJEC" +
+      "TED\020\001\022\026\n\022VIDEO_FOCUS_NATIVE\020\002\022 \n\034VIDEO_F" +
+      "OCUS_NATIVE_TRANSIENT\020\003\022(\n$VIDEO_FOCUS_P" +
+      "ROJECTED_NO_INPUT_FOCUS\020\004B\007B\005Media"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -7062,6 +10140,30 @@ public final class Media {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_Config_descriptor,
         new java.lang.String[] { "Status", "MaxUnacked", "ConfigurationIndices", });
+    internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_Insets_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_Insets_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_Insets_descriptor,
+        new java.lang.String[] { "Left", "Top", "Right", "Bottom", });
+    internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UiConfig_descriptor =
+      getDescriptor().getMessageTypes().get(10);
+    internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UiConfig_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UiConfig_descriptor,
+        new java.lang.String[] { "Margins", "ContentInsets", "StableContentInsets", "UiTheme", });
+    internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigRequest_descriptor =
+      getDescriptor().getMessageTypes().get(11);
+    internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigRequest_descriptor,
+        new java.lang.String[] { "UiConfig", });
+    internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigReply_descriptor =
+      getDescriptor().getMessageTypes().get(12);
+    internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigReply_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_andrerinas_headunitrevived_aap_protocol_proto_UpdateUiConfigReply_descriptor,
+        new java.lang.String[] { "Status", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

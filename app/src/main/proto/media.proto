@@ -121,3 +121,29 @@ message Config
     required uint32 max_unacked = 2;
     repeated uint32 configuration_indices = 3;
 }
+
+message Insets
+{
+    optional int32 left = 1;
+    optional int32 top = 2;
+    optional int32 right = 3;
+    optional int32 bottom = 4;
+}
+
+message UiConfig
+{
+    optional Insets margins = 1;
+    optional Insets content_insets = 2;
+    optional Insets stable_content_insets = 3;
+    optional int32 ui_theme = 4;
+}
+
+message UpdateUiConfigRequest
+{
+    required UiConfig ui_config = 1;
+}
+
+message UpdateUiConfigReply
+{
+    required uint32 status = 1;
+}
