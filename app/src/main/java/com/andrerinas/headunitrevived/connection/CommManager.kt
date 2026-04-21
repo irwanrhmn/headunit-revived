@@ -415,6 +415,8 @@ class CommManager(
     fun disconnect(sendByeBye: Boolean = true) {
         if (_connectionState.value is ConnectionState.Disconnected) return
 
+        com.andrerinas.headunitrevived.utils.HeadUnitScreenConfig.unlockResolution()
+
         _connectionState.value = ConnectionState.Disconnected(isUserExit = true)
         _disconnectJob = _scope.launch { doDisconnect(sendByeBye) }
         if (settings.killOnDisconnect) {

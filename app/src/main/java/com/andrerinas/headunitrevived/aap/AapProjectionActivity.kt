@@ -175,11 +175,14 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
 
         val screenOrientation = settings.screenOrientation
         if (screenOrientation == Settings.ScreenOrientation.AUTO) {
-            // AUTO mode: lock to current orientation at launch (existing behavior)
-            if (Build.VERSION.SDK_INT >= 18) {
-                requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LOCKED
-            } else {
-                requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
+            applyStickyOrientation()
+            if (!HeadUnitScreenConfig.isResolutionLocked) {
+                // Initial start: lock to current orientation at launch
+                if (Build.VERSION.SDK_INT >= 18) {
+                    requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LOCKED
+                } else {
+                    requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
+                }
             }
         } else {
             requestedOrientation = screenOrientation.androidOrientation
@@ -260,6 +263,9 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
                             }
                         }
                         is CommManager.ConnectionState.HandshakeComplete -> {
+                            // Lock the resolution so that orientation changes don't cause re-negotiation
+                            HeadUnitScreenConfig.lockResolution()
+                            
                             // Handshake done. If the surface is already ready (e.g. reconnect
                             // while the activity is in the foreground), start reading immediately.
                             // If not, onSurfaceChanged() will call startReading() when the surface
@@ -368,6 +374,7 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
     override fun onResume() {
         AppLog.i("AapProjectionActivity: onResume")
         super.onResume()
+        applyStickyOrientation()
         watchdogHandler.postDelayed(watchdogRunnable, 2000)
         watchdogHandler.postDelayed(videoWatchdogRunnable, 3000)
         watchdogHandler.postDelayed(reconnectingWatchdog, 5000)
@@ -743,6 +750,20 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
     private fun onKeyEvent(keyCode: Int, isPress: Boolean) {
         AppLog.d("AapProjectionActivity: onKeyEvent code=$keyCode, isPress=$isPress")
         commManager.send(keyCode, isPress)
+    }
+
+    private fun applyStickyOrientation() {
+        if (settings.screenOrientation == Settings.ScreenOrientation.AUTO && HeadUnitScreenConfig.isResolutionLocked) {
+            val target = if (HeadUnitScreenConfig.getNegotiatedWidth() > HeadUnitScreenConfig.getNegotiatedHeight()) {
+                android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            } else {
+                android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
+            if (requestedOrientation != target) {
+                AppLog.i("[UI_DEBUG] Sticky Orientation: Session active, forcing orientation to $target")
+                requestedOrientation = target
+            }
+        }
     }
 
     override fun onDestroy() {

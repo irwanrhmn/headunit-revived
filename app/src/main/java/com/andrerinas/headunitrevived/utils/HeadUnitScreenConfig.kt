@@ -25,6 +25,9 @@ object HeadUnitScreenConfig {
         private set
 
     var negotiatedResolutionType: Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType? = null
+    var isResolutionLocked: Boolean = false
+        private set
+
     private lateinit var currentSettings: Settings // Store settings instance
 
     // System Insets (Bars/Cutouts)
@@ -138,7 +141,9 @@ object HeadUnitScreenConfig {
         val isPortraitDisplay = screenHeightPx > screenWidthPx
 
         // 1. Determine base negotiated resolution
-        if (selectedResolution == Settings.Resolution.AUTO) {
+        if (isResolutionLocked && negotiatedResolutionType != null) {
+            AppLog.i("[UI_DEBUG] CarScreen: RESOLUTION LOCKED to $negotiatedResolutionType. Skipping re-negotiation.")
+        } else if (selectedResolution == Settings.Resolution.AUTO) {
             if (isPortraitDisplay) {
                 negotiatedResolutionType = if (screenWidthPx > 720 || screenHeightPx > 1280) {
                     Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._1080x1920
@@ -291,4 +296,15 @@ object HeadUnitScreenConfig {
 
     fun getUsableWidth(): Int = screenWidthPx
     fun getUsableHeight(): Int = screenHeightPx
+
+    fun lockResolution() {
+        AppLog.i("[UI_DEBUG] HeadUnitScreenConfig: Locking resolution.")
+        isResolutionLocked = true
+    }
+
+    fun unlockResolution() {
+        AppLog.i("[UI_DEBUG] HeadUnitScreenConfig: Unlocking resolution.")
+        isResolutionLocked = false
+        negotiatedResolutionType = null
+    }
 }
