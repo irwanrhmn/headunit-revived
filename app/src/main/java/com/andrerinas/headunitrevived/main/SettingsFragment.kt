@@ -263,6 +263,7 @@ class SettingsFragment : Fragment() {
         pendingFakeSpeed?.let { settings.fakeSpeed = it }
 
         val oldWifiMode = settings.wifiConnectionMode
+        val oldHelperStrategy = settings.helperConnectionStrategy
         pendingWifiConnectionMode?.let { settings.wifiConnectionMode = it }
         pendingHelperConnectionStrategy?.let { settings.helperConnectionStrategy = it }
         pendingWaitForWifi?.let { settings.waitForWifiBeforeWifiDirect = it }
@@ -275,7 +276,7 @@ class SettingsFragment : Fragment() {
 
         settings.commit()
 
-        if (oldWifiMode != settings.wifiConnectionMode) {
+        if (oldWifiMode != settings.wifiConnectionMode || oldHelperStrategy != settings.helperConnectionStrategy) {
             val intent = Intent(requireContext(), AapService::class.java).apply {
                 val mode = settings.wifiConnectionMode
                 action = if (mode == 1 || mode == 2 || mode == 3)

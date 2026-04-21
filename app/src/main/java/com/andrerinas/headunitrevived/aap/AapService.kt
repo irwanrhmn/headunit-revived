@@ -938,6 +938,11 @@ class AapService : Service(), UsbReceiver.Listener {
                 if (!commManager.isConnected) {
                     if (settings.wifiConnectionMode == 2 && settings.helperConnectionStrategy == 2) {
                         nearbyManager?.start()
+                    } else if (settings.wifiConnectionMode == 2 && settings.helperConnectionStrategy == 1) {
+                        val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
+                        if (wifiManager.isWifiEnabled) {
+                            wifiDirectManager?.makeVisible()
+                        }
                     } else {
                         startDiscovery()
                     }
@@ -1406,6 +1411,14 @@ class AapService : Service(), UsbReceiver.Listener {
                 if (mode == 2 && strategy == 2) {
                     AppLog.i("AapService: Force-starting Nearby discovery from UI")
                     nearbyManager?.start()
+                } else if (mode == 2 && strategy == 1) {
+                    AppLog.i("AapService: Force-starting WiFi Direct discovery from UI")
+                    val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
+                    if (wifiManager.isWifiEnabled) {
+                        wifiDirectManager?.makeVisible()
+                    } else {
+                        Toast.makeText(this, getString(R.string.wifi_disabled_info), Toast.LENGTH_SHORT).show()
+                    }
                 } else if (mode != 3) {
                     startDiscovery(oneShot = (mode != 2))
                 }
