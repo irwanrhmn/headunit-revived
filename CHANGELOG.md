@@ -1,4 +1,12 @@
 # Changelog
+### v.2.2.2-beta1
+- Fixed: Exit on disconnect now stops the carmode too
+- Fixed: Exit intent not closing the app
+- Fixed: Orientation not working great on app switch, if you have "auto or sensor" enabled
+- Again: Steering Wheel and Keymapping got some changes, maybe this will work on more devices
+- Extend mic debugging and add NoiseSuppressor, AutomaticGainControl and AcousticEchoCanceler for better voice quality
+- Fixed an issue where the Android USB system prompt wouldn't appear for phones. The prompt is now enabled by default and can be separately disabled for USB thumb drives. It calls "Listen for USB Devices" setting and it decouples the system USB prompt from the Auto-Start behavior. This will bring back the old functionality for all and can be disabled for those who are annoyed of the popup for non Android Auto devices
+
 ### v.2.2.1
 - **Fixed a fatal error in UBS conncetions since 2.2.0. This is important so releasing this version while not fixing all planned issues**
 - Google Nearby Connection is now auto connecting if auto connect is enabled
