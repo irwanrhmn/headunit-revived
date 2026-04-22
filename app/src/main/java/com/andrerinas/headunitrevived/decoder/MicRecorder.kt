@@ -197,21 +197,24 @@ class MicRecorder(private val micSampleRate: Int, private val context: Context) 
                 try {
                     if (NoiseSuppressor.isAvailable()) {
                         ns = NoiseSuppressor.create(audioSessionId)
-                        AppLog.i("MicRecorder: NoiseSuppressor: ${if (ns != null) "ON" else "failed"}")
+                        ns?.enabled = true
+                        AppLog.i("MicRecorder: NoiseSuppressor: ${if (ns?.enabled == true) "ON" else "failed"}")
                     } else {
                         AppLog.i("MicRecorder: NoiseSuppressor: Unsupported on this device")
                     }
                     
                     if (AutomaticGainControl.isAvailable()) {
                         agc = AutomaticGainControl.create(audioSessionId)
-                        AppLog.i("MicRecorder: AutomaticGainControl: ${if (agc != null) "ON" else "failed"}")
+                        agc?.enabled = true
+                        AppLog.i("MicRecorder: AutomaticGainControl: ${if (agc?.enabled == true) "ON" else "failed"}")
                     } else {
                         AppLog.i("MicRecorder: AutomaticGainControl: Unsupported on this device")
                     }
                     
                     if (AcousticEchoCanceler.isAvailable()) {
                         aec = AcousticEchoCanceler.create(audioSessionId)
-                        AppLog.i("MicRecorder: AcousticEchoCanceler: ${if (aec != null) "ON" else "failed"}")
+                        aec?.enabled = true
+                        AppLog.i("MicRecorder: AcousticEchoCanceler: ${if (aec?.enabled == true) "ON" else "failed"}")
                     } else {
                         AppLog.i("MicRecorder: AcousticEchoCanceler: Unsupported on this device")
                     }
