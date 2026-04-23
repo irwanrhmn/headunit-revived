@@ -56,6 +56,11 @@ internal class AapControlMedia(
                 val micRequest = message.parse(Media.MicrophoneRequest.newBuilder()).build()
                 return micRequest(micRequest)
             }
+            Media.MsgType.MEDIA_MESSAGE_UPDATE_UI_CONFIG_REPLY_VALUE -> {
+                AppLog.i("RX: Update UI Config Reply received. Restarting Video Decoder!")
+                aapTransport.onUpdateUiConfigReplyReceived?.invoke()
+                return 0
+            }
             Media.MsgType.MEDIA_MESSAGE_ACK_VALUE -> return 0
             else -> AppLog.e("Unsupported Media message type: ${message.type}")
         }

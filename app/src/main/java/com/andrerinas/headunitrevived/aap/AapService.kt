@@ -895,17 +895,18 @@ class AapService : Service(), UsbReceiver.Listener {
         serviceScope.launch(Dispatchers.IO) {
             nearbyManager?.stop() // Disconnect Nearby tunnel
             
-            // [FIX] Reset Native AA manager so it's ready for a fresh start/poke
+            // [FIX] Reset Native AA manager so it's ready for a fresh start/poke.
+            // Skip if the user voluntarily exited AA, as re-initializing the group/servers
+            // might trigger the phone to reconnect immediately.
             val settings = App.provide(this@AapService).settings
-            if (settings.wifiConnectionMode == 3) {
+            if (settings.wifiConnectionMode == 3 && !state.isUserExit) {
                 AppLog.i("AapService: Native AA Mode disconnected. Resetting manager and group in 1.5s...")
                 nativeAaHandshakeManager?.stop()
                 serviceScope.launch {
                     delay(1500) // Give hardware time to settle before re-initializing P2P
-                    initWifiMode(force = true) 
+                    initWifiMode(force = true)
                 }
             }
-
             App.provide(this@AapService).audioDecoder.stop()
             App.provide(this@AapService).videoDecoder.stop("AapService::onDisconnect")
         }

@@ -119,6 +119,7 @@ class CommManager(
 
     /** @Volatile: written on IO thread, read on Main and IO threads. */
     @Volatile private var _transport: AapTransport? = null
+    var onUpdateUiConfigReplyReceived: (() -> Unit)? = null
     @Volatile private var _connection: AccessoryConnection? = null
 
     /**
@@ -301,6 +302,7 @@ class CommManager(
                     )
                     _transport!!.onQuit = { isClean -> transportedQuited(isClean) }
                     _transport!!.onAudioFocusStateChanged = { isPlaying -> onAudioFocusStateChanged?.invoke(isPlaying) }
+                    _transport!!.onUpdateUiConfigReplyReceived = { onUpdateUiConfigReplyReceived?.invoke() }
                 }
                 if (_transport?.startHandshake(_connection!!) == true) {
                     _connectionState.emit(ConnectionState.HandshakeComplete)
@@ -399,6 +401,11 @@ class CommManager(
         if (_connectionState.value is ConnectionState.TransportStarted) {
             _transport?.send(message)
         }
+    }
+
+    fun sendUpdateUiConfigRequest(left: Int, top: Int, right: Int, bottom: Int) {
+        val request = com.andrerinas.headunitrevived.aap.protocol.messages.UpdateUiConfigRequest(left, top, right, bottom)
+        send(request)
     }
 
     // -----------------------------------------------------------------------------------------

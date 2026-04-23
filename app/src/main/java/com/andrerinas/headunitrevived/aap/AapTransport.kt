@@ -111,6 +111,7 @@ class AapTransport(
     @Volatile var wasUserExit: Boolean = false
     @Volatile var onQuit: ((Boolean) -> Unit)? = null
     var onAudioFocusStateChanged: ((Boolean) -> Unit)? = null
+    var onUpdateUiConfigReplyReceived: (() -> Unit)? = null
     private var pollHandler: Handler? = null
     private val pollHandlerCallback = Handler.Callback {
         val readInstance = aapRead
