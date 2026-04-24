@@ -633,7 +633,13 @@ class AapService : Service(), UsbReceiver.Listener {
             if (settings.wifiConnectionMode == 3) {
                 AppLog.i("AapService: Received WiFi credentials from manager (SSID=$ssid, IP=$ip). Updating and Triggering Poke.")
                 nativeAaHandshakeManager?.updateWifiCredentials(ssid, psk, ip, bssid)
-                nativeAaHandshakeManager?.triggerPoke()
+                // [FIX] Only auto-poke if the user didn't explicitly exit.
+                // If they did, they must click the "WiFi" button manually to poke.
+                if (!userExitedAA) {
+                    nativeAaHandshakeManager?.triggerPoke()
+                } else {
+                    AppLog.i("AapService: userExitedAA is true. Skipping auto-poke.")
+                }
             } else {
                 AppLog.d("AapService: WiFi credentials received, but not in Native AA mode. Skipping HandshakeManager update.")
             }
@@ -903,7 +909,6 @@ class AapService : Service(), UsbReceiver.Listener {
                     // tear down the WiFi Direct group so the phone can't auto-reconnect.
                     AppLog.i("AapService: Native AA user exit. Stopping handshake manager and WiFi Direct group.")
                     nativeAaHandshakeManager?.stop()
-                    wifiDirectManager?.removeGroup()
                 } else {
                     // Unexpected disconnect — reset and re-initialize for auto-reconnect.
                     AppLog.i("AapService: Native AA Mode disconnected. Resetting manager and group in 1.5s...")
@@ -1430,6 +1435,12 @@ class AapService : Service(), UsbReceiver.Listener {
                 val settings = App.provide(this).settings
                 val mode = settings.wifiConnectionMode
                 val strategy = settings.helperConnectionStrategy
+                
+                // [FIX] Reset exit flags on manual scan start
+                userExitedAA = false
+                userExitCooldownUntil = 0L
+                initWifiMode(force = true)
+
                 if (mode == 2 && strategy == 2) {
                     AppLog.i("AapService: Force-starting Nearby discovery from UI")
                     nearbyManager?.start()
@@ -1450,8 +1461,11 @@ class AapService : Service(), UsbReceiver.Listener {
                 val mac = intent?.getStringExtra(EXTRA_MAC)
                 if (mac != null) {
                     AppLog.i("AapService: Received manual Native-AA poke request for $mac")
-                    // Ensure WiFi Direct is ready before poking
-                    initWifiMode()
+                    // [FIX] Reset exit flags so the subsequent connection is accepted
+                    userExitedAA = false
+                    userExitCooldownUntil = 0L
+                    // Ensure WiFi Direct and BT servers are ready before poking
+                    initWifiMode(force = true)
                     nativeAaHandshakeManager?.manualPoke(mac)
                 }
             }

@@ -351,6 +351,14 @@ class AapProjectionActivity : SurfaceActivity(), IProjectionView.Callbacks, Vide
         setFullscreen() // Call setFullscreen here as well
 
         val loadingOverlay = findViewById<View>(R.id.loading_overlay)
+        
+        // [FIX] If we are already connected and frames are flowing (e.g. activity recreation),
+        // hide the overlay immediately to prevent the "Android Auto is starting" flicker.
+        if (commManager.isConnected && videoDecoder.lastFrameRenderedMs > 0) {
+            loadingOverlay?.visibility = View.GONE
+            overlayState = OverlayState.HIDDEN
+        }
+
         // Ensure loading overlay is on top of everything
         loadingOverlay?.bringToFront()
 

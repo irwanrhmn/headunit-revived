@@ -17,6 +17,13 @@ class AutoStartReceiver : BroadcastReceiver() {
         val targetMac = Settings.getAutoStartBtMac(context)
 
         if (targetMac.isEmpty()) return
+        
+        // [FIX] Don't trigger auto-start if we are already connected!
+        // This prevents activity restarts if BT reconnects during a session.
+        if (com.andrerinas.headunitrevived.App.provide(context).commManager.isConnected) {
+            AppLog.d("AutoStartReceiver: Already connected to Android Auto. Ignoring BT event.")
+            return
+        }
 
         if (action == BluetoothDevice.ACTION_ACL_CONNECTED) {
             val device = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {

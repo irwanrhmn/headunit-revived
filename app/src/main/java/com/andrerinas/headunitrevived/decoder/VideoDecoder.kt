@@ -99,6 +99,7 @@ class VideoDecoder(private val settings: Settings) {
                 stop("New surface")
             }
             mSurface = surface
+            lastFrameRenderedMs = 0L
         }
     }
 

@@ -24,7 +24,7 @@ object HeadUnitScreenConfig {
     var forcedScale: Boolean = false
         private set
 
-    var negotiatedResolutionType: Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType? = null
+    var negotiatedResolutionType: Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType = Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._800x480
     var isResolutionLocked: Boolean = false
         private set
 
@@ -240,12 +240,20 @@ object HeadUnitScreenConfig {
 
     fun getNegotiatedHeight(): Int {
         val resString = negotiatedResolutionType.toString().replace("_", "")
-        return resString.split("x")[1].toInt()
+        return try {
+            resString.split("x")[1].toInt()
+        } catch (e: Exception) {
+            480
+        }
     }
 
     fun getNegotiatedWidth(): Int {
         val resString = negotiatedResolutionType.toString().replace("_", "")
-        return resString.split("x")[0].toInt()
+        return try {
+            resString.split("x")[0].toInt()
+        } catch (e: Exception) {
+            800
+        }
     }
 
     fun getHeightMargin(): Int {
@@ -379,7 +387,6 @@ object HeadUnitScreenConfig {
     fun unlockResolution() {
         AppLog.i("[UI_DEBUG] HeadUnitScreenConfig: Unlocking resolution.")
         isResolutionLocked = false
-        negotiatedResolutionType = null
     }
 
     private const val SURFACE_MISMATCH_TOLERANCE = 4

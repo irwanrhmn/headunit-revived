@@ -131,7 +131,7 @@ class WifiDirectManager(private val context: Context) : WifiP2pManager.Connectio
             val psk = group.passphrase ?: ""
             val bssid = getWifiDirectMac(group.`interface`)
             val isOwner = group.isGroupOwner
-            
+
             // Try to get frequency via reflection (hidden field in WifiP2pGroup)
             var frequency = 0
             try {
@@ -146,10 +146,10 @@ class WifiDirectManager(private val context: Context) : WifiP2pManager.Connectio
                     } catch (e: Exception) {}
                 }
             } catch (e: Exception) {}
-            
+
             val band = if (frequency > 4000) "5GHz" else if (frequency > 0) "2.4GHz" else "unknown"
             AppLog.i("WifiDirectManager: onGroupInfoAvailable: SSID: $ssid, BSSID: $bssid, GO: $isOwner, Freq: $frequency MHz ($band)")
-            
+
             if (ssid.isNotEmpty()) {
                 // Wait for the IP address to be assigned to the interface
                 Thread {
@@ -162,7 +162,7 @@ class WifiDirectManager(private val context: Context) : WifiP2pManager.Connectio
                             ip = getWifiDirectIp(group.`interface`)
                             retries++
                         }
-                        
+
                         val finalIp = ip ?: "192.168.49.1"
                         AppLog.i("WifiDirectManager: SUCCESS - Providing credentials to HandshakeManager. SSID=$ssid, IP=$finalIp")
                         onCredentialsReady?.invoke(ssid, psk, finalIp, bssid)
@@ -191,7 +191,7 @@ class WifiDirectManager(private val context: Context) : WifiP2pManager.Connectio
                 val iface = interfaces.nextElement()
                 if (ifaceName != null && iface.name != ifaceName) continue
                 if (ifaceName == null && !iface.name.contains("p2p")) continue
-                
+
                 val mac = iface.hardwareAddress
                 if (mac != null) {
                     val sb = StringBuilder()
@@ -345,7 +345,7 @@ class WifiDirectManager(private val context: Context) : WifiP2pManager.Connectio
     fun startNativeAaQuietHost() {
         val mgr = manager
         val ch = channel
-        
+
         if (mgr == null || ch == null) {
             AppLog.e("WifiDirectManager: Cannot start Quiet Host - manager ($mgr) or channel ($ch) is null!")
             return
@@ -370,13 +370,13 @@ class WifiDirectManager(private val context: Context) : WifiP2pManager.Connectio
 
         AppLog.i("WifiDirectManager: startNativeAaQuietHost() requested. Removing old group if any...")
         mgr.removeGroup(ch, object : WifiP2pManager.ActionListener {
-            override fun onSuccess() { 
+            override fun onSuccess() {
                 AppLog.d("WifiDirectManager: removeGroup SUCCESS. Creating quiet group...")
-                delayedCreateQuietGroup(0) 
+                delayedCreateQuietGroup(0)
             }
-            override fun onFailure(reason: Int) { 
+            override fun onFailure(reason: Int) {
                 AppLog.d("WifiDirectManager: removeGroup failed (reason=$reason). This is expected if no group existed. Creating quiet group anyway...")
-                delayedCreateQuietGroup(0) 
+                delayedCreateQuietGroup(0)
             }
         })
     }
@@ -389,14 +389,14 @@ class WifiDirectManager(private val context: Context) : WifiP2pManager.Connectio
     private fun createQuietGroup(retryCount: Int) {
         val mgr = manager ?: return
         val ch = channel ?: return
-        
+
         AppLog.i("WifiDirectManager: Attempting createGroup for Native AA (Attempt $retryCount)...")
 
         // 5GHz Hack: Try to force 5GHz band using reflection
         try {
             val configClass = Class.forName("android.net.wifi.p2p.WifiP2pConfig")
             val config = configClass.newInstance()
-            
+
             val groupOwnerIntentField = configClass.getDeclaredField("groupOwnerIntent")
             groupOwnerIntentField.isAccessible = true
             groupOwnerIntentField.set(config, 15)
@@ -407,11 +407,11 @@ class WifiDirectManager(private val context: Context) : WifiP2pManager.Connectio
             }
 
             // The hidden method signature is createGroup(Channel, WifiP2pConfig, ActionListener)
-            val createGroupMethod = mgr.javaClass.getMethod("createGroup", 
-                WifiP2pManager.Channel::class.java, 
-                configClass, 
+            val createGroupMethod = mgr.javaClass.getMethod("createGroup",
+                WifiP2pManager.Channel::class.java,
+                configClass,
                 WifiP2pManager.ActionListener::class.java)
-                
+
             createGroupMethod.invoke(mgr, ch, config, object : WifiP2pManager.ActionListener {
                 override fun onSuccess() {
                     AppLog.i("WifiDirectManager: 5GHz Forced createGroup SUCCESS!")
@@ -468,27 +468,6 @@ class WifiDirectManager(private val context: Context) : WifiP2pManager.Connectio
                 }
             }
         })
-    }
-
-    /**
-     * Tears down the current P2P group without stopping the manager entirely.
-     * Used on user-initiated disconnects to prevent the phone from auto-reconnecting.
-     */
-    @SuppressLint("MissingPermission")
-    fun removeGroup() {
-        handler.removeCallbacks(discoveryRunnable)
-        isConnected = false
-        if (isGroupOwner) {
-            manager?.removeGroup(channel, object : WifiP2pManager.ActionListener {
-                override fun onSuccess() {
-                    AppLog.i("WifiDirectManager: Group removed (user exit).")
-                    isGroupOwner = false
-                }
-                override fun onFailure(reason: Int) {
-                    AppLog.d("WifiDirectManager: removeGroup failed (reason=$reason)")
-                }
-            })
-        }
     }
 
     fun stop() {

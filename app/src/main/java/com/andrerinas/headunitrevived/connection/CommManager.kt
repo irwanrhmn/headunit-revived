@@ -429,6 +429,7 @@ class CommManager(
         com.andrerinas.headunitrevived.utils.HeadUnitScreenConfig.unlockResolution()
 
         _connectionState.value = ConnectionState.Disconnected(isUserExit = true)
+        _transport?.wasUserExit = true
         _disconnectJob = _scope.launch { doDisconnect(sendByeBye) }
         if (settings.killOnDisconnect) {
             android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
