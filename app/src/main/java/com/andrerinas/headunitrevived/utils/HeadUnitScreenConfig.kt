@@ -162,7 +162,7 @@ object HeadUnitScreenConfig {
         val isPortraitDisplay = screenHeightPx > screenWidthPx
 
         // 1. Determine base negotiated resolution
-        if (isResolutionLocked && negotiatedResolutionType != null) {
+        if (isResolutionLocked) {
             AppLog.i("[UI_DEBUG] CarScreen: RESOLUTION LOCKED to $negotiatedResolutionType. Skipping re-negotiation.")
         } else if (selectedResolution == Settings.Resolution.AUTO) {
             if (isPortraitDisplay) {
